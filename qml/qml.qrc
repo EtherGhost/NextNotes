@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Main.qml</file>
+        <file>pages/AccountSelectionPage.qml</file>
+        <file>pages/LanguageSelectionPage.qml</file>
+        <file>pages/NotesListPage.qml</file>
+        <file>pages/NoteEditorPage.qml</file>
+        <file>backend/AccountSessionAdapter.qml</file>
+        <file>backend/AuthCore.js</file>
+        <file>backend/NotesCache.qml</file>
+        <file>backend/NotesApiClient.qml</file>
+        <file>backend/NotesApiCore.js</file>
+        <file>backend/NotesController.qml</file>
+        <file>backend/SyncPlanner.js</file>
+    </qresource>
+</RCC>

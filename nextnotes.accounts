@@ -1,0 +1,14 @@
+{
+    "services": [
+        {
+            "name": "NextNotes",
+            "description": "Use this Nextcloud account for NextNotes.",
+            "provider": "nextcloud"
+        },
+        {
+            "name": "NextNotes",
+            "description": "Use this ownCloud account for NextNotes.",
+            "provider": "owncloud"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "name": "nextnotes.cloudsite",
+    "description": "Native but simple Ubuntu Touch client for Nextcloud Notes.",
+    "architecture": "$ENV{ARCH}",
+    "title": "NextNotes",
+    "hooks": {
+        "nextnotes": {
+            "accounts": "nextnotes.accounts",
+            "apparmor": "nextnotes.apparmor",
+            "desktop": "nextnotes.desktop"
+        }
+    },
+    "version": "0.1.0",
+    "maintainer": "Etherghost <noreply@cloudsite.se>",
+    "framework": "$ENV{CLICK_FRAMEWORK}"
+}

@@ -1,0 +1,582 @@
+# French translations for NextNotes.
+# Copyright (C) 2026 Etherghost
+# This file is distributed under the same license as NextNotes.
+msgid ""
+msgstr ""
+"Project-Id-Version: nextnotes.cloudsite\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-12 18:27+0000\n"
+"PO-Revision-Date: 2026-06-12 00:00+0200\n"
+"Last-Translator: Etherghost\n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Authentication succeeded, but username or password was not available."
+msgstr "Autentisering succeeded, but anvandarnamn or losenord was not available."
+
+msgid "Authentication failed: %1"
+msgstr "Autentisering a echoue: %1"
+
+msgid "No account selected. Open Account first and authorize a Nextcloud account."
+msgstr "No account selected. Open Account first and authorize a Nextcloud account."
+
+msgid "No server URL configured. Open Account and enter the server URL."
+msgstr "No serveur URL configured. Open Account and enter the serveur URL."
+
+msgid "Waiting for Online Accounts..."
+msgstr "Waiting for Online Accounts..."
+
+msgid "Selected Online Accounts service was not found. Open Account and verify the account again."
+msgstr "Selected Online Accounts service was not found. Open Account and verify the account again."
+
+msgid "Notes API request failed with HTTP %1."
+msgstr "Notes API request a echoue with HTTP %1."
+
+msgid "Note API request failed with HTTP %1."
+msgstr "Note API request a echoue with HTTP %1."
+
+msgid "Note upload failed with HTTP %1."
+msgstr "Note televerser a echoue with HTTP %1."
+
+msgid "Create note failed with HTTP %1."
+msgstr "Create note a echoue with HTTP %1."
+
+msgid "Delete note failed with HTTP %1."
+msgstr "Supprimer note a echoue with HTTP %1."
+
+msgid "Server version changed. Local draft was not uploaded."
+msgstr "Server version modifie. Local draft was not televersered."
+
+msgid "Untitled note"
+msgstr "Note sans titre"
+
+msgid "Could not parse Notes API response."
+msgstr "Could not parse Notes API response."
+
+msgid "Notes API returned an unexpected response format."
+msgstr "Notes API returned an unexpected response format."
+
+msgid "Could not parse note response."
+msgstr "Could not parse note response."
+
+msgid "Could not parse upload response."
+msgstr "Could not parse televerser response."
+
+msgid "Open your Nextcloud notes."
+msgstr "Open your Nextcloud notes."
+
+msgid "All notes"
+msgstr "Toutes les notes"
+
+msgid "Offline, will retry"
+msgstr "Offline, will retry"
+
+msgid "%1 pending"
+msgstr "%1 pending"
+
+msgid "Synced %1"
+msgstr "Synced %1"
+
+msgid "Not synced yet"
+msgstr "Not synced yet"
+
+msgid "Deleting note..."
+msgstr "Deleting note..."
+
+msgid "Creating note..."
+msgstr "Creating note..."
+
+msgid "Uploading changes..."
+msgstr "Televersering modifications..."
+
+msgid "Loading note..."
+msgstr "Chargement note..."
+
+msgid "Loading notes..."
+msgstr "Chargement notes..."
+
+msgid "%1 notes synced."
+msgstr "%1 notes synced."
+
+msgid "No notes yet."
+msgstr "No notes yet."
+
+msgid "Local changes saved on this device"
+msgstr "Local modifications enregistre on this device"
+
+msgid "Loaded from server"
+msgstr "Loaded from serveur"
+
+msgid "Uploaded changes."
+msgstr "Televersered modifications."
+
+msgid "Created note."
+msgstr "Created note."
+
+msgid "Deleted note."
+msgstr "Supprimerd note."
+
+msgid "Showing saved notes. Syncing local changes..."
+msgstr "Showing enregistre notes. Syncing local modifications..."
+
+msgid "Syncing local changes..."
+msgstr "Syncing local modifications..."
+
+msgid "Showing saved notes. Checking for updates..."
+msgstr "Showing enregistre notes. Checking for updates..."
+
+msgid "Connecting to Nextcloud..."
+msgstr "Connecting to Nextcloud..."
+
+msgid "Showing saved notes."
+msgstr "Showing enregistre notes."
+
+msgid "No saved notes on this device."
+msgstr "No enregistre notes on this device."
+
+msgid "No local draft is available to upload."
+msgstr "No local draft is available to televerser."
+
+msgid "Cannot upload safely because the server etag is missing."
+msgstr "Cannot televerser safely because the serveur etag is missing."
+
+msgid "Authenticating..."
+msgstr "Autentiserar..."
+
+msgid "Checking for server changes..."
+msgstr "Checking for serveur modifications..."
+
+msgid "No cached note is available to delete."
+msgstr "No cached note is available to supprimer."
+
+msgid "Deleted local draft."
+msgstr "Supprimerd local draft."
+
+msgid "Deleted locally. Syncing deletion..."
+msgstr "Supprimerd locally. Syncing deletion..."
+
+msgid "Deleted %1 notes locally. Syncing deletions..."
+msgstr "Supprimerd %1 notes locally. Syncing deletions..."
+
+msgid "Deleted %1 local drafts."
+msgstr "Supprimerd %1 local drafts."
+
+msgid "Local draft kept. You can try uploading again."
+msgstr "Local draft kept. You can try televersering again."
+
+msgid "Using server version."
+msgstr "Using serveur version."
+
+msgid "Loaded cached note. Refreshing..."
+msgstr "Loaded cached note. Refreshing..."
+
+msgid "This note is read-only."
+msgstr "This note is read-only."
+
+msgid "Favorite changed locally."
+msgstr "Favorite modifie locally."
+
+msgid "Favorite changed locally. Syncing soon."
+msgstr "Favorite modifie locally. Syncing soon."
+
+msgid "Uploading %1 of %2..."
+msgstr "Televersering %1 of %2..."
+
+msgid "Caching note previews..."
+msgstr "Caching note previews..."
+
+msgid "Sync complete: %1 uploaded, %2 failed, %3 conflicts, %4 skipped."
+msgstr "Sync complete: %1 televersered, %2 a echoue, %3 conflicts, %4 skipped."
+
+msgid "Favorites"
+msgstr "Favoris"
+
+msgid "Uncategorized"
+msgstr "Sans categorie"
+
+msgid "Potential conflict: local changes are not uploaded"
+msgstr "Potential conflict: local modifications are not televersered"
+
+msgid "New local draft. Upload to create it on the server."
+msgstr "New local draft. Televerser to create it on the serveur."
+
+msgid "Delete failed: %1"
+msgstr "Supprimer a echoue: %1"
+
+msgid "Create failed: %1"
+msgstr "Create a echoue: %1"
+
+msgid "Upload failed: %1"
+msgstr "Televerser a echoue: %1"
+
+msgid "Showing cached note. Refresh failed: %1"
+msgstr "Showing cached note. Refresh a echoue: %1"
+
+msgid "Showing saved notes. Could not refresh."
+msgstr "Showing enregistre notes. Could not refresh."
+
+msgid "Could not load notes. Check the account and connection."
+msgstr "Could not load notes. Check the account and connection."
+
+msgid "never"
+msgstr "never"
+
+msgid "just now"
+msgstr "just now"
+
+msgid "%1m ago"
+msgstr "%1m ago"
+
+msgid "%1h ago"
+msgstr "%1h ago"
+
+msgid "%1d ago"
+msgstr "%1d ago"
+
+msgid "New"
+msgstr "New"
+
+msgid "now"
+msgstr "now"
+
+msgid "%1m"
+msgstr "%1m"
+
+msgid "%1h"
+msgstr "%1h"
+
+msgid "No date"
+msgstr "No date"
+
+msgid "Today"
+msgstr "Aujourd hui"
+
+msgid "Yesterday"
+msgstr "Hier"
+
+msgid "Last week"
+msgstr "La semaine derniere"
+
+msgid "Select an account and authorize it for NextNotes."
+msgstr "Select an account and authorize it for NextNotes."
+
+msgid "Accounts"
+msgstr "Comptes"
+
+msgid "Authorization succeeded for %1. Credentials are available to the app, but were not displayed or stored."
+msgstr "Authorization succeeded for %1. Credentials are available to the app, but were not displayed or stored."
+
+msgid "Authorization failed: %1. If the system did not show an Online Accounts prompt, open System Settings > Accounts and allow NextNotes for this account, then try again."
+msgstr "Authorization a echoue: %1. If the system did not show an Online Accounts prompt, open System Settings > Accounts and allow NextNotes for this account, then try again."
+
+msgid "System account authorization completed. Select the account again if needed, then verify authorization."
+msgstr "System account authorization completed. Select the account again if needed, then verify authorization."
+
+msgid "System account authorization was cancelled or did not return an account."
+msgstr "System account authorization was cancelled or did not return an account."
+
+msgid "Account"
+msgstr "Compte"
+
+msgid "Available accounts"
+msgstr "Comptes disponibles"
+
+msgid "No Nextcloud account found"
+msgstr "No Nextcloud account found"
+
+msgid "Add a Nextcloud or ownCloud account in Ubuntu Touch System Settings > Accounts. Then return here and select it."
+msgstr "Add a Nextcloud or ownCloud account in Ubuntu Touch System Settings > Accounts. Then return here and select it."
+
+msgid "Selected"
+msgstr "Selected"
+
+msgid "Use"
+msgstr "Use"
+
+msgid "Server URL"
+msgstr "Server URL"
+
+msgid "Authorize"
+msgstr "Authorize"
+
+msgid "Verify"
+msgstr "Verify"
+
+msgid "Diagnostics"
+msgstr "Diagnostics"
+
+msgid "Hide diagnostics"
+msgstr "Hide diagnostics"
+
+msgid "Discovered services: %1\nSelected accountId=%2 providerId=%3 serviceId=%4 serviceTypeId=%5 enabled=%6"
+msgstr "Discovered services: %1\nSelected accountId=%2 providerId=%3 serviceId=%4 serviceTypeId=%5 enabled=%6"
+
+msgid "Selected %1. Authorize the account before using it."
+msgstr "Selected %1. Authorize the account before using it."
+
+msgid "Select an account first."
+msgstr "Select an account first."
+
+msgid "Opening the system Online Accounts authorization flow..."
+msgstr "Opening the system Online Accounts authorization flow..."
+
+msgid "Verifying Online Accounts authorization..."
+msgstr "Verifying Online Accounts authorization..."
+
+msgid "No account is saved yet. Select a Nextcloud account below, authorize it, and verify access."
+msgstr "No account is enregistre yet. Select a Nextcloud account below, authorize it, and verify access."
+
+msgid "%1 on %2\nproviderId=%3 serviceId=%4"
+msgstr "%1 on %2\nproviderId=%3 serviceId=%4"
+
+msgid "Saved account"
+msgstr "Saved account"
+
+msgid "server URL missing"
+msgstr "serveur URL missing"
+
+msgid "No account selected"
+msgstr "No account selected"
+
+msgid "Server URL missing"
+msgstr "Server URL missing"
+
+msgid "Default"
+msgstr "Par defaut"
+
+msgid "Follow system language"
+msgstr "Suivre la langue du systeme"
+
+msgid "Built-in source language"
+msgstr "Langue source integree"
+
+msgid "AI-assisted translation"
+msgstr "Traduction assistee par IA"
+
+msgid "Language"
+msgstr "Langue"
+
+msgid "Choose the language NextNotes should use. Restart the app after changing language."
+msgstr "Choisissez la langue que NextNotes doit utiliser. Redemarrez l application apres avoir change de langue."
+
+msgid "Some translations are AI-assisted and not fully reviewed. You can help improve translations in the project repository."
+msgstr "Certaines traductions sont assistees par IA et ne sont pas entierement relues. Vous pouvez aider a les ameliorer dans le depot du projet."
+
+msgid "NextNotes will follow the system language after restart."
+msgstr "NextNotes suivra la langue du systeme apres redemarrage."
+
+msgid "NextNotes will use %1 after restart."
+msgstr "NextNotes utilisera %1 apres redemarrage."
+
+msgid "Edit title"
+msgstr "Modifier le titre"
+
+msgid "Update the note title."
+msgstr "Update the note title."
+
+msgid "Title"
+msgstr "Titre"
+
+msgid "Save"
+msgstr "Enregistrer"
+
+msgid "Cancel"
+msgstr "Annuler"
+
+msgid "Category"
+msgstr "Categorie"
+
+msgid "Choose an existing category or enter a new one."
+msgstr "Choose an existing category or enter a new one."
+
+msgid "Status"
+msgstr "Etat"
+
+msgid "Close"
+msgstr "Fermer"
+
+msgid "Delete note?"
+msgstr "Supprimer la note ?"
+
+msgid "This local draft has not been uploaded. Deleting it will remove it from this device."
+msgstr "This local draft has not been televersered. Deleting it will remove it from this device."
+
+msgid "This note has unsynced local changes. Deleting it will discard those changes and delete the server note."
+msgstr "This note has unsynced local modifications. Deleting it will discard those modifications and supprimer the serveur note."
+
+msgid "This will delete the note from Nextcloud."
+msgstr "This will supprimer the note from Nextcloud."
+
+msgid "Delete"
+msgstr "Supprimer"
+
+msgid "Search in note"
+msgstr "Search in note"
+
+msgid "Find"
+msgstr "Find"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "The server changed this note while you had local edits. Review a version, then choose which one to keep."
+msgstr "The serveur modifie this note while you had local edits. Review a version, then choose which one to keep."
+
+msgid "Server version"
+msgstr "Server version"
+
+msgid "Local version"
+msgstr "Local version"
+
+msgid "Use server version"
+msgstr "Use serveur version"
+
+msgid "Keep local version"
+msgstr "Keep local version"
+
+msgid "Save locally"
+msgstr "Save locally"
+
+msgid "Create note"
+msgstr "Creer une note"
+
+msgid "Upload changes"
+msgstr "Televerser modifications"
+
+msgid "Note content"
+msgstr "Note content"
+
+msgid "Add favorite"
+msgstr "Add favorite"
+
+msgid "Remove favorite"
+msgstr "Remove favorite"
+
+msgid "No note selected."
+msgstr "No note selected."
+
+msgid "Conflict"
+msgstr "Conflit"
+
+msgid "New note"
+msgstr "Nouvelle note"
+
+msgid "Unsynced changes"
+msgstr "Unsynced modifications"
+
+msgid "Read-only"
+msgstr "Lecture seule"
+
+msgid "%1 - %2"
+msgstr "%1 - %2"
+
+msgid "Modified: %1"
+msgstr "Modified: %1"
+
+msgid "Local draft saved: %1"
+msgstr "Local draft enregistre: %1"
+
+msgid "Server conflict etag is available."
+msgstr "Server conflict etag is available."
+
+msgid "Sync: %1"
+msgstr "Sync: %1"
+
+msgid "No content preview"
+msgstr "No content preview"
+
+msgid "unknown"
+msgstr "unknown"
+
+msgid "Modified: %1 - ETag available"
+msgstr "Modified: %1 - ETag available"
+
+msgid "Local draft saved: %1 - unsynced"
+msgstr "Local draft enregistre: %1 - unsynced"
+
+msgid "%1 selected"
+msgstr "%1 selected"
+
+msgid "Search notes"
+msgstr "Rechercher des notes"
+
+msgid "Search %1"
+msgstr "Rechercher %1"
+
+msgid "This will delete \"%1\" from Nextcloud."
+msgstr "This will supprimer \"%1\" from Nextcloud."
+
+msgid "Delete selected notes?"
+msgstr "Supprimer selected notes?"
+
+msgid "No selected notes could be deleted."
+msgstr "No selected notes could be supprimerd."
+
+msgid "Refreshing..."
+msgstr "Refreshing..."
+
+msgid "Release to refresh"
+msgstr "Release to refresh"
+
+msgid "Pull to refresh"
+msgstr "Pull to refresh"
+
+msgid "Favorite"
+msgstr "Favori"
+
+msgid "Unfavorite"
+msgstr "Retirer des favoris"
+
+msgid "Unsynced"
+msgstr "Non synchronise"
+
+msgid "No matching notes"
+msgstr "Aucune note correspondante"
+
+msgid "No notes in %1"
+msgstr "No notes in %1"
+
+msgid "No notes to show"
+msgstr "Aucune note a afficher"
+
+msgid "No saved notes"
+msgstr "Aucune note enregistree"
+
+msgid "Search matches note titles and content already cached on this device."
+msgstr "Search matches note titles and content already cached on this device."
+
+msgid "Use another category or create a new note here."
+msgstr "Use another category or create a new note here."
+
+msgid "Pull down to refresh from Nextcloud."
+msgstr "Pull down to refresh from Nextcloud."
+
+msgid "Connect to Nextcloud while online to load notes onto this device."
+msgstr "Connect to Nextcloud while online to load notes onto this device."
+
+msgid "NextNotes"
+msgstr "NextNotes"
+
+msgid "Refresh"
+msgstr "Actualiser"
+
+msgid "Syncing..."
+msgstr "Synchronisation..."
+
+msgid "Sync now (%1)"
+msgstr "Synchroniser maintenant (%1)"
+
+msgid "Sync now"
+msgstr "Synchroniser maintenant"
+
+msgid "This will delete %1 selected notes."
+msgstr "This will supprimer %1 selected notes."
+
+msgid "%1 local-only drafts will be removed from this device."
+msgstr "%1 local-only drafts will be removed from this device."
+
+msgid "%1 notes have unsynced local changes that will be discarded."
+msgstr "%1 notes have unsynced local modifications that will be discarded."
