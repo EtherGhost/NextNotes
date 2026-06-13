@@ -4,6 +4,11 @@ set -euo pipefail
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$project_dir"
 
+dark_mode=0
+if [[ "${1:-}" == "--dark" ]]; then
+    dark_mode=1
+fi
+
 if [[ ! -f .env.test.local ]]; then
     echo "Missing .env.test.local. Copy .env.test.local.example and fill in a dedicated test account." >&2
     exit 1
@@ -36,7 +41,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-python3 - "$tmp_config" "$desktop_env_file" <<'PY'
+python3 - "$tmp_config" "$desktop_env_file" "$dark_mode" <<'PY'
 import json
 import os
 import pathlib
@@ -45,12 +50,15 @@ import sys
 project_config = pathlib.Path("clickable.yaml").read_text(encoding="utf-8")
 target = pathlib.Path(sys.argv[1])
 desktop_env_file = pathlib.Path(sys.argv[2])
+dark_mode = sys.argv[3] == "1"
 env_vars = {
     "NEXTNOTES_DESKTOP_TEST_AUTH": "1",
     "NEXTNOTES_TEST_SERVER": os.environ["NEXTNOTES_TEST_SERVER"],
     "NEXTNOTES_TEST_USERNAME": os.environ["NEXTNOTES_TEST_USERNAME"],
     "NEXTNOTES_TEST_APP_PASSWORD": os.environ["NEXTNOTES_TEST_APP_PASSWORD"],
 }
+if dark_mode:
+    env_vars["NEXTNOTES_DESKTOP_DARK_MODE"] = "1"
 
 with target.open("w", encoding="utf-8") as handle:
     handle.write(project_config.rstrip())

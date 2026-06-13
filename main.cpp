@@ -134,18 +134,23 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     app.setApplicationName(QStringLiteral("nextnotes.cloudsite"));
 
-    const QHash<QString, QString> desktopTestEnv = desktopLarge ? readDesktopTestEnvFile() : QHash<QString, QString>();
-    const QString desktopTestServer = configValue(desktopTestEnv, "NEXTNOTES_TEST_SERVER");
-    const QString desktopTestUserName = configValue(desktopTestEnv, "NEXTNOTES_TEST_USERNAME");
-    const QString desktopTestSecret = configValue(desktopTestEnv, "NEXTNOTES_TEST_APP_PASSWORD");
+    const QHash<QString, QString> desktopEnv = desktopLarge ? readDesktopTestEnvFile() : QHash<QString, QString>();
+    const bool desktopDarkMode = desktopLarge
+        && (qEnvironmentVariableIsSet("NEXTNOTES_DESKTOP_DARK_MODE")
+            || configValue(desktopEnv, "NEXTNOTES_DESKTOP_DARK_MODE") == QStringLiteral("1"));
+
+    const QString desktopTestServer = configValue(desktopEnv, "NEXTNOTES_TEST_SERVER");
+    const QString desktopTestUserName = configValue(desktopEnv, "NEXTNOTES_TEST_USERNAME");
+    const QString desktopTestSecret = configValue(desktopEnv, "NEXTNOTES_TEST_APP_PASSWORD");
     const bool desktopTestAuthEnabled = desktopLarge
-        && configValue(desktopTestEnv, "NEXTNOTES_DESKTOP_TEST_AUTH") == QStringLiteral("1")
+        && configValue(desktopEnv, "NEXTNOTES_DESKTOP_TEST_AUTH") == QStringLiteral("1")
         && !desktopTestServer.isEmpty()
         && !desktopTestUserName.isEmpty()
         && !desktopTestSecret.isEmpty();
 
     QQuickView view;
     view.rootContext()->setContextProperty(QStringLiteral("desktopLarge"), desktopLarge);
+    view.rootContext()->setContextProperty(QStringLiteral("desktopDarkMode"), desktopDarkMode);
     view.rootContext()->setContextProperty(QStringLiteral("desktopTestAuthEnabled"), desktopTestAuthEnabled);
     view.rootContext()->setContextProperty(QStringLiteral("desktopTestServerUrl"), desktopTestAuthEnabled ? desktopTestServer : QString());
     view.rootContext()->setContextProperty(QStringLiteral("desktopTestUserName"), desktopTestAuthEnabled ? desktopTestUserName : QString());
@@ -156,7 +161,10 @@ int main(int argc, char *argv[])
         view.resize(QSize(1080, 1600));
     }
     view.show();
-    qInfo("NextNotes desktopLarge=%s desktopTestAuth=%s", desktopLarge ? "true" : "false", desktopTestAuthEnabled ? "true" : "false");
+    qInfo("NextNotes desktopLarge=%s desktopDarkMode=%s desktopTestAuth=%s",
+        desktopLarge ? "true" : "false",
+        desktopDarkMode ? "true" : "false",
+        desktopTestAuthEnabled ? "true" : "false");
 
     return app.exec();
 }

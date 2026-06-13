@@ -12,6 +12,12 @@ MainView {
     width: desktopLarge ? units.gu(90) : units.gu(45)
     height: desktopLarge ? units.gu(120) : units.gu(75)
 
+    Component.onCompleted: {
+        if (desktopDarkMode) {
+            theme.name = "Ubuntu.Components.Themes.SuruDark"
+        }
+    }
+
     NotesController {
         id: appNotesController
     }

@@ -87,6 +87,12 @@ Larger desktop debug window:
 ~/.local/bin/clickable script desktop-large
 ```
 
+Dark desktop debug window:
+
+```bash
+~/.local/bin/clickable script desktop-dark
+```
+
 Desktop mode can also use the dedicated live-test account from `.env.test.local`
 for faster debugging without Ubuntu Touch Online Accounts:
 
@@ -94,6 +100,7 @@ for faster debugging without Ubuntu Touch Online Accounts:
 cp .env.test.local.example .env.test.local
 # edit .env.test.local with a dedicated test account
 ~/.local/bin/clickable script desktop-test
+~/.local/bin/clickable script desktop-test-dark
 ```
 
 This path is only enabled for desktop debugging when `NEXTNOTES_DESKTOP_TEST_AUTH=1`
