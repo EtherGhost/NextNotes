@@ -115,6 +115,7 @@ class ProjectMetadataTests(unittest.TestCase):
 
     def test_about_page_records_version_license_and_disclaimer(self):
         page = read_text("qml/pages/AboutPage.qml")
+        changelog = read_text("CHANGELOG.md")
 
         for snippet in [
             "Version %1",
@@ -124,6 +125,8 @@ class ProjectMetadataTests(unittest.TestCase):
             "qrc:/assets/logo.svg",
         ]:
             self.assertIn(snippet, page)
+        self.assertIn("## 0.1.1", changelog)
+        self.assertIn("## 0.1.0", changelog)
 
 
 class NotesApiClientContractTests(unittest.TestCase):

@@ -162,6 +162,8 @@ Before release:
 - Verify maintainer metadata.
 - Verify the Online Accounts setup flow on a fresh install.
 
+Release notes are maintained in [CHANGELOG.md](CHANGELOG.md).
+
 ## License
 
 NextNotes is licensed under the MIT License.
