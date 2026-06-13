@@ -87,6 +87,18 @@ Larger desktop debug window:
 ~/.local/bin/clickable script desktop-large
 ```
 
+Desktop mode can also use the dedicated live-test account from `.env.test.local`
+for faster debugging without Ubuntu Touch Online Accounts:
+
+```bash
+cp .env.test.local.example .env.test.local
+# edit .env.test.local with a dedicated test account
+~/.local/bin/clickable script desktop-test
+```
+
+This path is only enabled for desktop debugging when `NEXTNOTES_DESKTOP_TEST_AUTH=1`
+is set by the script. Ubuntu Touch builds continue to use Online Accounts only.
+
 Install on a connected Ubuntu Touch device:
 
 ```bash

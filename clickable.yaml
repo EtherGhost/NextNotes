@@ -3,5 +3,6 @@ builder: cmake
 kill: nextnotes
 scripts:
   desktop-large: ~/.local/bin/clickable desktop --arch amd64
+  desktop-test: bash scripts/desktop-test.sh
   test: python3 -m unittest discover -s tests -v
   test-live: python3 -m unittest discover -s tests_live -v

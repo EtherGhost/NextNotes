@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nextnotes.cloudsite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-13 14:07+0000\n"
+"POT-Creation-Date: 2026-06-13 17:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,28 +17,32 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: qml/backend/AccountSessionAdapter.qml:61
+#: qml/backend/AccountSessionAdapter.qml:65
 msgid "Authentication succeeded, but username or password was not available."
 msgstr ""
 
-#: qml/backend/AccountSessionAdapter.qml:83
+#: qml/backend/AccountSessionAdapter.qml:87
 msgid "Authentication failed: %1"
 msgstr ""
 
-#: qml/backend/AccountSessionAdapter.qml:89
+#: qml/backend/AccountSessionAdapter.qml:95
+msgid "Desktop test credentials are incomplete."
+msgstr ""
+
+#: qml/backend/AccountSessionAdapter.qml:110
 msgid ""
 "No account selected. Open Account first and authorize a Nextcloud account."
 msgstr ""
 
-#: qml/backend/AccountSessionAdapter.qml:95
+#: qml/backend/AccountSessionAdapter.qml:116
 msgid "No server URL configured. Open Account and enter the server URL."
 msgstr ""
 
-#: qml/backend/AccountSessionAdapter.qml:115
+#: qml/backend/AccountSessionAdapter.qml:136
 msgid "Waiting for Online Accounts..."
 msgstr ""
 
-#: qml/backend/AccountSessionAdapter.qml:117
+#: qml/backend/AccountSessionAdapter.qml:138
 msgid ""
 "Selected Online Accounts service was not found. Open Account and verify the "
 "account again."

@@ -12,6 +12,10 @@ Item {
     property string cachedServerUrl: ""
     property string cachedUserName: ""
     property string cachedSecret: ""
+    property bool envTestAuthEnabled: typeof desktopTestAuthEnabled !== "undefined" && desktopTestAuthEnabled
+    property string envTestServerUrl: typeof desktopTestServerUrl !== "undefined" ? desktopTestServerUrl : ""
+    property string envTestUserName: typeof desktopTestUserName !== "undefined" ? desktopTestUserName : ""
+    property string envTestSecret: typeof desktopTestSecret !== "undefined" ? desktopTestSecret : ""
 
     signal authenticated(string userName, string secret, string serverUrl)
     signal failed(string message)
@@ -85,6 +89,23 @@ Item {
     }
 
     function authenticate() {
+        if (envTestAuthEnabled) {
+            var testServerUrl = normalizeServerUrl(envTestServerUrl)
+            if (testServerUrl.length === 0 || envTestUserName.length === 0 || envTestSecret.length === 0) {
+                failed(i18n.tr("Desktop test credentials are incomplete."))
+                return
+            }
+
+            cachedAccountId = -1
+            cachedServiceId = "desktop-test-env"
+            cachedServerUrl = testServerUrl
+            cachedUserName = envTestUserName
+            cachedSecret = envTestSecret
+            console.log("NextNotes NotesApi auth using desktop test environment credentials serverUrlConfigured=" + hasValue(testServerUrl))
+            authenticated(cachedUserName, cachedSecret, cachedServerUrl)
+            return
+        }
+
         if (accountSettings.accountId <= 0 || accountSettings.serviceId.length === 0) {
             failed(i18n.tr("No account selected. Open Account first and authorize a Nextcloud account."))
             return

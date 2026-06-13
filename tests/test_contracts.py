@@ -70,6 +70,20 @@ class ProjectMetadataTests(unittest.TestCase):
         self.assertIn('localeForLanguageCode', main)
         self.assertLess(main.index('qputenv("LANGUAGE"'), main.index("QGuiApplication app"))
         self.assertIn('appSettings.remove(QStringLiteral("manualAccount"))', main)
+        self.assertIn("NEXTNOTES_DESKTOP_TEST_AUTH", main)
+        self.assertIn("NEXTNOTES_TEST_SERVER", main)
+        self.assertIn("NEXTNOTES_TEST_USERNAME", main)
+        self.assertIn("NEXTNOTES_TEST_APP_PASSWORD", main)
+        self.assertIn("desktopTestAuthEnabled", main)
+        self.assertIn("readDesktopTestEnvFile", main)
+        self.assertIn(".clickable/nextnotes-desktop-env.local", main)
+        self.assertIn("desktop-test", read_text("clickable.yaml"))
+        self.assertIn("scripts/desktop-test.sh", read_text("clickable.yaml"))
+        desktop_test_script = read_text("scripts/desktop-test.sh")
+        self.assertIn("env_vars:", desktop_test_script)
+        self.assertIn("NEXTNOTES_DESKTOP_TEST_AUTH", desktop_test_script)
+        self.assertIn("mktemp .clickable/nextnotes-desktop-test", desktop_test_script)
+        self.assertIn("nextnotes-desktop-env.local", desktop_test_script)
         self.assertIn('text: i18n.tr("Language")', notes_list)
         self.assertIn('text: i18n.tr("About")', notes_list)
         self.assertIn('property string languageCode: ""', language_page)
@@ -316,8 +330,14 @@ class RefactoredCoreContractTests(unittest.TestCase):
             "accountService.authenticate({})",
             'category: "account"',
             "findSelectedAccountService",
+            "envTestAuthEnabled",
+            "desktop-test-env",
         ]:
             self.assertIn(snippet, account_page + session)
+
+        self.assertIn("envTestAuthEnabled", session)
+        self.assertIn("desktopTestAuthEnabled", session)
+        self.assertIn("auth using desktop test environment credentials", session)
 
         forbidden = [
             "manualAccount",

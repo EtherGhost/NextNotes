@@ -1,6 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlContext>
 #include <QQuickView>
+#include <QDir>
+#include <QFile>
 #include <QSettings>
 #include <QSize>
 #include <QString>
@@ -9,6 +11,84 @@
 #include <QtGlobal>
 
 namespace {
+QString environmentValue(const char *name)
+{
+    return QString::fromLocal8Bit(qgetenv(name)).trimmed();
+}
+
+QString unquoteEnvValue(QString value)
+{
+    value = value.trimmed();
+    if (value.size() >= 2) {
+        const QChar first = value.front();
+        const QChar last = value.back();
+        if ((first == QLatin1Char('"') && last == QLatin1Char('"'))
+                || (first == QLatin1Char('\'') && last == QLatin1Char('\''))) {
+            value = value.mid(1, value.size() - 2);
+        }
+    }
+    return value;
+}
+
+QHash<QString, QString> readEnvFile(const QString &path)
+{
+    QHash<QString, QString> values;
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return values;
+    }
+
+    const QString content = QString::fromUtf8(file.readAll());
+    for (const QString &rawLine : content.split(QLatin1Char('\n'))) {
+        const QString line = rawLine.trimmed();
+        if (line.isEmpty() || line.startsWith(QLatin1Char('#'))) {
+            continue;
+        }
+
+        const int separator = line.indexOf(QLatin1Char('='));
+        if (separator <= 0) {
+            continue;
+        }
+
+        const QString key = line.left(separator).trimmed();
+        const QString value = unquoteEnvValue(line.mid(separator + 1));
+        values.insert(key, value);
+    }
+    return values;
+}
+
+QHash<QString, QString> readDesktopTestEnvFile()
+{
+    QStringList candidates;
+    candidates << QDir::current().filePath(QStringLiteral(".clickable/nextnotes-desktop-env.local"));
+    candidates << QDir::current().filePath(QStringLiteral(".env.test.local"));
+
+    QDir appDir(QCoreApplication::applicationDirPath());
+    for (int i = 0; i < 6; ++i) {
+        candidates << appDir.filePath(QStringLiteral(".clickable/nextnotes-desktop-env.local"));
+        candidates << appDir.filePath(QStringLiteral(".env.test.local"));
+        appDir.cdUp();
+    }
+
+    for (const QString &candidate : candidates) {
+        const QHash<QString, QString> values = readEnvFile(candidate);
+        if (!values.isEmpty()) {
+            return values;
+        }
+    }
+
+    return {};
+}
+
+QString configValue(const QHash<QString, QString> &fileValues, const char *name)
+{
+    const QString env = environmentValue(name);
+    if (!env.isEmpty()) {
+        return env;
+    }
+    return fileValues.value(QString::fromLatin1(name)).trimmed();
+}
+
 QString localeForLanguageCode(const QString &languageCode)
 {
     static const QHash<QString, QString> localeMap = {
@@ -54,15 +134,29 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     app.setApplicationName(QStringLiteral("nextnotes.cloudsite"));
 
+    const QHash<QString, QString> desktopTestEnv = desktopLarge ? readDesktopTestEnvFile() : QHash<QString, QString>();
+    const QString desktopTestServer = configValue(desktopTestEnv, "NEXTNOTES_TEST_SERVER");
+    const QString desktopTestUserName = configValue(desktopTestEnv, "NEXTNOTES_TEST_USERNAME");
+    const QString desktopTestSecret = configValue(desktopTestEnv, "NEXTNOTES_TEST_APP_PASSWORD");
+    const bool desktopTestAuthEnabled = desktopLarge
+        && configValue(desktopTestEnv, "NEXTNOTES_DESKTOP_TEST_AUTH") == QStringLiteral("1")
+        && !desktopTestServer.isEmpty()
+        && !desktopTestUserName.isEmpty()
+        && !desktopTestSecret.isEmpty();
+
     QQuickView view;
     view.rootContext()->setContextProperty(QStringLiteral("desktopLarge"), desktopLarge);
+    view.rootContext()->setContextProperty(QStringLiteral("desktopTestAuthEnabled"), desktopTestAuthEnabled);
+    view.rootContext()->setContextProperty(QStringLiteral("desktopTestServerUrl"), desktopTestAuthEnabled ? desktopTestServer : QString());
+    view.rootContext()->setContextProperty(QStringLiteral("desktopTestUserName"), desktopTestAuthEnabled ? desktopTestUserName : QString());
+    view.rootContext()->setContextProperty(QStringLiteral("desktopTestSecret"), desktopTestAuthEnabled ? desktopTestSecret : QString());
     view.setSource(QUrl(QStringLiteral("qrc:/Main.qml")));
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     if (desktopLarge) {
         view.resize(QSize(1080, 1600));
     }
     view.show();
-    qInfo("NextNotes desktopLarge=%s", desktopLarge ? "true" : "false");
+    qInfo("NextNotes desktopLarge=%s desktopTestAuth=%s", desktopLarge ? "true" : "false", desktopTestAuthEnabled ? "true" : "false");
 
     return app.exec();
 }
