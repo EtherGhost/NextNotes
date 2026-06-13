@@ -419,6 +419,15 @@ Page {
     }
 
     function selectAccount(handle, accountId, displayName, providerName, providerId, serviceName, serviceId, serviceTypeId, enabled) {
+        var appService = findPreferredAppService(accountId, providerId)
+        if (appService.handle) {
+            handle = appService.handle
+            serviceName = appService.serviceName
+            serviceId = appService.serviceId
+            serviceTypeId = appService.serviceTypeId
+            enabled = appService.enabled
+        }
+
         selectedService.objectHandle = handle
         selectedAccountId = accountId
         selectedDisplayName = displayName
@@ -441,10 +450,42 @@ Page {
             + " serviceTypeId=" + selectedServiceTypeId
             + " enabled=" + selectedEnabled
             + " hostAvailable=" + hasValue(serverUrl)
+            + " preferredAppService=" + (appService.handle ? true : false)
         )
 
         authorizationStatus = i18n.tr("Selected %1. Authorize the account before using it.")
             .arg(selectedDisplayName)
+    }
+
+    function findPreferredAppService(accountId, providerId) {
+        var expectedServiceId = providerId === "owncloud" ? owncloudServiceId : nextcloudServiceId
+        for (var i = 0; i < accountServices.count; ++i) {
+            if (accountServices.get(i, "accountId") !== accountId) {
+                continue
+            }
+
+            var handle = accountServices.get(i, "accountServiceHandle")
+            if (!handle) {
+                continue
+            }
+
+            visibleCountService.objectHandle = handle
+            var provider = visibleCountService.provider || {}
+            var service = visibleCountService.service || {}
+            var rowProviderId = provider.id || accountServices.get(i, "providerName")
+            var rowServiceId = service.id || accountServices.get(i, "serviceName")
+            if (rowProviderId === providerId && rowServiceId === expectedServiceId) {
+                return {
+                    "handle": handle,
+                    "serviceName": accountServices.get(i, "serviceName"),
+                    "serviceId": rowServiceId,
+                    "serviceTypeId": service.serviceTypeId || service.type || "",
+                    "enabled": accountServices.get(i, "enabled")
+                }
+            }
+        }
+
+        return {}
     }
 
     function updateVisibleCloudAccounts() {
@@ -477,15 +518,7 @@ Page {
         }
 
         saveServerUrl()
-        console.log(
-            "NextNotes OnlineAccountsSetup starting"
-            + " accountId=" + selectedAccountId
-            + " providerId=" + selectedProviderId
-            + " applicationId=" + nextNotesApplicationId
-            + " serviceId=" + selectedServiceId
-        )
-        authorizationStatus = i18n.tr("Opening the system Online Accounts authorization flow...")
-        accountSetup.exec()
+        authenticateSelectedAccount()
     }
 
     function authenticateSelectedAccount() {
@@ -495,6 +528,7 @@ Page {
         }
 
         saveServerUrl()
+        refreshSelectedServiceHandle()
         authorizationStatus = i18n.tr("Verifying Online Accounts authorization...")
         console.log(
             "NextNotes OnlineAccountsAuthorization requesting"
@@ -515,6 +549,23 @@ Page {
         }
 
         selectedService.authenticate({})
+    }
+
+    function refreshSelectedServiceHandle() {
+        if (selectedAccountId <= 0 || selectedProviderId.length === 0) {
+            return
+        }
+
+        var appService = findPreferredAppService(selectedAccountId, selectedProviderId)
+        if (!appService.handle) {
+            return
+        }
+
+        selectedService.objectHandle = appService.handle
+        selectedServiceName = appService.serviceName
+        selectedServiceId = appService.serviceId
+        selectedServiceTypeId = appService.serviceTypeId
+        selectedEnabled = appService.enabled
     }
 
     function saveServerUrl() {

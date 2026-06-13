@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nextnotes.cloudsite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-13 17:48+0000\n"
+"POT-Creation-Date: 2026-06-13 18:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -480,50 +480,46 @@ msgid ""
 "Selected accountId=%2 providerId=%3 serviceId=%4 serviceTypeId=%5 enabled=%6"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:446
+#: qml/pages/AccountSelectionPage.qml:456
 msgid "Selected %1. Authorize the account before using it."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:475
-#: qml/pages/AccountSelectionPage.qml:493
+#: qml/pages/AccountSelectionPage.qml:516
+#: qml/pages/AccountSelectionPage.qml:526
 msgid "Select an account first."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:487
-msgid "Opening the system Online Accounts authorization flow..."
-msgstr ""
-
-#: qml/pages/AccountSelectionPage.qml:498
+#: qml/pages/AccountSelectionPage.qml:532
 msgid "Verifying Online Accounts authorization..."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:531
+#: qml/pages/AccountSelectionPage.qml:582
 msgid ""
 "No account is saved yet. Select a Nextcloud account below, authorize it, and "
 "verify access."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:534
+#: qml/pages/AccountSelectionPage.qml:585
 msgid ""
 "%1 on %2\n"
 "providerId=%3 serviceId=%4"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:535
+#: qml/pages/AccountSelectionPage.qml:586
 msgid "Saved account"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:536
+#: qml/pages/AccountSelectionPage.qml:587
 msgid "server URL missing"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:548
-#: qml/pages/AccountSelectionPage.qml:569
+#: qml/pages/AccountSelectionPage.qml:599
+#: qml/pages/AccountSelectionPage.qml:620
 msgid "No account selected"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:559
-#: qml/pages/AccountSelectionPage.qml:564
+#: qml/pages/AccountSelectionPage.qml:610
+#: qml/pages/AccountSelectionPage.qml:615
 msgid "Server URL missing"
 msgstr ""
 

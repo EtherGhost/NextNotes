@@ -39,6 +39,9 @@ class ProjectMetadataTests(unittest.TestCase):
         self.assertIn("nextnotes.cloudsite_nextnotes", account_page)
         self.assertIn("nextnotes.cloudsite_nextnotes_nextcloud", account_page)
         self.assertIn("nextnotes.cloudsite_nextnotes_owncloud", account_page)
+        self.assertIn("findPreferredAppService", account_page)
+        self.assertIn("selectedService.updateServiceEnabled(true)", account_page)
+        self.assertNotIn("accountSetup.exec()", account_page)
         self.assertNotIn("nextnotes.tobbe", account_page + accounts_hook)
 
     def test_qml_resource_file_includes_all_runtime_qml_files(self):
