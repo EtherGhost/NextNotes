@@ -63,6 +63,7 @@ class ProjectMetadataTests(unittest.TestCase):
 
         self.assertIn("add_subdirectory(po)", cmake)
         self.assertIn("pages/LanguageSelectionPage.qml", qrc)
+        self.assertIn("pages/AboutPage.qml", qrc)
         self.assertIn('QSettings appSettings(QStringLiteral("nextnotes.cloudsite"), QStringLiteral("nextnotes.cloudsite"))', main)
         self.assertIn('qputenv("LANGUAGE"', main)
         self.assertIn('qputenv("LANG"', main)
@@ -70,6 +71,7 @@ class ProjectMetadataTests(unittest.TestCase):
         self.assertLess(main.index('qputenv("LANGUAGE"'), main.index("QGuiApplication app"))
         self.assertIn('appSettings.remove(QStringLiteral("manualAccount"))', main)
         self.assertIn('text: i18n.tr("Language")', notes_list)
+        self.assertIn('text: i18n.tr("About")', notes_list)
         self.assertIn('property string languageCode: ""', language_page)
         self.assertIn('i18n.tr("Follow system language")', language_page)
         self.assertIn('"code": "en"', language_page)
@@ -93,6 +95,18 @@ class ProjectMetadataTests(unittest.TestCase):
             self.assertIn(f'"Language: {language}\\n"', po_text)
             self.assertIn('"Content-Type: text/plain; charset=UTF-8\\n"', po_text)
             self.assertGreater(po_text.count('msgstr "'), 100)
+
+    def test_about_page_records_version_license_and_disclaimer(self):
+        page = read_text("qml/pages/AboutPage.qml")
+
+        for snippet in [
+            "Version %1",
+            "MIT License",
+            "Etherghost",
+            "not affiliated",
+            "qrc:/assets/logo.svg",
+        ]:
+            self.assertIn(snippet, page)
 
 
 class NotesApiClientContractTests(unittest.TestCase):

@@ -15,6 +15,7 @@ NextNotes is not affiliated with, endorsed by, or sponsored by Nextcloud GmbH or
 - Preserve local drafts when server conflicts are detected.
 - Review conflicts by choosing the local or server version.
 - Follow the system language or manually choose a supported language.
+- View version, license, and project information from the About page.
 
 ## Not Included
 

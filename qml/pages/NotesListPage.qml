@@ -889,6 +889,15 @@ Page {
                         pageStack.push(Qt.resolvedUrl("AccountSelectionPage.qml"))
                     }
                 }
+
+                Button {
+                    Layout.fillWidth: true
+                    text: i18n.tr("About")
+                    onClicked: {
+                        page.menuOpen = false
+                        pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
+                    }
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>Main.qml</file>
+        <file>pages/AboutPage.qml</file>
         <file>pages/AccountSelectionPage.qml</file>
         <file>pages/LanguageSelectionPage.qml</file>
         <file>pages/NotesListPage.qml</file>

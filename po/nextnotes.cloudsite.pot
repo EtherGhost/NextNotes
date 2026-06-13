@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nextnotes.cloudsite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-12 21:10+0000\n"
+"POT-Creation-Date: 2026-06-13 14:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,7 +73,7 @@ msgstr ""
 #: qml/backend/NotesCache.qml:328 qml/backend/NotesCache.qml:407
 #: qml/pages/NoteEditorPage.qml:744 qml/pages/NotesListPage.qml:162
 #: qml/pages/NotesListPage.qml:354 qml/pages/NotesListPage.qml:489
-#: qml/pages/NotesListPage.qml:926
+#: qml/pages/NotesListPage.qml:935
 msgid "Untitled note"
 msgstr ""
 
@@ -359,6 +359,37 @@ msgstr ""
 
 #: qml/backend/NotesController.qml:1289
 msgid "Last week"
+msgstr ""
+
+#: qml/pages/AboutPage.qml:11 qml/pages/NotesListPage.qml:895
+msgid "About"
+msgstr ""
+
+#: qml/pages/AboutPage.qml:44 qml/pages/NotesListPage.qml:778
+msgid "NextNotes"
+msgstr ""
+
+#: qml/pages/AboutPage.qml:52
+msgid "Version %1"
+msgstr ""
+
+#: qml/pages/AboutPage.qml:59
+msgid "Native but simple Ubuntu Touch client for Nextcloud Notes."
+msgstr ""
+
+#: qml/pages/AboutPage.qml:72
+msgid "License"
+msgstr ""
+
+#: qml/pages/AboutPage.qml:78
+msgid "NextNotes is licensed under the MIT License."
+msgstr ""
+
+#: qml/pages/AboutPage.qml:91
+msgid ""
+"NextNotes is not affiliated with, endorsed by, or sponsored by Nextcloud "
+"GmbH or the Nextcloud project. Nextcloud is a trademark of its respective "
+"owners."
 msgstr ""
 
 #: qml/pages/AccountSelectionPage.qml:27
@@ -798,10 +829,6 @@ msgstr ""
 msgid "Connect to Nextcloud while online to load notes onto this device."
 msgstr ""
 
-#: qml/pages/NotesListPage.qml:778
-msgid "NextNotes"
-msgstr ""
-
 #: qml/pages/NotesListPage.qml:790
 msgid "Refresh"
 msgstr ""
@@ -818,14 +845,14 @@ msgstr ""
 msgid "Sync now"
 msgstr ""
 
-#: qml/pages/NotesListPage.qml:995
+#: qml/pages/NotesListPage.qml:1004
 msgid "This will delete %1 selected notes."
 msgstr ""
 
-#: qml/pages/NotesListPage.qml:997
+#: qml/pages/NotesListPage.qml:1006
 msgid "%1 local-only drafts will be removed from this device."
 msgstr ""
 
-#: qml/pages/NotesListPage.qml:1000
+#: qml/pages/NotesListPage.qml:1009
 msgid "%1 notes have unsynced local changes that will be discarded."
 msgstr ""
