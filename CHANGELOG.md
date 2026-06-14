@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Aligned the account page with the shared Nextcloud suite flow: clickable account rows, guided Ubuntu Touch account-setting approval, automatic verification after account selection, and immediate controller refresh after changing account.
+
 ## 0.1.1 - 2026-06-13
 
 - Fixed Online Accounts authorization so selecting an existing Ubuntu Touch account does not open the provider login page.

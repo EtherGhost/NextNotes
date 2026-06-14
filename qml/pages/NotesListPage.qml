@@ -122,7 +122,9 @@ Page {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: pageStack.push(Qt.resolvedUrl("AccountSelectionPage.qml"))
+                    onClicked: pageStack.push(Qt.resolvedUrl("AccountSelectionPage.qml"), {
+                        "notesController": notesController
+                    })
                 }
             }
         }
@@ -886,7 +888,9 @@ Page {
                     text: i18n.tr("Account")
                     onClicked: {
                         page.menuOpen = false
-                        pageStack.push(Qt.resolvedUrl("AccountSelectionPage.qml"))
+                        pageStack.push(Qt.resolvedUrl("AccountSelectionPage.qml"), {
+                            "notesController": notesController
+                        })
                     }
                 }
 

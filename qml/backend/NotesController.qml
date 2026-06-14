@@ -66,6 +66,13 @@ Item {
     property int pendingDeleteNoteId: 0
     property bool noteDeleted: false
     property string accountAvatarUrl: ""
+    property string activeAccountKey: ""
+    property int currentAccountId: 0
+    property string currentDisplayName: ""
+    property string currentProviderId: ""
+    property string currentServiceId: ""
+    property string currentServerUrl: ""
+    property string currentAvatarUrl: ""
     property double lastLifecycleSyncStartedAt: 0
     property double lastServerSyncCompletedAt: 0
     property string deferredAutomaticReason: ""
@@ -136,6 +143,7 @@ Item {
 
         onAuthenticated: {
             controller.accountAvatarUrl = controller.avatarUrl(serverUrl, userName)
+            controller.currentAvatarUrl = controller.accountAvatarUrl
             controller.sessionUserName = userName
             controller.sessionSecret = secret
             controller.sessionServerUrl = serverUrl
@@ -166,6 +174,13 @@ Item {
         }
 
         onFailed: controller.fail(message)
+    }
+
+    Timer {
+        id: accountRefreshTimer
+        interval: 150
+        repeat: false
+        onTriggered: controller.loadNotes()
     }
 
     NotesApiClient {
@@ -309,6 +324,7 @@ Item {
     }
 
     function loadNotes() {
+        accountSession.setAccount(currentAccountId, currentProviderId, currentServiceId, currentServerUrl)
         cancelDetailPrefetch()
         pendingNoteId = 0
         pendingUpload = false
@@ -333,6 +349,39 @@ Item {
             ? i18n.tr("Showing saved notes. Checking for updates...")
             : i18n.tr("Connecting to Nextcloud...")
         accountSession.authenticate()
+    }
+
+    function applyAccountSelection(accountId, displayName, providerId, serviceId, serverUrl, avatarUrl) {
+        currentAccountId = accountId
+        currentDisplayName = displayName || ""
+        currentProviderId = providerId || ""
+        currentServiceId = serviceId || ""
+        currentServerUrl = serverUrl || ""
+        currentAvatarUrl = avatarUrl || ""
+        accountSession.setAccount(currentAccountId, currentProviderId, currentServiceId, currentServerUrl)
+        clearAccountData()
+        activeAccountKey = accountKey()
+        accountRefreshTimer.restart()
+    }
+
+    function clearAccountData() {
+        notesModel.clear()
+        categoriesModel.clear()
+        allNotes = []
+        totalNotesCount = 0
+        filteredNotesCount = 0
+        hasCachedNotes = false
+        accountAvatarUrl = currentAvatarUrl || ""
+        statusText = currentAccountId > 0
+            ? i18n.tr("Account changed. Refreshing...")
+            : i18n.tr("Open your Nextcloud notes.")
+    }
+
+    function accountKey() {
+        return String(currentAccountId)
+            + "|" + String(currentProviderId || "")
+            + "|" + String(currentServiceId || "")
+            + "|" + String(currentServerUrl || "")
     }
 
     function loadCachedNotesOnly() {

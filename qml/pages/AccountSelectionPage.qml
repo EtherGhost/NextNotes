@@ -9,7 +9,9 @@ import "../backend/AuthCore.js" as AuthCore
 Page {
     id: page
 
-    readonly property string nextNotesApplicationId: "nextnotes.cloudsite_nextnotes"
+    property var notesController
+
+    readonly property string appApplicationId: "nextnotes.cloudsite_nextnotes"
     readonly property string nextcloudServiceId: "nextnotes.cloudsite_nextnotes_nextcloud"
     readonly property string owncloudServiceId: "nextnotes.cloudsite_nextnotes_owncloud"
 
@@ -22,6 +24,7 @@ Page {
     property string selectedServiceTypeId: ""
     property bool selectedEnabled: false
     property string serverUrl: accountSettings.serverUrl
+    property string pendingServerUrlAction: ""
     property bool showDiagnostics: false
     property int visibleCloudAccounts: 0
     property string authorizationStatus: i18n.tr("Select an account and authorize it for NextNotes.")
@@ -42,13 +45,17 @@ Page {
         property string providerId: ""
         property string serviceId: ""
         property string serverUrl: ""
+        property string avatarUrl: ""
     }
 
     AccountServiceModel {
         id: accountServices
         includeDisabled: true
 
-        onCountChanged: page.updateVisibleCloudAccounts()
+        onCountChanged: {
+            page.updateVisibleCloudAccounts()
+            Qt.callLater(page.restoreSelectedAccountFromSettings)
+        }
     }
 
     AccountService {
@@ -72,13 +79,28 @@ Page {
                 + " hasToken=" + page.hasValue(token)
             )
 
-            page.authorizationStatus = i18n.tr("Authorization succeeded for %1. Credentials are available to the app, but were not displayed or stored.")
-                .arg(page.selectedProviderId)
+            if (page.displayServerUrlIsMissing()) {
+                page.authorizationStatus = i18n.tr("Authorization succeeded, but the Ubuntu Touch account did not expose a server address for NextNotes.")
+            } else {
+                page.authorizationStatus = i18n.tr("Authorization succeeded for %1. Credentials are available to the app, but were not displayed or stored.")
+                    .arg(page.selectedProviderId)
+            }
             accountSettings.accountId = page.selectedAccountId
             accountSettings.displayName = page.selectedDisplayName
             accountSettings.providerId = page.selectedProviderId
             accountSettings.serviceId = page.selectedServiceId
             accountSettings.serverUrl = page.normalizeServerUrl(page.serverUrl)
+            accountSettings.avatarUrl = page.avatarUrl(accountSettings.serverUrl, userName)
+            if (page.notesController && page.notesController.applyAccountSelection) {
+                page.notesController.applyAccountSelection(
+                    accountSettings.accountId,
+                    accountSettings.displayName,
+                    accountSettings.providerId,
+                    accountSettings.serviceId,
+                    accountSettings.serverUrl,
+                    accountSettings.avatarUrl
+                )
+            }
         }
 
         onAuthenticationError: {
@@ -102,7 +124,7 @@ Page {
 
     Setup {
         id: accountSetup
-        applicationId: page.nextNotesApplicationId
+        applicationId: page.appApplicationId
         providerId: page.selectedProviderId.length > 0 ? page.selectedProviderId : "nextcloud"
 
         onFinished: {
@@ -114,7 +136,8 @@ Page {
                 + " replyKeys=" + page.objectKeys(reply).join(",")
             )
             if (accountId > 0) {
-                page.authorizationStatus = i18n.tr("System account authorization completed. Select the account again if needed, then verify authorization.")
+                page.authorizationStatus = i18n.tr("System account authorization completed. Verifying access...")
+                enableThenAuthenticateTimer.start()
             } else {
                 page.authorizationStatus = i18n.tr("System account authorization was cancelled or did not return an account.")
             }
@@ -128,16 +151,37 @@ Page {
         onTriggered: page.authenticateSelectedAccount()
     }
 
-    Component.onCompleted: Qt.callLater(page.updateVisibleCloudAccounts)
+    Timer {
+        id: serverUrlCommitTimer
+        interval: 80
+        repeat: false
+        onTriggered: {
+            page.serverUrl = serverUrlField.text
+            page.saveServerUrl()
+            var action = page.pendingServerUrlAction
+            page.pendingServerUrlAction = ""
+            if (action === "authorize") {
+                page.authorizeSelectedAccountAfterCommit()
+            } else if (action === "authenticate") {
+                page.authenticateSelectedAccountAfterCommit()
+            }
+        }
+    }
+
+    Component.onCompleted: Qt.callLater(function() {
+        page.updateVisibleCloudAccounts()
+        page.restoreSelectedAccountFromSettings()
+    })
 
     Flickable {
         id: pageFlickable
         anchors {
-            top: header.bottom
+            top: parent.top
             left: parent.left
             right: parent.right
             bottom: parent.bottom
             margins: units.gu(2)
+            topMargin: header.height + units.gu(2)
             bottomMargin: units.gu(2) + page.oskOverlap
         }
         clip: true
@@ -219,6 +263,31 @@ Page {
 
             Label {
                 Layout.fillWidth: true
+                text: i18n.tr("Server address")
+                font.bold: true
+                elide: Text.ElideRight
+            }
+
+            TextField {
+                id: serverUrlField
+                Layout.fillWidth: true
+                placeholderText: i18n.tr("https://cloud.example.com")
+                text: page.serverUrl.length > 0 ? page.serverUrl : accountSettings.serverUrl
+                inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoPredictiveText
+                onTextChanged: page.serverUrl = text
+                onAccepted: page.commitServerUrlInput("")
+            }
+
+            Label {
+                Layout.fillWidth: true
+                text: i18n.tr("The account still comes from Ubuntu Touch Online Accounts. Edit this only if the system account did not expose the correct server address.")
+                wrapMode: Text.WordWrap
+                maximumLineCount: 3
+                opacity: 0.68
+            }
+
+            Label {
+                Layout.fillWidth: true
                 text: i18n.tr("Available accounts")
                 font.bold: true
                 elide: Text.ElideRight
@@ -285,12 +354,32 @@ Page {
                     property string rowServiceId: rowServiceInfo.id || row.role("serviceName")
                     property string rowServiceTypeId: rowServiceInfo.serviceTypeId || rowServiceInfo.type || ""
                     property bool isCloudAccount: rowProviderId === "nextcloud" || rowProviderId === "owncloud"
-                    property bool isNextNotesService: rowServiceId === page.nextcloudServiceId || rowServiceId === page.owncloudServiceId
-                    property bool isSelected: page.selectedAccountId === row.role("accountId")
-                        && page.selectedServiceId === rowServiceId
+                    property bool isAppService: rowServiceId === page.nextcloudServiceId || rowServiceId === page.owncloudServiceId
+                    property bool isGenericCloudService: rowServiceId.length === 0
+                        || rowServiceId === rowProviderId
+                        || rowServiceId === row.role("serviceName")
+                            && rowServiceTypeId.length === 0
+                    property bool isSelected: (page.selectedAccountId === row.role("accountId")
+                            && page.selectedServiceId === rowServiceId)
+                        || (page.selectedAccountId <= 0
+                            && accountSettings.accountId === row.role("accountId")
+                            && accountSettings.serviceId === rowServiceId)
 
                     height: visible ? units.gu(7) : 0
-                    visible: isCloudAccount && (isNextNotesService || row.role("enabled"))
+                    visible: isCloudAccount && (isAppService || isGenericCloudService)
+                    color: row.isSelected ? Qt.rgba(0.17, 0.5, 0.72, 0.16) : "transparent"
+
+                    onClicked: page.selectAccount(
+                        row.role("accountServiceHandle"),
+                        row.role("accountId"),
+                        row.role("displayName"),
+                        row.role("providerName"),
+                        rowProviderId,
+                        row.role("serviceName"),
+                        rowServiceId,
+                        rowServiceTypeId,
+                        row.role("enabled")
+                    )
 
                     RowLayout {
                         id: content
@@ -339,60 +428,34 @@ Page {
                                 maximumLineCount: 1
                                 opacity: 0.72
                             }
-                        }
 
-                        Button {
-                            Layout.preferredWidth: units.gu(9)
-                            text: row.isSelected ? i18n.tr("Selected") : i18n.tr("Use")
-                            onClicked: page.selectAccount(
-                                row.role("accountServiceHandle"),
-                                row.role("accountId"),
-                                row.role("displayName"),
-                                row.role("providerName"),
-                                rowProviderId,
-                                row.role("serviceName"),
-                                rowServiceId,
-                                rowServiceTypeId,
-                                row.role("enabled")
-                            )
+                            Label {
+                                Layout.fillWidth: true
+                                text: row.isAppService
+                                    ? (row.role("enabled") ? i18n.tr("Allowed for NextNotes") : i18n.tr("Allow NextNotes in Ubuntu Touch account settings first"))
+                                    : i18n.tr("Nextcloud account discovered")
+                                textSize: Label.Small
+                                elide: Text.ElideRight
+                                maximumLineCount: 1
+                                opacity: row.isAppService && row.role("enabled") ? 0.72 : 0.9
+                            }
                         }
                     }
                 }
             }
 
-            TextField {
-                id: serverUrlField
+            Button {
                 Layout.fillWidth: true
-                placeholderText: i18n.tr("Server URL")
-                text: page.serverUrl
-                inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoPredictiveText
-                onTextChanged: page.serverUrl = text
-            }
-
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: units.gu(1)
-
-                Button {
-                    Layout.fillWidth: true
-                    text: i18n.tr("Authorize")
-                    enabled: page.selectedAccountId > 0
-                    onClicked: page.authorizeSelectedAccount()
-                }
-
-                Button {
-                    Layout.fillWidth: true
-                    text: i18n.tr("Verify")
-                    enabled: page.selectedAccountId > 0
-                    onClicked: page.authenticateSelectedAccount()
-                }
+                text: i18n.tr("Verify selected account")
+                enabled: page.selectedAccountId > 0
+                onClicked: page.authenticateSelectedAccount()
             }
 
             Label {
                 Layout.fillWidth: true
                 text: authorizationStatus
-                elide: Text.ElideRight
-                maximumLineCount: 2
+                wrapMode: Text.WordWrap
+                maximumLineCount: 5
                 opacity: 0.82
             }
 
@@ -438,9 +501,9 @@ Page {
         selectedServiceTypeId = serviceTypeId
         selectedEnabled = enabled
 
-        var settings = selectedService.settings || {}
-        var host = settings.host || settings.Host || accountSettings.serverUrl
-        serverUrl = normalizeServerUrl(host)
+        var resolvedServerUrl = findServerUrlForAccount(accountId, displayName)
+        serverUrl = normalizeServerUrl(resolvedServerUrl)
+        serverUrlField.text = serverUrl
 
         console.log(
             "NextNotes OnlineAccountsSelection selected"
@@ -453,8 +516,9 @@ Page {
             + " preferredAppService=" + (appService.handle ? true : false)
         )
 
-        authorizationStatus = i18n.tr("Selected %1. Authorize the account before using it.")
+        authorizationStatus = i18n.tr("Selected %1. Verifying authorization...")
             .arg(selectedDisplayName)
+        page.commitServerUrlInput("authenticate")
     }
 
     function findPreferredAppService(accountId, providerId) {
@@ -488,6 +552,113 @@ Page {
         return {}
     }
 
+    function restoreSelectedAccountFromSettings() {
+        if (selectedAccountId > 0 || accountSettings.accountId <= 0 || accountSettings.providerId.length === 0) {
+            return
+        }
+
+        var appService = findPreferredAppService(accountSettings.accountId, accountSettings.providerId)
+        if (!appService.handle) {
+            return
+        }
+
+        selectedService.objectHandle = appService.handle
+        selectedAccountId = accountSettings.accountId
+        selectedDisplayName = accountSettings.displayName
+        selectedProviderId = accountSettings.providerId
+        selectedProviderName = accountSettings.providerId
+        selectedServiceName = appService.serviceName
+        selectedServiceId = appService.serviceId
+        selectedServiceTypeId = appService.serviceTypeId
+        selectedEnabled = appService.enabled
+        serverUrl = normalizeServerUrl(accountSettings.serverUrl)
+        serverUrlField.text = serverUrl
+        authorizationStatus = i18n.tr("Saved account selected. Verify again if needed.")
+    }
+
+    function findServerUrlForAccount(accountId, displayName) {
+        var selectedUrl = serverUrlFromCurrentService()
+        if (selectedUrl.length > 0) {
+            return selectedUrl
+        }
+
+        for (var i = 0; i < accountServices.count; ++i) {
+            if (accountServices.get(i, "accountId") !== accountId) {
+                continue
+            }
+
+            var handle = accountServices.get(i, "accountServiceHandle")
+            if (!handle) {
+                continue
+            }
+
+            visibleCountService.objectHandle = handle
+            var url = serverUrlFromService(visibleCountService)
+            if (url.length > 0) {
+                return url
+            }
+        }
+
+        var inferredUrl = inferServerUrlFromDisplayName(displayName)
+        if (inferredUrl.length > 0) {
+            return inferredUrl
+        }
+
+        if (accountSettings.accountId === accountId) {
+            return normalizeServerUrl(accountSettings.serverUrl)
+        }
+
+        return ""
+    }
+
+    function serverUrlFromCurrentService() {
+        return serverUrlFromService(selectedService)
+    }
+
+    function serverUrlFromService(serviceObject) {
+        var settings = serviceObject.settings || {}
+        var account = serviceObject.account || {}
+        var provider = serviceObject.provider || {}
+        var values = [
+            settings.host,
+            settings.Host,
+            settings.server,
+            settings.serverUrl,
+            settings.url,
+            settings.Url,
+            account.host,
+            account.Host,
+            account.server,
+            account.serverUrl,
+            account.url,
+            provider.host,
+            provider.server,
+            provider.serverUrl,
+            provider.url
+        ]
+
+        for (var i = 0; i < values.length; ++i) {
+            var url = normalizeServerUrl(values[i])
+            if (url.length > 0) {
+                return url
+            }
+        }
+
+        return ""
+    }
+
+    function inferServerUrlFromDisplayName(displayName) {
+        var value = String(displayName || "").trim()
+        var atIndex = value.lastIndexOf("@")
+        if (atIndex < 0 || atIndex === value.length - 1) {
+            return ""
+        }
+
+        var host = value.slice(atIndex + 1)
+        host = host.replace(/[<>()\[\],;]/g, "").trim()
+        return normalizeServerUrl(host)
+    }
+
     function updateVisibleCloudAccounts() {
         var count = 0
         for (var i = 0; i < accountServices.count; ++i) {
@@ -503,8 +674,11 @@ Page {
             var serviceId = service.id || accountServices.get(i, "serviceName")
             var enabled = accountServices.get(i, "enabled")
             var cloud = providerId === "nextcloud" || providerId === "owncloud"
-            var nextNotesService = serviceId === nextcloudServiceId || serviceId === owncloudServiceId
-            if (cloud && (nextNotesService || enabled)) {
+            var cloudAppService = serviceId === nextcloudServiceId || serviceId === owncloudServiceId
+            var genericCloudService = serviceId.length === 0
+                || serviceId === providerId
+                || serviceId === accountServices.get(i, "serviceName") && (service.serviceTypeId || service.type || "").length === 0
+            if (cloud && (cloudAppService || genericCloudService)) {
                 count += 1
             }
         }
@@ -512,22 +686,28 @@ Page {
     }
 
     function authorizeSelectedAccount() {
+        page.commitServerUrlInput("authenticate")
+    }
+
+    function authorizeSelectedAccountAfterCommit() {
         if (selectedAccountId <= 0) {
             authorizationStatus = i18n.tr("Select an account first.")
             return
         }
 
-        saveServerUrl()
-        authenticateSelectedAccount()
+        authenticateSelectedAccountAfterCommit()
     }
 
     function authenticateSelectedAccount() {
+        page.commitServerUrlInput("authenticate")
+    }
+
+    function authenticateSelectedAccountAfterCommit() {
         if (selectedAccountId <= 0) {
             authorizationStatus = i18n.tr("Select an account first.")
             return
         }
 
-        saveServerUrl()
         refreshSelectedServiceHandle()
         authorizationStatus = i18n.tr("Verifying Online Accounts authorization...")
         console.log(
@@ -541,14 +721,37 @@ Page {
         )
 
         if (!selectedEnabled) {
-            console.log("NextNotes OnlineAccountsAuthorization enabling serviceId=" + selectedServiceId)
-            selectedService.updateServiceEnabled(true)
-            selectedEnabled = true
-            enableThenAuthenticateTimer.start()
+            console.log(
+                "NextNotes OnlineAccountsAuthorization service-not-enabled"
+                + " accountId=" + selectedAccountId
+                + " providerId=" + selectedProviderId
+                + " serviceId=" + selectedServiceId
+            )
+            authorizationStatus = i18n.tr("This account is not allowed for NextNotes yet. Open Ubuntu Touch System Settings > Accounts, select the Nextcloud account, allow NextNotes, then return here and select the account again.")
+            clearSelectedAccount()
             return
         }
 
         selectedService.authenticate({})
+    }
+
+    function clearSelectedAccount() {
+        selectedService.objectHandle = null
+        selectedAccountId = 0
+        selectedDisplayName = ""
+        selectedProviderName = ""
+        selectedProviderId = ""
+        selectedServiceName = ""
+        selectedServiceId = ""
+        selectedServiceTypeId = ""
+        selectedEnabled = false
+    }
+
+    function commitServerUrlInput(action) {
+        pendingServerUrlAction = action || ""
+        Qt.inputMethod.commit()
+        serverUrlField.focus = false
+        serverUrlCommitTimer.restart()
     }
 
     function refreshSelectedServiceHandle() {
@@ -572,9 +775,6 @@ Page {
         var url = normalizeServerUrl(serverUrl)
         serverUrl = url
         accountSettings.serverUrl = url
-        if (selectedAccountId > 0) {
-            selectedService.updateSettings({ "host": url })
-        }
     }
 
     function currentSetupSummary() {
@@ -607,12 +807,19 @@ Page {
         if (accountSettings.serverUrl.length > 0) {
             return accountSettings.serverUrl
         }
-        return i18n.tr("Server URL missing")
+        return i18n.tr("The selected Ubuntu Touch account did not expose a server address.")
+    }
+
+    function displayServerUrlIsMissing() {
+        if (selectedAccountId > 0) {
+            return normalizeServerUrl(serverUrl).length === 0
+        }
+        return normalizeServerUrl(accountSettings.serverUrl).length === 0
     }
 
     function accountReady() {
         return (selectedAccountId > 0 || accountSettings.accountId > 0)
-            && displayServerUrl() !== i18n.tr("Server URL missing")
+            && !displayServerUrlIsMissing()
     }
 
     function accountInitial() {
@@ -625,6 +832,13 @@ Page {
 
     function normalizeServerUrl(value) {
         return AuthCore.normalizeServerUrl(value)
+    }
+
+    function avatarUrl(serverUrl, userName) {
+        if (!serverUrl || !userName) {
+            return ""
+        }
+        return String(serverUrl).replace(/\/+$/, "") + "/index.php/avatar/" + encodeURIComponent(userName) + "/64"
     }
 
     function objectKeys(value) {
