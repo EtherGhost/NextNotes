@@ -157,10 +157,27 @@ Item {
     }
 
     function setAccount(accountId, providerId, serviceId, serverUrl) {
+        var normalizedServerUrl = normalizeServerUrl(serverUrl)
+        var accountChanged = currentAccountId !== accountId
+            || currentProviderId !== (providerId || "")
+            || currentServiceId !== (serviceId || "")
+            || currentServerUrl !== normalizedServerUrl
+
+        if (accountChanged) {
+            pendingServiceHandle = false
+            pendingCallback = null
+            cachedAccountId = 0
+            cachedServiceId = ""
+            cachedServerUrl = ""
+            cachedUserName = ""
+            cachedSecret = ""
+            accountService.objectHandle = null
+        }
+
         currentAccountId = accountId
         currentProviderId = providerId || ""
         currentServiceId = serviceId || ""
-        currentServerUrl = normalizeServerUrl(serverUrl)
+        currentServerUrl = normalizedServerUrl
     }
 
     function hasCachedCredentials(serverUrl) {

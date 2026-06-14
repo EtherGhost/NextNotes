@@ -38,6 +38,8 @@ NextNotes always uses Ubuntu Touch Online Accounts. Add your Nextcloud or ownClo
 
 Credentials are requested from Online Accounts at runtime and are not stored by NextNotes. After successful runtime authentication, credentials may be kept only in process memory for the current app session.
 
+The account flow follows the shared Nextcloud suite pattern: account rows are selected directly, verification is serialized while running, stale in-memory credentials are cleared when switching accounts, and technical diagnostics are kept out of the normal UI.
+
 ## Languages
 
 Current language choices:

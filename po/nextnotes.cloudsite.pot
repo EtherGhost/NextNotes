@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nextnotes.cloudsite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-14 19:57+0000\n"
+"POT-Creation-Date: 2026-06-14 23:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -408,146 +408,136 @@ msgstr ""
 msgid "Accounts"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:83
+#: qml/pages/AccountSelectionPage.qml:84
 msgid ""
 "Authorization succeeded, but the Ubuntu Touch account did not expose a "
 "server address for NextNotes."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:85
+#: qml/pages/AccountSelectionPage.qml:86
 msgid ""
 "Authorization succeeded for %1. Credentials are available to the app, but "
 "were not displayed or stored."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:116
+#: qml/pages/AccountSelectionPage.qml:118
 msgid ""
 "Authorization failed: %1. If the system did not show an Online Accounts "
 "prompt, open System Settings > Accounts and allow NextNotes for this "
 "account, then try again."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:139
+#: qml/pages/AccountSelectionPage.qml:141
 msgid "System account authorization completed. Verifying access..."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:142
+#: qml/pages/AccountSelectionPage.qml:144
 msgid ""
 "System account authorization was cancelled or did not return an account."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:199 qml/pages/NotesListPage.qml:888
+#: qml/pages/AccountSelectionPage.qml:201 qml/pages/NotesListPage.qml:888
 msgid "Account"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:266
+#: qml/pages/AccountSelectionPage.qml:268
 msgid "Server address"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:274
+#: qml/pages/AccountSelectionPage.qml:276
 msgid "https://cloud.example.com"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:283
+#: qml/pages/AccountSelectionPage.qml:285
 msgid ""
 "The account still comes from Ubuntu Touch Online Accounts. Edit this only if "
 "the system account did not expose the correct server address."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:291
+#: qml/pages/AccountSelectionPage.qml:293
 msgid "Available accounts"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:317
+#: qml/pages/AccountSelectionPage.qml:319
 msgid "No Nextcloud account found"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:324
+#: qml/pages/AccountSelectionPage.qml:326
 msgid ""
 "Add a Nextcloud or ownCloud account in Ubuntu Touch System Settings > "
 "Accounts. Then return here and select it."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:435
+#: qml/pages/AccountSelectionPage.qml:443
 msgid "Allow NextNotes in Ubuntu Touch account settings first"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:435
+#: qml/pages/AccountSelectionPage.qml:443
 msgid "Allowed for NextNotes"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:436
+#: qml/pages/AccountSelectionPage.qml:444
 msgid "Nextcloud account discovered"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:449
+#: qml/pages/AccountSelectionPage.qml:457
 msgid "Verify selected account"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:464
-msgid "Diagnostics"
+#: qml/pages/AccountSelectionPage.qml:457
+msgid "Verifying account..."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:464
-msgid "Hide diagnostics"
-msgstr ""
-
-#: qml/pages/AccountSelectionPage.qml:471
-msgid ""
-"Discovered services: %1\n"
-"Selected accountId=%2 providerId=%3 serviceId=%4 serviceTypeId=%5 enabled=%6"
-msgstr ""
-
-#: qml/pages/AccountSelectionPage.qml:519
+#: qml/pages/AccountSelectionPage.qml:507
 msgid "Selected %1. Verifying authorization..."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:576
+#: qml/pages/AccountSelectionPage.qml:564
 msgid "Saved account selected. Verify again if needed."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:694
-#: qml/pages/AccountSelectionPage.qml:707
+#: qml/pages/AccountSelectionPage.qml:682
+#: qml/pages/AccountSelectionPage.qml:695
 msgid "Select an account first."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:712
+#: qml/pages/AccountSelectionPage.qml:700
 msgid "Verifying Online Accounts authorization..."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:730
+#: qml/pages/AccountSelectionPage.qml:719
 msgid ""
 "This account is not allowed for NextNotes yet. Open Ubuntu Touch System "
 "Settings > Accounts, select the Nextcloud account, allow NextNotes, then "
 "return here and select the account again."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:782
+#: qml/pages/AccountSelectionPage.qml:773
 msgid ""
 "No account is saved yet. Select a Nextcloud account below, authorize it, and "
 "verify access."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:785
+#: qml/pages/AccountSelectionPage.qml:776
 msgid ""
 "%1 on %2\n"
 "providerId=%3 serviceId=%4"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:786
+#: qml/pages/AccountSelectionPage.qml:777
 msgid "Saved account"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:787
+#: qml/pages/AccountSelectionPage.qml:778
 msgid "server URL missing"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:799
-#: qml/pages/AccountSelectionPage.qml:827
+#: qml/pages/AccountSelectionPage.qml:790
+#: qml/pages/AccountSelectionPage.qml:818
 msgid "No account selected"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:810
+#: qml/pages/AccountSelectionPage.qml:801
 msgid "The selected Ubuntu Touch account did not expose a server address."
 msgstr ""
 

@@ -25,7 +25,7 @@ Page {
     property bool selectedEnabled: false
     property string serverUrl: accountSettings.serverUrl
     property string pendingServerUrlAction: ""
-    property bool showDiagnostics: false
+    property bool authorizationRunning: false
     property int visibleCloudAccounts: 0
     property string authorizationStatus: i18n.tr("Select an account and authorize it for NextNotes.")
     readonly property real oskOverlap: Qt.inputMethod.visible && Qt.inputMethod.keyboardRectangle.height > 0
@@ -62,6 +62,7 @@ Page {
         id: selectedService
 
         onAuthenticated: {
+            page.authorizationRunning = false
             var data = reply && reply.data ? reply.data : reply
             var userName = page.firstValue(data, ["UserName", "Username", "userName", "username"])
             var secret = page.firstValue(data, ["Secret", "Password", "password", "secret"])
@@ -104,6 +105,7 @@ Page {
         }
 
         onAuthenticationError: {
+            page.authorizationRunning = false
             var message = error && error.message ? error.message : JSON.stringify(error)
             console.log(
                 "NextNotes OnlineAccountsAuthorization error"
@@ -369,26 +371,32 @@ Page {
                     visible: isCloudAccount && (isAppService || isGenericCloudService)
                     color: row.isSelected ? Qt.rgba(0.17, 0.5, 0.72, 0.16) : "transparent"
 
-                    onClicked: page.selectAccount(
-                        row.role("accountServiceHandle"),
-                        row.role("accountId"),
-                        row.role("displayName"),
-                        row.role("providerName"),
-                        rowProviderId,
-                        row.role("serviceName"),
-                        rowServiceId,
-                        rowServiceTypeId,
-                        row.role("enabled")
-                    )
+                    enabled: !page.authorizationRunning
+
+                    onClicked: {
+                        if (page.authorizationRunning) {
+                            return
+                        }
+
+                        page.selectAccount(
+                            row.role("accountServiceHandle"),
+                            row.role("accountId"),
+                            row.role("displayName"),
+                            row.role("providerName"),
+                            rowProviderId,
+                            row.role("serviceName"),
+                            rowServiceId,
+                            rowServiceTypeId,
+                            row.role("enabled")
+                        )
+                    }
 
                     RowLayout {
                         id: content
-                        anchors {
-                            left: parent.left
-                            right: parent.right
-                            verticalCenter: parent.verticalCenter
-                            margins: units.gu(1)
-                        }
+                        x: units.gu(1)
+                        y: 0
+                        width: Math.max(0, row.width - units.gu(2))
+                        height: row.height
                         spacing: units.gu(1)
 
                         Rectangle {
@@ -446,8 +454,8 @@ Page {
 
             Button {
                 Layout.fillWidth: true
-                text: i18n.tr("Verify selected account")
-                enabled: page.selectedAccountId > 0
+                text: page.authorizationRunning ? i18n.tr("Verifying account...") : i18n.tr("Verify selected account")
+                enabled: page.selectedAccountId > 0 && !page.authorizationRunning
                 onClicked: page.authenticateSelectedAccount()
             }
 
@@ -457,26 +465,6 @@ Page {
                 wrapMode: Text.WordWrap
                 maximumLineCount: 5
                 opacity: 0.82
-            }
-
-            Button {
-                Layout.fillWidth: true
-                text: page.showDiagnostics ? i18n.tr("Hide diagnostics") : i18n.tr("Diagnostics")
-                onClicked: page.showDiagnostics = !page.showDiagnostics
-            }
-
-            Label {
-                Layout.fillWidth: true
-                visible: page.showDiagnostics
-                text: i18n.tr("Discovered services: %1\nSelected accountId=%2 providerId=%3 serviceId=%4 serviceTypeId=%5 enabled=%6")
-                    .arg(accountServices.count)
-                    .arg(selectedAccountId > 0 ? selectedAccountId : "-")
-                    .arg(selectedProviderId.length ? selectedProviderId : "-")
-                    .arg(selectedServiceId.length ? selectedServiceId : "-")
-                    .arg(selectedServiceTypeId.length ? selectedServiceTypeId : "-")
-                    .arg(selectedAccountId > 0 ? selectedEnabled : "-")
-                wrapMode: Text.WordWrap
-                textSize: Label.Small
             }
         }
     }
@@ -721,6 +709,7 @@ Page {
         )
 
         if (!selectedEnabled) {
+            page.authorizationRunning = false
             console.log(
                 "NextNotes OnlineAccountsAuthorization service-not-enabled"
                 + " accountId=" + selectedAccountId
@@ -731,11 +720,13 @@ Page {
             clearSelectedAccount()
             return
         }
+        page.authorizationRunning = true
 
         selectedService.authenticate({})
     }
 
     function clearSelectedAccount() {
+        page.authorizationRunning = false
         selectedService.objectHandle = null
         selectedAccountId = 0
         selectedDisplayName = ""

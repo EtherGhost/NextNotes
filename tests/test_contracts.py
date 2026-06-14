@@ -43,12 +43,16 @@ class ProjectMetadataTests(unittest.TestCase):
         self.assertIn("service-not-enabled", account_page)
         self.assertIn("clearSelectedAccount()", account_page)
         self.assertIn("notesController.applyAccountSelection(", account_page)
-        self.assertIn("onClicked: page.selectAccount(", account_page)
+        self.assertIn("authorizationRunning", account_page)
+        self.assertIn("if (page.authorizationRunning)", account_page)
+        self.assertIn("page.selectAccount(", account_page)
         self.assertIn("function restoreSelectedAccountFromSettings()", account_page)
         self.assertIn("Open Ubuntu Touch System Settings > Accounts", account_page)
         self.assertNotIn("selectedService.updateServiceEnabled(true)", account_page)
         self.assertNotIn('text: row.isSelected ? i18n.tr("Selected") : i18n.tr("Use")', account_page)
         self.assertNotIn("accountSetup.exec()", account_page)
+        self.assertNotIn("Discovered services:", account_page)
+        self.assertNotIn("Diagnostics", account_page)
         self.assertNotIn("nextnotes.tobbe", account_page + accounts_hook)
 
     def test_qml_resource_file_includes_all_runtime_qml_files(self):
@@ -363,6 +367,9 @@ class RefactoredCoreContractTests(unittest.TestCase):
         self.assertIn("envTestAuthEnabled", session)
         self.assertIn("desktopTestAuthEnabled", session)
         self.assertIn("auth using desktop test environment credentials", session)
+        self.assertIn("var accountChanged = currentAccountId !== accountId", session)
+        self.assertIn("cachedSecret = \"\"", session)
+        self.assertIn("pendingCallback = null", session)
 
         forbidden = [
             "manualAccount",
@@ -532,13 +539,11 @@ class UiFlowContractTests(unittest.TestCase):
 
         for snippet in [
             "Available accounts",
-            "Diagnostics",
             "No Nextcloud account found",
             "Ubuntu Touch System Settings > Accounts",
             "currentSetupSummary",
             "displayAccountName",
             "accountInitial",
-            "showDiagnostics",
             "visibleCloudAccounts",
             "updateVisibleCloudAccounts",
             "Flickable",
@@ -550,6 +555,9 @@ class UiFlowContractTests(unittest.TestCase):
             "accountSettings.serviceId",
         ]:
             self.assertIn(snippet, account_page)
+
+        self.assertNotIn("showDiagnostics", account_page)
+        self.assertNotIn("Diagnostics", account_page)
 
 
 class DocumentationAndAcceptanceCoverageTests(unittest.TestCase):

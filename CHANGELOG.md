@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Aligned the account page with the shared Nextcloud suite flow: clickable account rows, guided Ubuntu Touch account-setting approval, automatic verification after account selection, and immediate controller refresh after changing account.
+- Hardened account switching by serializing verification, clearing stale in-memory credentials, removing normal diagnostic UI, and adding regression-test coverage.
 
 ## 0.1.1 - 2026-06-13
 
