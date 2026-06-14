@@ -9,13 +9,37 @@ Item {
     readonly property string statusDeleted: "LOCAL_DELETED"
 
     property var database: null
+    property string databaseName: "NextNotesSync"
+
+    function setScope(scopeKey) {
+        var scopedName = "NextNotesSync_" + safeScopeName(scopeKey)
+        if (databaseName === scopedName) {
+            return
+        }
+
+        database = null
+        databaseName = scopedName
+        console.log("NextNotes NotesCache scope changed")
+    }
+
+    function safeScopeName(scopeKey) {
+        var value = String(scopeKey || "default")
+        value = value.replace(/[^A-Za-z0-9_]/g, "_")
+        if (value.length === 0) {
+            return "default"
+        }
+        if (value.length > 96) {
+            return value.slice(0, 96)
+        }
+        return value
+    }
 
     function db() {
         if (database) {
             return database
         }
 
-        database = Sql.LocalStorage.openDatabaseSync("NextNotesSync", "1.0", "NextNotes sync cache", 8 * 1024 * 1024)
+        database = Sql.LocalStorage.openDatabaseSync(databaseName, "1.0", "NextNotes sync cache", 8 * 1024 * 1024)
         database.transaction(function(tx) {
             tx.executeSql(
                 "CREATE TABLE IF NOT EXISTS notes (" +

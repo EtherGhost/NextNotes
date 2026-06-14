@@ -11,6 +11,7 @@ NextNotes is not affiliated with, endorsed by, or sponsored by Nextcloud GmbH or
 - Use an existing Nextcloud or ownCloud account from Ubuntu Touch Online Accounts.
 - List, search, open, create, edit, favorite, categorize, and delete notes.
 - Cache notes locally for offline access.
+- Keep local note caches separated per selected Online Accounts account.
 - Automatically sync local changes while the app is active.
 - Preserve local drafts when server conflicts are detected.
 - Review conflicts by choosing the local or server version.
@@ -39,6 +40,8 @@ NextNotes always uses Ubuntu Touch Online Accounts. Add your Nextcloud or ownClo
 Credentials are requested from Online Accounts at runtime and are not stored by NextNotes. After successful runtime authentication, credentials may be kept only in process memory for the current app session.
 
 The account flow follows the shared Nextcloud suite pattern: account rows are selected directly, verification is serialized while running, stale in-memory credentials are cleared when switching accounts, and technical diagnostics are kept out of the normal UI.
+
+Each Ubuntu Touch account must be allowed for NextNotes in System Settings > Accounts. If one account works and another account does not, open the OS account settings for the failing account, allow NextNotes, then select that account again inside the app.
 
 ## Languages
 

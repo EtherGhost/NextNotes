@@ -20,7 +20,7 @@ class ProjectMetadataTests(unittest.TestCase):
         manifest = json.loads(read_text("manifest.json.in"))
 
         self.assertEqual(manifest["name"], "nextnotes.cloudsite")
-        self.assertEqual(manifest["version"], "0.1.1.3")
+        self.assertEqual(manifest["version"], "0.1.1.7")
         self.assertIn("nextnotes", manifest["hooks"])
         self.assertEqual(manifest["hooks"]["nextnotes"]["apparmor"], "nextnotes.apparmor")
         self.assertEqual(manifest["hooks"]["nextnotes"]["desktop"], "nextnotes.desktop")
@@ -333,8 +333,9 @@ class NotesControllerContractTests(unittest.TestCase):
         for name in ["sessionSecret", "syncSecret"]:
             self.assertIn(name, self.controller)
 
-        self.assertNotIn("Settings", self.controller)
         self.assertNotIn("LocalStorage", self.controller)
+        self.assertNotIn("property string sessionSecret", self.controller.split('Settings {', 1)[1].split('}', 1)[0])
+        self.assertNotIn("property string syncSecret", self.controller.split('Settings {', 1)[1].split('}', 1)[0])
         self.assertRegex(self.controller, r'syncSecret\s*=\s*""')
         self.assertIn("sessionSecret = secret", self.controller)
 
@@ -368,10 +369,19 @@ class RefactoredCoreContractTests(unittest.TestCase):
         self.assertIn("desktopTestAuthEnabled", session)
         self.assertIn("auth using desktop test environment credentials", session)
         self.assertIn("var accountChanged = currentAccountId !== accountId", session)
+        self.assertIn("property var pendingCallback: null", session)
+        self.assertIn("function withCredentials(callback)", session)
         self.assertIn("cachedSecret = \"\"", session)
         self.assertIn("pendingCallback = null", session)
         self.assertIn("NextNotes NotesController account selection applied", read_text("qml/backend/NotesController.qml"))
-        self.assertIn("Qt.callLater(loadNotes)", read_text("qml/backend/NotesController.qml"))
+        self.assertIn("Qt.callLater(refreshSelectedAccountFromServer)", read_text("qml/backend/NotesController.qml"))
+        self.assertIn("function refreshSelectedAccountFromServer()", read_text("qml/backend/NotesController.qml"))
+        self.assertIn('category: "account"', read_text("qml/backend/NotesController.qml"))
+        self.assertIn("notesCache.setScope(accountKey())", read_text("qml/backend/NotesController.qml"))
+        self.assertIn("function setScope(scopeKey)", read_text("qml/backend/NotesCache.qml"))
+        self.assertIn('Sql.LocalStorage.openDatabaseSync(databaseName', read_text("qml/backend/NotesCache.qml"))
+        self.assertIn('message.indexOf("AppArmor policy prevents")', account_page)
+        self.assertIn("page.clearSelectedAccount()", account_page)
 
         forbidden = [
             "manualAccount",

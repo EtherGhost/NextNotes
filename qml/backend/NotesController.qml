@@ -1,4 +1,5 @@
 import QtQuick 2.7
+import Qt.labs.settings 1.0
 import "SyncPlanner.js" as SyncPlanner
 
 Item {
@@ -134,6 +135,17 @@ Item {
 
     property alias categories: categoriesModel
 
+    Settings {
+        id: accountSettings
+        category: "account"
+        property int accountId: 0
+        property string displayName: ""
+        property string providerId: ""
+        property string serviceId: ""
+        property string serverUrl: ""
+        property string avatarUrl: ""
+    }
+
     NotesCache {
         id: notesCache
     }
@@ -144,6 +156,11 @@ Item {
         onAuthenticated: {
             controller.accountAvatarUrl = controller.avatarUrl(serverUrl, userName)
             controller.currentAvatarUrl = controller.accountAvatarUrl
+            if (serverUrl && serverUrl.length > 0) {
+                accountSettings.serverUrl = serverUrl
+                controller.currentServerUrl = serverUrl
+            }
+            accountSettings.avatarUrl = controller.accountAvatarUrl
             controller.sessionUserName = userName
             controller.sessionSecret = secret
             controller.sessionServerUrl = serverUrl
@@ -181,6 +198,10 @@ Item {
         interval: 150
         repeat: false
         onTriggered: controller.loadNotes()
+    }
+
+    Component.onCompleted: {
+        restoreAccountRuntimeFromSettings()
     }
 
     NotesApiClient {
@@ -324,7 +345,7 @@ Item {
     }
 
     function loadNotes() {
-        accountSession.setAccount(currentAccountId, currentProviderId, currentServiceId, currentServerUrl)
+        configureAccountRuntime()
         cancelDetailPrefetch()
         pendingNoteId = 0
         pendingUpload = false
@@ -352,6 +373,12 @@ Item {
     }
 
     function applyAccountSelection(accountId, displayName, providerId, serviceId, serverUrl, avatarUrl) {
+        accountSettings.accountId = accountId
+        accountSettings.displayName = displayName || ""
+        accountSettings.providerId = providerId || ""
+        accountSettings.serviceId = serviceId || ""
+        accountSettings.serverUrl = serverUrl || ""
+        accountSettings.avatarUrl = avatarUrl || ""
         currentAccountId = accountId
         currentDisplayName = displayName || ""
         currentProviderId = providerId || ""
@@ -365,10 +392,46 @@ Item {
             + " serviceId=" + currentServiceId
             + " serverUrlConfigured=" + (currentServerUrl.length > 0)
         )
-        accountSession.setAccount(currentAccountId, currentProviderId, currentServiceId, currentServerUrl)
+        configureAccountRuntime()
         clearAccountData()
         activeAccountKey = accountKey()
-        Qt.callLater(loadNotes)
+        Qt.callLater(refreshSelectedAccountFromServer)
+    }
+
+    function refreshSelectedAccountFromServer() {
+        configureAccountRuntime()
+        cancelDetailPrefetch()
+        pendingNoteId = 0
+        pendingUpload = false
+        pendingUploadNote = null
+        pendingDelete = false
+        pendingDeleteNoteId = 0
+        hasCachedNote = false
+        loading = true
+        statusText = i18n.tr("Account changed. Refreshing...")
+        accountSession.authenticate()
+    }
+
+    function restoreAccountRuntimeFromSettings() {
+        currentAccountId = accountSettings.accountId
+        currentDisplayName = accountSettings.displayName || ""
+        currentProviderId = accountSettings.providerId || ""
+        currentServiceId = accountSettings.serviceId || ""
+        currentServerUrl = accountSettings.serverUrl || ""
+        currentAvatarUrl = accountSettings.avatarUrl || ""
+        accountAvatarUrl = currentAvatarUrl
+        configureAccountRuntime()
+        activeAccountKey = accountKey()
+    }
+
+    function configureAccountRuntime() {
+        if (currentAccountId <= 0 && accountSettings.accountId > 0) {
+            restoreAccountRuntimeFromSettings()
+            return
+        }
+
+        accountSession.setAccount(currentAccountId, currentProviderId, currentServiceId, currentServerUrl)
+        notesCache.setScope(accountKey())
     }
 
     function clearAccountData() {
@@ -392,6 +455,7 @@ Item {
     }
 
     function loadCachedNotesOnly() {
+        configureAccountRuntime()
         cancelDetailPrefetch()
         pendingNoteId = 0
         pendingUpload = false
@@ -409,6 +473,7 @@ Item {
     }
 
     function uploadLocalDraft() {
+        configureAccountRuntime()
         if (pendingNoteId === 0 || noteReadOnly || !noteDirty) {
             return
         }
@@ -436,6 +501,7 @@ Item {
     }
 
     function syncNow(automatic) {
+        configureAccountRuntime()
         if (syncRunning || loading) {
             return
         }
@@ -597,6 +663,7 @@ Item {
     }
 
     function loadNote(noteId, initialTitle) {
+        configureAccountRuntime()
         cancelDetailPrefetch()
         noteFetchMode = "open"
         pendingNoteId = noteId
@@ -635,6 +702,7 @@ Item {
     }
 
     function createLocalNote() {
+        configureAccountRuntime()
         cancelDetailPrefetch()
         var category = selectedCategoryType === "category" ? selectedCategoryValue : ""
         var favorite = selectedCategoryType === "favorites"
@@ -694,6 +762,7 @@ Item {
     }
 
     function refreshNotesFromCache() {
+        configureAccountRuntime()
         populateNotes(notesCache.loadNotes())
         hasCachedNotes = totalNotesCount > 0
     }

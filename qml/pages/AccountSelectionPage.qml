@@ -115,8 +115,13 @@ Page {
                 + " serviceTypeId=" + page.selectedServiceTypeId
                 + " message=" + message
             )
-            page.authorizationStatus = i18n.tr("Authorization failed: %1. If the system did not show an Online Accounts prompt, open System Settings > Accounts and allow NextNotes for this account, then try again.")
-                .arg(message)
+            if (message.indexOf("AppArmor policy prevents") >= 0 || message.indexOf("AccessDenied") >= 0) {
+                page.authorizationStatus = i18n.tr("NextNotes is not allowed to use this account yet. Open Ubuntu Touch System Settings > Accounts, select the Nextcloud account, allow NextNotes, then return here and select the account again.")
+                page.clearSelectedAccount()
+            } else {
+                page.authorizationStatus = i18n.tr("Authorization failed: %1. If the system did not show an Online Accounts prompt, open System Settings > Accounts and allow NextNotes for this account, then try again.")
+                    .arg(message)
+            }
         }
     }
 

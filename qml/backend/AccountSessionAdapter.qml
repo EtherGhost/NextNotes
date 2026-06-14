@@ -16,6 +16,7 @@ Item {
     property string currentProviderId: ""
     property string currentServiceId: ""
     property string currentServerUrl: ""
+    property var pendingCallback: null
     property bool envTestAuthEnabled: typeof desktopTestAuthEnabled !== "undefined" && desktopTestAuthEnabled
     property string envTestServerUrl: typeof desktopTestServerUrl !== "undefined" ? desktopTestServerUrl : ""
     property string envTestUserName: typeof desktopTestUserName !== "undefined" ? desktopTestUserName : ""
@@ -77,6 +78,11 @@ Item {
             adapter.cachedSecret = secret
 
             adapter.authenticated(userName, secret, adapter.cachedServerUrl)
+            if (adapter.pendingCallback) {
+                var callback = adapter.pendingCallback
+                adapter.pendingCallback = null
+                callback(userName, secret, adapter.cachedServerUrl)
+            }
         }
 
         onAuthenticationError: {
@@ -107,6 +113,11 @@ Item {
             cachedSecret = envTestSecret
             console.log("NextNotes NotesApi auth using desktop test environment credentials serverUrlConfigured=" + hasValue(testServerUrl))
             authenticated(cachedUserName, cachedSecret, cachedServerUrl)
+            if (pendingCallback) {
+                var callback = pendingCallback
+                pendingCallback = null
+                callback(cachedUserName, cachedSecret, cachedServerUrl)
+            }
             return
         }
 
@@ -130,6 +141,11 @@ Item {
                 + " serverUrlConfigured=" + hasValue(serverUrl)
             )
             authenticated(cachedUserName, cachedSecret, cachedServerUrl)
+            if (pendingCallback) {
+                var callback = pendingCallback
+                pendingCallback = null
+                callback(cachedUserName, cachedSecret, cachedServerUrl)
+            }
             return
         }
 
@@ -154,6 +170,11 @@ Item {
             + " serverUrlConfigured=" + hasValue(serverUrl)
         )
         accountService.authenticate({})
+    }
+
+    function withCredentials(callback) {
+        pendingCallback = callback
+        authenticate()
     }
 
     function setAccount(accountId, providerId, serviceId, serverUrl) {
