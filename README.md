@@ -34,7 +34,7 @@ NextNotes focuses on a small reliable V1. It does not implement:
 
 ## Authentication
 
-NextNotes uses Ubuntu Touch Online Accounts. Add your Nextcloud or ownCloud account in Ubuntu Touch System Settings > Accounts, then authorize that account inside NextNotes.
+NextNotes always uses Ubuntu Touch Online Accounts. Add your Nextcloud or ownCloud account in Ubuntu Touch System Settings > Accounts, then authorize that account inside NextNotes.
 
 Credentials are requested from Online Accounts at runtime and are not stored by NextNotes. After successful runtime authentication, credentials may be kept only in process memory for the current app session.
 
