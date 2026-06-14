@@ -20,7 +20,7 @@ class ProjectMetadataTests(unittest.TestCase):
         manifest = json.loads(read_text("manifest.json.in"))
 
         self.assertEqual(manifest["name"], "nextnotes.cloudsite")
-        self.assertEqual(manifest["version"], "0.1.1.2")
+        self.assertEqual(manifest["version"], "0.1.1.3")
         self.assertIn("nextnotes", manifest["hooks"])
         self.assertEqual(manifest["hooks"]["nextnotes"]["apparmor"], "nextnotes.apparmor")
         self.assertEqual(manifest["hooks"]["nextnotes"]["desktop"], "nextnotes.desktop")
@@ -370,6 +370,8 @@ class RefactoredCoreContractTests(unittest.TestCase):
         self.assertIn("var accountChanged = currentAccountId !== accountId", session)
         self.assertIn("cachedSecret = \"\"", session)
         self.assertIn("pendingCallback = null", session)
+        self.assertIn("NextNotes NotesController account selection applied", read_text("qml/backend/NotesController.qml"))
+        self.assertIn("Qt.callLater(loadNotes)", read_text("qml/backend/NotesController.qml"))
 
         forbidden = [
             "manualAccount",

@@ -358,10 +358,17 @@ Item {
         currentServiceId = serviceId || ""
         currentServerUrl = serverUrl || ""
         currentAvatarUrl = avatarUrl || ""
+        console.log(
+            "NextNotes NotesController account selection applied"
+            + " accountId=" + currentAccountId
+            + " providerId=" + currentProviderId
+            + " serviceId=" + currentServiceId
+            + " serverUrlConfigured=" + (currentServerUrl.length > 0)
+        )
         accountSession.setAccount(currentAccountId, currentProviderId, currentServiceId, currentServerUrl)
         clearAccountData()
         activeAccountKey = accountKey()
-        accountRefreshTimer.restart()
+        Qt.callLater(loadNotes)
     }
 
     function clearAccountData() {

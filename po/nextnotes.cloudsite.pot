@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nextnotes.cloudsite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-14 21:44+0000\n"
+"POT-Creation-Date: 2026-06-14 21:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,12 +97,12 @@ msgstr ""
 msgid "Could not parse upload response."
 msgstr ""
 
-#: qml/backend/NotesController.qml:9 qml/backend/NotesController.qml:377
+#: qml/backend/NotesController.qml:9 qml/backend/NotesController.qml:384
 msgid "Open your Nextcloud notes."
 msgstr ""
 
-#: qml/backend/NotesController.qml:13 qml/backend/NotesController.qml:998
-#: qml/backend/NotesController.qml:1030 qml/backend/NotesController.qml:1145
+#: qml/backend/NotesController.qml:13 qml/backend/NotesController.qml:1005
+#: qml/backend/NotesController.qml:1037 qml/backend/NotesController.qml:1152
 msgid "All notes"
 msgstr ""
 
@@ -142,16 +142,16 @@ msgstr ""
 msgid "Loading notes..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:203 qml/backend/NotesController.qml:889
+#: qml/backend/NotesController.qml:203 qml/backend/NotesController.qml:896
 msgid "%1 notes synced."
 msgstr ""
 
-#: qml/backend/NotesController.qml:204 qml/backend/NotesController.qml:890
+#: qml/backend/NotesController.qml:204 qml/backend/NotesController.qml:897
 msgid "No notes yet."
 msgstr ""
 
-#: qml/backend/NotesController.qml:233 qml/backend/NotesController.qml:601
-#: qml/backend/NotesController.qml:647
+#: qml/backend/NotesController.qml:233 qml/backend/NotesController.qml:608
+#: qml/backend/NotesController.qml:654
 msgid "Local changes saved on this device"
 msgstr ""
 
@@ -179,193 +179,193 @@ msgstr ""
 msgid "Syncing local changes..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:349 qml/backend/NotesController.qml:794
+#: qml/backend/NotesController.qml:349 qml/backend/NotesController.qml:801
 msgid "Showing saved notes. Checking for updates..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:350 qml/backend/NotesController.qml:795
+#: qml/backend/NotesController.qml:350 qml/backend/NotesController.qml:802
 msgid "Connecting to Nextcloud..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:376
+#: qml/backend/NotesController.qml:383
 msgid "Account changed. Refreshing..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:400
+#: qml/backend/NotesController.qml:407
 msgid "Showing saved notes."
 msgstr ""
 
-#: qml/backend/NotesController.qml:401
+#: qml/backend/NotesController.qml:408
 msgid "No saved notes on this device."
 msgstr ""
 
-#: qml/backend/NotesController.qml:411
+#: qml/backend/NotesController.qml:418
 msgid "No local draft is available to upload."
 msgstr ""
 
-#: qml/backend/NotesController.qml:419
+#: qml/backend/NotesController.qml:426
 msgid "Cannot upload safely because the server etag is missing."
 msgstr ""
 
-#: qml/backend/NotesController.qml:427 qml/backend/NotesController.qml:474
-#: qml/backend/NotesController.qml:602 qml/backend/NotesController.qml:625
+#: qml/backend/NotesController.qml:434 qml/backend/NotesController.qml:481
+#: qml/backend/NotesController.qml:609 qml/backend/NotesController.qml:632
 msgid "Authenticating..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:467 qml/backend/NotesController.qml:848
+#: qml/backend/NotesController.qml:474 qml/backend/NotesController.qml:855
 msgid "Checking for server changes..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:494 qml/backend/NotesController.qml:495
+#: qml/backend/NotesController.qml:501 qml/backend/NotesController.qml:502
 msgid "No cached note is available to delete."
 msgstr ""
 
-#: qml/backend/NotesController.qml:504 qml/backend/NotesController.qml:506
-#: qml/backend/NotesController.qml:551 qml/backend/NotesController.qml:562
+#: qml/backend/NotesController.qml:511 qml/backend/NotesController.qml:513
+#: qml/backend/NotesController.qml:558 qml/backend/NotesController.qml:569
 msgid "Deleted local draft."
 msgstr ""
 
-#: qml/backend/NotesController.qml:514 qml/backend/NotesController.qml:516
-#: qml/backend/NotesController.qml:552
+#: qml/backend/NotesController.qml:521 qml/backend/NotesController.qml:523
+#: qml/backend/NotesController.qml:559
 msgid "Deleted locally. Syncing deletion..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:558
+#: qml/backend/NotesController.qml:565
 msgid "Deleted %1 notes locally. Syncing deletions..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:563
+#: qml/backend/NotesController.qml:570
 msgid "Deleted %1 local drafts."
 msgstr ""
 
-#: qml/backend/NotesController.qml:576
+#: qml/backend/NotesController.qml:583
 msgid "Local draft kept. You can try uploading again."
 msgstr ""
 
-#: qml/backend/NotesController.qml:588
+#: qml/backend/NotesController.qml:595
 msgid "Using server version."
 msgstr ""
 
-#: qml/backend/NotesController.qml:601
+#: qml/backend/NotesController.qml:608
 msgid "Loaded cached note. Refreshing..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:656 qml/pages/NoteEditorPage.qml:589
+#: qml/backend/NotesController.qml:663 qml/pages/NoteEditorPage.qml:589
 msgid "This note is read-only."
 msgstr ""
 
-#: qml/backend/NotesController.qml:666
+#: qml/backend/NotesController.qml:673
 msgid "Favorite changed locally."
 msgstr ""
 
-#: qml/backend/NotesController.qml:670
+#: qml/backend/NotesController.qml:677
 msgid "Favorite changed locally. Syncing soon."
 msgstr ""
 
-#: qml/backend/NotesController.qml:821
+#: qml/backend/NotesController.qml:828
 msgid "Uploading %1 of %2..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:870
+#: qml/backend/NotesController.qml:877
 msgid "Caching note previews..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:924
+#: qml/backend/NotesController.qml:931
 msgid "Sync complete: %1 uploaded, %2 failed, %3 conflicts, %4 skipped."
 msgstr ""
 
-#: qml/backend/NotesController.qml:1005 qml/backend/NotesController.qml:1137
+#: qml/backend/NotesController.qml:1012 qml/backend/NotesController.qml:1144
 msgid "Favorites"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1012 qml/backend/NotesController.qml:1140
+#: qml/backend/NotesController.qml:1019 qml/backend/NotesController.qml:1147
 #: qml/pages/NoteEditorPage.qml:301
 msgid "Uncategorized"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1170
+#: qml/backend/NotesController.qml:1177
 msgid "Potential conflict: local changes are not uploaded"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1172
+#: qml/backend/NotesController.qml:1179
 msgid "New local draft. Upload to create it on the server."
 msgstr ""
 
-#: qml/backend/NotesController.qml:1223 qml/backend/NotesController.qml:1236
+#: qml/backend/NotesController.qml:1230 qml/backend/NotesController.qml:1243
 msgid "Delete failed: %1"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1238
+#: qml/backend/NotesController.qml:1245
 msgid "Create failed: %1"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1238
+#: qml/backend/NotesController.qml:1245
 msgid "Upload failed: %1"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1240
+#: qml/backend/NotesController.qml:1247
 msgid "Showing cached note. Refresh failed: %1"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1245
+#: qml/backend/NotesController.qml:1252
 msgid "Showing saved notes. Could not refresh."
 msgstr ""
 
-#: qml/backend/NotesController.qml:1246
+#: qml/backend/NotesController.qml:1253
 msgid "Could not load notes. Check the account and connection."
 msgstr ""
 
-#: qml/backend/NotesController.qml:1257
+#: qml/backend/NotesController.qml:1264
 msgid "never"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1262
+#: qml/backend/NotesController.qml:1269
 msgid "just now"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1267
+#: qml/backend/NotesController.qml:1274
 msgid "%1m ago"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1272
+#: qml/backend/NotesController.qml:1279
 msgid "%1h ago"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1275
+#: qml/backend/NotesController.qml:1282
 #, javascript-format
 msgid "%1d ago"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1289 qml/pages/NotesListPage.qml:501
+#: qml/backend/NotesController.qml:1296 qml/pages/NotesListPage.qml:501
 #: qml/pages/NotesListPage.qml:575
 msgid "New"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1297
+#: qml/backend/NotesController.qml:1304
 msgid "now"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1300
+#: qml/backend/NotesController.qml:1307
 msgid "%1m"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1303
+#: qml/backend/NotesController.qml:1310
 msgid "%1h"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1322
+#: qml/backend/NotesController.qml:1329
 msgid "No date"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1332
+#: qml/backend/NotesController.qml:1339
 msgid "Today"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1335
+#: qml/backend/NotesController.qml:1342
 msgid "Yesterday"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1338
+#: qml/backend/NotesController.qml:1345
 msgid "Last week"
 msgstr ""
 
