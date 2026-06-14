@@ -10,7 +10,7 @@
             "desktop": "nextnotes.desktop"
         }
     },
-    "version": "0.1.1.1",
+    "version": "0.1.1.2",
     "maintainer": "Etherghost <noreply@cloudsite.se>",
     "framework": "$ENV{CLICK_FRAMEWORK}"
 }
