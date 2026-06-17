@@ -20,7 +20,7 @@ class ProjectMetadataTests(unittest.TestCase):
         manifest = json.loads(read_text("manifest.json.in"))
 
         self.assertEqual(manifest["name"], "nextnotes.cloudsite")
-        self.assertEqual(manifest["version"], "0.1.2")
+        self.assertEqual(manifest["version"], "0.1.3")
         self.assertIn("nextnotes", manifest["hooks"])
         self.assertEqual(manifest["hooks"]["nextnotes"]["apparmor"], "nextnotes.apparmor")
         self.assertEqual(manifest["hooks"]["nextnotes"]["desktop"], "nextnotes.desktop")
@@ -141,14 +141,14 @@ class ProjectMetadataTests(unittest.TestCase):
 
         for snippet in [
             "Version %1",
-            "0.1.2",
+            "0.1.3",
             "MIT License",
             "Etherghost",
             "not affiliated",
             "qrc:/assets/logo.svg",
         ]:
             self.assertIn(snippet, page)
-        self.assertIn("## 0.1.2", changelog)
+        self.assertIn("## 0.1.3", changelog)
         self.assertIn("## 0.1.0", changelog)
 
 

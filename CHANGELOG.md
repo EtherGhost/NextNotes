@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.3 - 2026-06-17
+
+- Fixed note list ordering after toggling a note as favorite so successful sync and server refresh no longer move the note back to an older modified position.
+- Improved sync/conflict status presentation by replacing disruptive editor status text with top-bar status icons.
+- Added a dedicated full-screen conflict review page that can be opened directly from the list or editor status icon.
+- Removed obsolete manual save/upload controls from the editor now that automatic local save and sync are active.
+
 ## 0.1.2 - 2026-06-15
 
 - Aligned the account page with the shared Nextcloud suite flow: clickable account rows, guided Ubuntu Touch account-setting approval, automatic verification after account selection, and immediate controller refresh after changing account.

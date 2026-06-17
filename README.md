@@ -6,6 +6,12 @@ It is intentionally simple: plain-text notes, local caching, offline editing, an
 
 NextNotes is not affiliated with, endorsed by, or sponsored by Nextcloud GmbH or the Nextcloud project. Nextcloud is a trademark of its respective owners.
 
+## Current Status
+
+Current release candidate: `0.1.3`.
+
+This release focuses on editor status stability, direct conflict review access, and correct note-list ordering after favorite changes sync.
+
 ## Features
 
 - Use an existing Nextcloud or ownCloud account from Ubuntu Touch Online Accounts.
