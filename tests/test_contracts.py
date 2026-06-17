@@ -264,6 +264,12 @@ class NotesCacheContractTests(unittest.TestCase):
         self.assertGreaterEqual(self.cache.count("serverContent.length === 0"), 2)
         self.assertIn("preserve", read_text("README.md").lower())
 
+    def test_uploaded_and_created_notes_keep_latest_local_modified_time(self):
+        self.assertIn("modified, status, conflict FROM notes WHERE id = ?", self.cache)
+        self.assertIn("local_modified FROM notes WHERE id = ?", self.cache)
+        self.assertGreaterEqual(self.cache.count("var effectiveModified = Math.max(Number(note.modified || 0)"), 3)
+        self.assertIn("var effectiveModified = Math.max(Number(serverNote.modified || 0)", self.cache)
+
 
 class NotesControllerContractTests(unittest.TestCase):
     @classmethod

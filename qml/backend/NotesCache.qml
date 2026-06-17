@@ -225,7 +225,7 @@ Item {
 
     function upsertServerMetadata(tx, note, now) {
         var existingResult = tx.executeSql(
-            "SELECT title, category, favorite, etag, status, conflict FROM notes WHERE id = ?",
+            "SELECT title, category, favorite, etag, modified, status, conflict FROM notes WHERE id = ?",
             [note.noteId]
         )
         var existing = existingResult.rows.length > 0 ? existingResult.rows.item(0) : null
@@ -239,6 +239,7 @@ Item {
         var preservedTitle = existingDirty ? (existing.title || note.title) : note.title
         var preservedCategory = existingDirty ? (existing.category || "") : (note.category || "")
         var preservedFavorite = existingDirty ? Number(existing.favorite || 0) : (note.favorite ? 1 : 0)
+        var effectiveModified = Math.max(Number(note.modified || 0), existing ? Number(existing.modified || 0) : 0)
 
         tx.executeSql(
             "INSERT OR REPLACE INTO notes " +
@@ -255,7 +256,7 @@ Item {
                 preservedTitle,
                 preservedCategory,
                 existingDirty ? existingEtag : serverEtag,
-                note.modified || 0,
+                effectiveModified,
                 note.readonly ? 1 : 0,
                 preservedFavorite,
                 note.noteId,
@@ -274,7 +275,7 @@ Item {
         var now = Math.floor(Date.now() / 1000)
         db().transaction(function(tx) {
             var existingResult = tx.executeSql(
-                "SELECT etag, server_content, status, conflict, is_new FROM notes WHERE id = ?",
+                "SELECT etag, modified, server_content, status, conflict, is_new FROM notes WHERE id = ?",
                 [note.noteId]
             )
             var existing = existingResult.rows.length > 0 ? existingResult.rows.item(0) : null
@@ -283,6 +284,7 @@ Item {
             var existingNew = existing && Number(existing.is_new || 0) === 1
             var serverContent = note.content || ""
             var serverEtag = note.etag || ""
+            var effectiveModified = Math.max(Number(note.modified || 0), existing ? Number(existing.modified || 0) : 0)
 
             if (existingDirty && !existingNew) {
                 var existingServerContent = existing.server_content || ""
@@ -294,7 +296,7 @@ Item {
                 tx.executeSql(
                     "UPDATE notes SET modified = ?, readonly = ?, server_content = ?, conflict = ?, conflict_etag = ?, updated_at = ? WHERE id = ?",
                     [
-                        note.modified || 0,
+                        effectiveModified,
                         note.readonly ? 1 : 0,
                         serverContent,
                         conflict ? 1 : 0,
@@ -316,7 +318,7 @@ Item {
                     note.title,
                     note.category || "",
                     serverEtag,
-                    note.modified || 0,
+                    effectiveModified,
                     note.readonly ? 1 : 0,
                     note.favorite ? 1 : 0,
                     serverContent,
@@ -386,11 +388,12 @@ Item {
         var now = Math.floor(Date.now() / 1000)
         var serverContent = note.content || ""
         db().transaction(function(tx) {
-            var existingResult = tx.executeSql("SELECT content, content_loaded FROM notes WHERE id = ?", [note.noteId])
+            var existingResult = tx.executeSql("SELECT content, content_loaded, local_modified FROM notes WHERE id = ?", [note.noteId])
             var existing = existingResult.rows.length > 0 ? existingResult.rows.item(0) : null
             if (serverContent.length === 0 && existing && Number(existing.content_loaded || 0) === 1) {
                 serverContent = existing.content || ""
             }
+            var effectiveModified = Math.max(Number(note.modified || 0), existing ? Number(existing.local_modified || 0) : 0)
 
             tx.executeSql(
                 "INSERT OR REPLACE INTO notes " +
@@ -401,7 +404,7 @@ Item {
                     note.title,
                     note.category || "",
                     note.etag || "",
-                    note.modified || 0,
+                    effectiveModified,
                     note.readonly ? 1 : 0,
                     note.favorite ? 1 : 0,
                     serverContent,
@@ -418,7 +421,7 @@ Item {
         var serverContent = serverNote.content || ""
         db().transaction(function(tx) {
             var localResult = tx.executeSql(
-                "SELECT title, category, favorite, content, content_loaded FROM notes WHERE id = ?",
+                "SELECT title, category, favorite, content, content_loaded, local_modified FROM notes WHERE id = ?",
                 [localNoteId]
             )
             var local = localResult.rows.length > 0 ? localResult.rows.item(0) : null
@@ -436,6 +439,7 @@ Item {
                 serverCategory = local.category
             }
             var serverFavorite = serverNote.favorite === true || (local && Number(local.favorite || 0) === 1)
+            var effectiveModified = Math.max(Number(serverNote.modified || 0), local ? Number(local.local_modified || 0) : 0)
 
             tx.executeSql("DELETE FROM notes WHERE id = ?", [localNoteId])
             tx.executeSql(
@@ -447,7 +451,7 @@ Item {
                     serverTitle,
                     serverCategory,
                     serverNote.etag || "",
-                    serverNote.modified || 0,
+                    effectiveModified,
                     serverNote.readonly ? 1 : 0,
                     serverFavorite ? 1 : 0,
                     serverContent,
