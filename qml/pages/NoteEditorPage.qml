@@ -21,8 +21,6 @@ Page {
     property string editCategoryText: ""
     property bool editingTitle: false
     property bool editingCategory: false
-    property string conflictPreviewChoice: "local"
-    property string conflictLocalContent: ""
     property var notesController
     readonly property real oskOverlap: Qt.inputMethod.visible && Qt.inputMethod.keyboardRectangle.height > 0
         ? Math.max(0, page.height - Qt.inputMethod.keyboardRectangle.y)
@@ -46,6 +44,128 @@ Page {
                 font.bold: true
                 elide: Text.ElideRight
                 maximumLineCount: 1
+            }
+
+            Rectangle {
+                Layout.preferredWidth: units.gu(5)
+                Layout.preferredHeight: units.gu(5)
+                radius: units.gu(2.5)
+                color: "transparent"
+                border.width: 2
+                border.color: page.statusAccentColor()
+
+                Item {
+                    id: statusIcon
+                    anchors.centerIn: parent
+                    width: units.gu(2.8)
+                    height: units.gu(2.8)
+
+                    RotationAnimation on rotation {
+                        from: 0
+                        to: 360
+                        duration: 900
+                        loops: Animation.Infinite
+                        running: notesController.syncRunning
+                    }
+
+                    Connections {
+                        target: notesController
+                        onSyncRunningChanged: {
+                            if (!notesController.syncRunning) {
+                                statusIcon.rotation = 0
+                            }
+                        }
+                    }
+
+                    Canvas {
+                        id: statusCanvas
+                        anchors.fill: parent
+                        property string paintColor: page.statusAccentColor()
+                        visible: page.statusIconKind() !== "dirty" && page.statusIconKind() !== "conflict"
+                        onVisibleChanged: requestPaint()
+                        onPaintColorChanged: requestPaint()
+                        onPaint: {
+                            var ctx = getContext("2d")
+                            var w = width
+                            var h = height
+                            var s = Math.min(w, h)
+                            ctx.clearRect(0, 0, w, h)
+                            ctx.strokeStyle = paintColor
+                            ctx.fillStyle = paintColor
+                            ctx.lineWidth = Math.max(2.4, s * 0.13)
+                            ctx.lineCap = "round"
+                            ctx.lineJoin = "round"
+
+                            if (notesController.syncRunning) {
+                                ctx.beginPath()
+                                ctx.arc(w / 2, h / 2, s * 0.35, Math.PI * 0.15, Math.PI * 1.55, false)
+                                ctx.stroke()
+                                ctx.beginPath()
+                                ctx.moveTo(w * 0.77, h * 0.30)
+                                ctx.lineTo(w * 0.82, h * 0.52)
+                                ctx.lineTo(w * 0.62, h * 0.45)
+                                ctx.stroke()
+                            } else if (page.statusIconKind() === "readonly") {
+                                ctx.strokeRect(w * 0.27, h * 0.45, w * 0.46, h * 0.34)
+                                ctx.beginPath()
+                                ctx.arc(w / 2, h * 0.45, s * 0.19, Math.PI, 0, false)
+                                ctx.stroke()
+                            } else {
+                                ctx.beginPath()
+                                ctx.moveTo(w * 0.22, h * 0.54)
+                                ctx.lineTo(w * 0.42, h * 0.72)
+                                ctx.lineTo(w * 0.78, h * 0.28)
+                                ctx.stroke()
+                            }
+                        }
+
+                        Connections {
+                            target: notesController
+                            onSyncRunningChanged: statusCanvas.requestPaint()
+                            onNoteReadOnlyChanged: statusCanvas.requestPaint()
+                            onNoteDirtyChanged: statusCanvas.requestPaint()
+                            onNoteIsNewChanged: statusCanvas.requestPaint()
+                            onNoteConflictChanged: statusCanvas.requestPaint()
+                        }
+                    }
+
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: units.gu(1.7)
+                        height: width
+                        radius: width / 2
+                        visible: page.statusIconKind() === "dirty"
+                        color: page.statusAccentColor()
+                    }
+
+                    Item {
+                        anchors.fill: parent
+                        visible: page.statusIconKind() === "conflict"
+
+                        Rectangle {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            y: parent.height * 0.12
+                            width: Math.max(3, parent.width * 0.16)
+                            height: parent.height * 0.52
+                            radius: width / 2
+                            color: page.statusAccentColor()
+                        }
+
+                        Rectangle {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            y: parent.height * 0.76
+                            width: Math.max(4, parent.width * 0.20)
+                            height: width
+                            radius: width / 2
+                            color: page.statusAccentColor()
+                        }
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: page.openStatusFromIcon()
+                }
             }
 
             Rectangle {
@@ -111,13 +231,6 @@ Page {
         target: notesController
 
         onNoteContentChanged: {
-            if (notesController.noteConflict) {
-                page.conflictLocalContent = notesController.noteContent
-                if (page.conflictPreviewChoice === "local") {
-                    page.applyConflictEditorContent()
-                }
-                return
-            }
             if (contentEditor.text !== notesController.noteContent) {
                 page.applyingControllerContent = true
                 contentEditor.text = notesController.noteContent
@@ -159,18 +272,10 @@ Page {
         }
 
         onNoteConflictChanged: {
-            if (notesController.noteConflict) {
-                page.conflictPreviewChoice = "local"
-                page.conflictLocalContent = notesController.noteContent
-                page.applyConflictEditorContent()
-            } else {
-                page.conflictLocalContent = ""
-            }
-        }
-
-        onNoteServerContentChanged: {
-            if (notesController.noteConflict && page.conflictPreviewChoice === "server") {
-                page.applyConflictEditorContent()
+            if (!notesController.noteConflict && contentEditor.text !== notesController.noteContent) {
+                page.applyingControllerContent = true
+                contentEditor.text = notesController.noteContent
+                page.applyingControllerContent = false
             }
         }
 
@@ -336,6 +441,16 @@ Page {
             text: page.noteStatusDetails()
 
             Button {
+                text: i18n.tr("Resolve conflict")
+                visible: notesController.noteConflict
+                enabled: !notesController.noteLoading
+                onClicked: {
+                    PopupUtils.close(dialog)
+                    page.openConflictResolution()
+                }
+            }
+
+            Button {
                 text: i18n.tr("Close")
                 onClicked: PopupUtils.close(dialog)
             }
@@ -402,210 +517,19 @@ Page {
             }
         }
 
-        Rectangle {
-            Layout.fillWidth: true
-            height: units.gu(4.5)
-            color: "transparent"
-            border.width: 0
-            visible: notesController.noteStatusText.length > 0
-                || notesController.noteDirty
-                || notesController.noteConflict
-                || notesController.noteReadOnly
-
-            RowLayout {
-                anchors {
-                    fill: parent
-                    leftMargin: units.gu(0.25)
-                    rightMargin: units.gu(0.25)
-                }
-                spacing: units.gu(0.75)
-
-                Rectangle {
-                    Layout.preferredWidth: units.gu(1)
-                    Layout.preferredHeight: units.gu(1)
-                    radius: units.gu(0.5)
-                    color: notesController.noteConflict
-                        ? "#c7162b"
-                        : notesController.noteDirty || notesController.noteIsNew
-                        ? "#c65d00"
-                        : notesController.noteReadOnly
-                        ? "#6f6f6f"
-                        : notesController.syncStateColor
-                }
-
-                Label {
-                    Layout.fillWidth: true
-                    text: page.noteStatusSummary()
-                    elide: Text.ElideRight
-                    maximumLineCount: 1
-                    opacity: 0.78
-                }
-
-                Button {
-                    Layout.preferredWidth: units.gu(8)
-                    text: i18n.tr("Details")
-                    visible: page.noteStatusDetails().length > 48
-                    onClicked: PopupUtils.open(statusDetailsDialog)
-                }
-            }
-        }
-
-        ColumnLayout {
-            Layout.fillWidth: true
-            visible: notesController.noteConflict
-            spacing: units.gu(0.75)
-
-            Label {
-                Layout.fillWidth: true
-                text: i18n.tr("The server changed this note while you had local edits. Review a version, then choose which one to keep.")
-                wrapMode: Text.WordWrap
-                maximumLineCount: 3
-                opacity: 0.82
-            }
-
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: units.gu(1)
-
-                Button {
-                    Layout.fillWidth: true
-                    text: i18n.tr("Server version")
-                    color: page.conflictPreviewChoice === "server" ? "#c7162b" : theme.palette.normal.background
-                    onClicked: page.selectConflictVersion("server")
-                }
-
-                Button {
-                    Layout.fillWidth: true
-                    text: i18n.tr("Local version")
-                    color: page.conflictPreviewChoice === "local" ? "#c65d00" : theme.palette.normal.background
-                    onClicked: page.selectConflictVersion("local")
-                }
-            }
-
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: units.gu(11)
-                radius: units.gu(0.75)
-                color: "transparent"
-                border.width: 1
-                border.color: page.conflictPreviewChoice === "server" ? "#c7162b" : "#c65d00"
-
-                ColumnLayout {
-                    anchors {
-                        fill: parent
-                        margins: units.gu(1)
-                    }
-                    spacing: units.gu(0.4)
-
-                    Label {
-                        Layout.fillWidth: true
-                        text: page.conflictPreviewChoice === "server"
-                            ? i18n.tr("Server version")
-                            : i18n.tr("Local version")
-                        font.bold: true
-                        elide: Text.ElideRight
-                        maximumLineCount: 1
-                    }
-
-                    Label {
-                        Layout.fillWidth: true
-                        text: page.conflictPreviewChoice === "server"
-                            ? page.serverConflictPreviewMetadata()
-                            : page.localConflictPreviewMetadata()
-                        elide: Text.ElideRight
-                        maximumLineCount: 1
-                        opacity: 0.72
-                    }
-
-                    Label {
-                        id: conflictPreviewText
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        text: page.previewFor(page.conflictPreviewChoice === "server"
-                            ? notesController.noteServerContent
-                            : contentEditor.text)
-                        wrapMode: Text.WordWrap
-                        maximumLineCount: 4
-                        elide: Text.ElideRight
-                        opacity: 0.88
-                    }
-                }
-            }
-
-            Button {
-                Layout.fillWidth: true
-                text: page.conflictPreviewChoice === "server"
-                    ? i18n.tr("Use server version")
-                    : i18n.tr("Keep local version")
-                enabled: !notesController.noteLoading
-                onClicked: {
-                    if (page.conflictPreviewChoice === "server") {
-                        notesController.discardLocalDraftAndUseServer()
-                    } else {
-                        notesController.keepLocalDraftAfterConflict()
-                    }
-                }
-            }
-        }
-
-        RowLayout {
-            Layout.fillWidth: true
-            spacing: units.gu(1)
-            visible: !notesController.noteReadOnly && (notesController.noteDirty || notesController.noteIsNew)
-
-            Button {
-                Layout.fillWidth: true
-                text: i18n.tr("Save locally")
-                enabled: !notesController.noteLoading
-                    && (!notesController.noteConflict || page.conflictPreviewChoice === "local")
-                onClicked: {
-                    localSaveTimer.stop()
-                    notesController.saveLocalDraft(page.draftTitle, contentEditor.text, page.draftCategory, page.favoriteSelected)
-                }
-            }
-
-            Button {
-                Layout.fillWidth: true
-                visible: notesController.noteDirty
-                text: notesController.noteIsNew ? i18n.tr("Create note") : i18n.tr("Upload changes")
-                enabled: !notesController.noteLoading
-                    && (!notesController.noteConflict || page.conflictPreviewChoice === "local")
-                onClicked: {
-                    localSaveTimer.stop()
-                    notesController.saveLocalDraft(page.draftTitle, contentEditor.text, page.draftCategory, page.favoriteSelected)
-                    notesController.uploadLocalDraft()
-                }
-            }
-        }
-
         TextArea {
             id: contentEditor
             Layout.fillWidth: true
             Layout.fillHeight: true
             text: ""
             readOnly: notesController.noteReadOnly
-                || (notesController.noteConflict && page.conflictPreviewChoice === "server")
-            placeholderText: notesController.noteReadOnly || (notesController.noteConflict && page.conflictPreviewChoice === "server")
+            placeholderText: notesController.noteReadOnly
                 ? i18n.tr("This note is read-only.")
                 : i18n.tr("Note content")
             onTextChanged: {
-                if (!page.applyingControllerContent && notesController.noteConflict && page.conflictPreviewChoice === "local") {
-                    page.conflictLocalContent = contentEditor.text
-                }
                 if (!page.applyingControllerContent && !readOnly && noteId !== 0) {
                     localSaveTimer.restart()
                 }
-            }
-
-            Rectangle {
-                anchors.fill: parent
-                visible: notesController.noteConflict && page.conflictPreviewChoice === "server"
-                color: "transparent"
-                border.width: 1
-                border.color: theme.palette.normal.backgroundText
-                opacity: 0.28
-                radius: units.gu(0.25)
-                z: 2
             }
         }
     }
@@ -783,33 +707,6 @@ Page {
         page.applyingControllerContent = false
     }
 
-    function selectConflictVersion(choice) {
-        if (!notesController.noteConflict) {
-            page.conflictPreviewChoice = choice
-            return
-        }
-        if (page.conflictPreviewChoice === "local" && choice === "server") {
-            page.conflictLocalContent = contentEditor.text
-            localSaveTimer.stop()
-        }
-        page.conflictPreviewChoice = choice
-        page.applyConflictEditorContent()
-    }
-
-    function applyConflictEditorContent() {
-        if (!notesController.noteConflict) {
-            return
-        }
-        var nextText = page.conflictPreviewChoice === "server"
-            ? notesController.noteServerContent
-            : (page.conflictLocalContent.length > 0 ? page.conflictLocalContent : notesController.noteContent)
-        if (contentEditor.text !== nextText) {
-            page.applyingControllerContent = true
-            contentEditor.text = nextText
-            page.applyingControllerContent = false
-        }
-    }
-
     function noteStateLabel() {
         if (notesController.noteConflict) {
             return i18n.tr("Conflict")
@@ -841,6 +738,39 @@ Page {
         return notesController.syncStateText
     }
 
+    function statusIconKind() {
+        if (notesController.syncRunning) {
+            return "syncing"
+        }
+        if (notesController.noteConflict) {
+            return "conflict"
+        }
+        if (notesController.noteDirty || notesController.noteIsNew) {
+            return "dirty"
+        }
+        if (notesController.noteReadOnly) {
+            return "readonly"
+        }
+        return "synced"
+    }
+
+    function statusAccentColor() {
+        var kind = page.statusIconKind()
+        if (kind === "syncing") {
+            return "#2c7fb8"
+        }
+        if (kind === "conflict") {
+            return "#c7162b"
+        }
+        if (kind === "dirty") {
+            return "#c65d00"
+        }
+        if (kind === "readonly") {
+            return "#6f6f6f"
+        }
+        return notesController.syncStateColor
+    }
+
     function noteStatusDetails() {
         var parts = []
         var state = noteStateLabel()
@@ -865,36 +795,7 @@ Page {
         return parts.join("\n")
     }
 
-    function previewFor(content) {
-        var text = String(content || "").replace(/\s+/g, " ").trim()
-        if (text.length === 0) {
-            return i18n.tr("No content preview")
-        }
-        return text.length > 120 ? text.slice(0, 117) + "..." : text
-    }
-
-    function serverConflictPreviewMetadata() {
-        var modified = notesController.noteModifiedText.length > 0
-            ? notesController.noteModifiedText
-            : i18n.tr("unknown")
-        return notesController.noteConflictEtag.length > 0
-            ? i18n.tr("Modified: %1 - ETag available").arg(modified)
-            : i18n.tr("Modified: %1").arg(modified)
-    }
-
-    function localConflictPreviewMetadata() {
-        var saved = notesController.noteLocalModifiedText.length > 0
-            ? notesController.noteLocalModifiedText
-            : i18n.tr("unknown")
-        return notesController.noteDirty
-            ? i18n.tr("Local draft saved: %1 - unsynced").arg(saved)
-            : i18n.tr("Local draft saved: %1").arg(saved)
-    }
-
     function saveDraftNow() {
-        if (notesController.noteConflict && page.conflictPreviewChoice === "server") {
-            return
-        }
         if (!page.applyingControllerContent && !notesController.noteReadOnly && noteId !== 0) {
             notesController.saveLocalDraft(page.draftTitle, contentEditor.text, page.draftCategory, page.favoriteSelected)
         }
@@ -905,6 +806,23 @@ Page {
             localSaveTimer.stop()
             saveDraftNow()
         }
+    }
+
+    function openStatusFromIcon() {
+        if (notesController.noteConflict) {
+            page.openConflictResolution()
+            return
+        }
+
+        PopupUtils.open(statusDetailsDialog)
+    }
+
+    function openConflictResolution() {
+        page.flushPendingDraft()
+        pageStack.push(Qt.resolvedUrl("ConflictResolutionPage.qml"), {
+            "noteTitle": page.displayTitle(),
+            "notesController": notesController
+        })
     }
 
     function findNextInContent() {

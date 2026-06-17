@@ -18,6 +18,8 @@ Item {
     property int filteredNotesCount: notesModel.count
     property var allNotes: []
     property int dirtyNotesCount: 0
+    property int conflictNotesCount: 0
+    property int firstConflictNoteId: 0
     property bool syncRunning: false
     property string syncProgressText: ""
     property string syncSummaryText: ""
@@ -99,7 +101,7 @@ Item {
 
     Timer {
         id: autoSyncTimer
-        interval: 5000
+        interval: 500
         repeat: false
         onTriggered: controller.autoSyncNow()
     }
@@ -748,8 +750,17 @@ Item {
 
     function populateNotes(notes) {
         var normalizedNotes = []
+        var conflictCount = 0
+        var firstConflictId = 0
         for (var i = 0; i < notes.length; ++i) {
-            normalizedNotes.push(normalizeNoteForList(notes[i]))
+            var normalizedNote = normalizeNoteForList(notes[i])
+            normalizedNotes.push(normalizedNote)
+            if (normalizedNote.conflict === true) {
+                conflictCount += 1
+                if (firstConflictId === 0) {
+                    firstConflictId = Number(normalizedNote.noteId)
+                }
+            }
         }
         normalizedNotes.sort(function(a, b) {
             return b.sortModified - a.sortModified
@@ -757,6 +768,8 @@ Item {
         allNotes = normalizedNotes
         totalNotesCount = allNotes.length
         dirtyNotesCount = notesCache.loadLocalChanges().length
+        conflictNotesCount = conflictCount
+        firstConflictNoteId = firstConflictId
         rebuildCategories()
         applyNoteFilter()
     }

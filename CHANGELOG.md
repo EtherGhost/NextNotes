@@ -7,6 +7,7 @@
 - Fixed account switching in the Notes controller by restoring the missing runtime credential callback state and forcing a fresh server refresh after account changes.
 - Separated the SQLite note cache per selected Ubuntu Touch account so switching accounts does not reconcile one account's cached notes against another account.
 - Improved account authorization errors when Ubuntu Touch SignOn/AppArmor denies access for a specific account.
+- Stabilized the note editor by moving sync/conflict status into a top-bar status icon, removing obsolete manual save/upload buttons, moving conflict resolution to a dedicated page, and shortening automatic sync after local autosave.
 
 ## 0.1.1 - 2026-06-13
 

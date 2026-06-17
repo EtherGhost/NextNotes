@@ -86,6 +86,130 @@ Page {
                 Layout.preferredHeight: units.gu(5)
                 visible: !page.selectionMode
                 radius: units.gu(2.5)
+                color: "transparent"
+                border.width: 2
+                border.color: page.statusAccentColor()
+
+                Item {
+                    id: listStatusIcon
+                    anchors.centerIn: parent
+                    width: units.gu(2.8)
+                    height: units.gu(2.8)
+
+                    RotationAnimation on rotation {
+                        from: 0
+                        to: 360
+                        duration: 900
+                        loops: Animation.Infinite
+                        running: notesController.loading || notesController.syncRunning
+                    }
+
+                    Connections {
+                        target: notesController
+                        onLoadingChanged: {
+                            if (!notesController.loading && !notesController.syncRunning) {
+                                listStatusIcon.rotation = 0
+                            }
+                        }
+                        onSyncRunningChanged: {
+                            if (!notesController.loading && !notesController.syncRunning) {
+                                listStatusIcon.rotation = 0
+                            }
+                        }
+                    }
+
+                    Canvas {
+                        id: listStatusCanvas
+                        anchors.fill: parent
+                        property string paintColor: page.statusAccentColor()
+                        visible: page.statusIconKind() !== "dirty" && page.statusIconKind() !== "conflict"
+                        onVisibleChanged: requestPaint()
+                        onPaintColorChanged: requestPaint()
+                        onPaint: {
+                            var ctx = getContext("2d")
+                            var w = width
+                            var h = height
+                            var s = Math.min(w, h)
+                            ctx.clearRect(0, 0, w, h)
+                            ctx.strokeStyle = paintColor
+                            ctx.fillStyle = paintColor
+                            ctx.lineWidth = Math.max(2.4, s * 0.13)
+                            ctx.lineCap = "round"
+                            ctx.lineJoin = "round"
+
+                            if (notesController.loading || notesController.syncRunning) {
+                                ctx.beginPath()
+                                ctx.arc(w / 2, h / 2, s * 0.35, Math.PI * 0.15, Math.PI * 1.55, false)
+                                ctx.stroke()
+                                ctx.beginPath()
+                                ctx.moveTo(w * 0.77, h * 0.30)
+                                ctx.lineTo(w * 0.82, h * 0.52)
+                                ctx.lineTo(w * 0.62, h * 0.45)
+                                ctx.stroke()
+                            } else {
+                                ctx.beginPath()
+                                ctx.moveTo(w * 0.22, h * 0.54)
+                                ctx.lineTo(w * 0.42, h * 0.72)
+                                ctx.lineTo(w * 0.78, h * 0.28)
+                                ctx.stroke()
+                            }
+                        }
+
+                        Connections {
+                            target: notesController
+                            onLoadingChanged: listStatusCanvas.requestPaint()
+                            onSyncRunningChanged: listStatusCanvas.requestPaint()
+                            onDirtyNotesCountChanged: listStatusCanvas.requestPaint()
+                            onConflictNotesCountChanged: listStatusCanvas.requestPaint()
+                            onSyncRetryPendingChanged: listStatusCanvas.requestPaint()
+                            onConnectionRecoveryPendingChanged: listStatusCanvas.requestPaint()
+                        }
+                    }
+
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: units.gu(1.7)
+                        height: width
+                        radius: width / 2
+                        visible: page.statusIconKind() === "dirty"
+                        color: page.statusAccentColor()
+                    }
+
+                    Item {
+                        anchors.fill: parent
+                        visible: page.statusIconKind() === "conflict"
+
+                        Rectangle {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            y: parent.height * 0.12
+                            width: Math.max(3, parent.width * 0.16)
+                            height: parent.height * 0.52
+                            radius: width / 2
+                            color: page.statusAccentColor()
+                        }
+
+                        Rectangle {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            y: parent.height * 0.76
+                            width: Math.max(4, parent.width * 0.20)
+                            height: width
+                            radius: width / 2
+                            color: page.statusAccentColor()
+                        }
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: page.openStatusFromIcon()
+                }
+            }
+
+            Rectangle {
+                Layout.preferredWidth: units.gu(5)
+                Layout.preferredHeight: units.gu(5)
+                visible: !page.selectionMode
+                radius: units.gu(2.5)
                 color: "#2c7fb8"
                 border.width: 1
                 border.color: "#7a7a7a"
@@ -142,7 +266,7 @@ Page {
         Dialog {
             id: dialog
             title: i18n.tr("Status")
-            text: notesController.statusText
+            text: page.statusDetailsText()
 
             Button {
                 text: i18n.tr("Close")
@@ -222,46 +346,6 @@ Page {
             margins: units.gu(1.5)
         }
         spacing: units.gu(1.25)
-
-        Rectangle {
-            Layout.fillWidth: true
-            height: units.gu(4)
-            color: "transparent"
-            border.width: 0
-            visible: notesController.statusText.length > 0
-
-            RowLayout {
-                anchors {
-                    fill: parent
-                    leftMargin: units.gu(0.25)
-                    rightMargin: units.gu(0.25)
-                }
-                spacing: units.gu(0.75)
-
-                Rectangle {
-                    Layout.preferredWidth: units.gu(1)
-                    Layout.preferredHeight: units.gu(1)
-                    radius: units.gu(0.5)
-                    color: notesController.loading ? "#2c7fb8" : notesController.syncStateColor
-                }
-
-                Label {
-                    id: statusLabel
-                    Layout.fillWidth: true
-                    text: notesController.statusText + " - " + notesController.syncStateText
-                    elide: Text.ElideRight
-                    maximumLineCount: 1
-                    opacity: 0.75
-                }
-
-                Button {
-                    Layout.preferredWidth: units.gu(8)
-                    text: i18n.tr("Details")
-                    visible: notesController.statusText.length > 48
-                    onClicked: PopupUtils.open(statusDetailsDialog)
-                }
-            }
-        }
 
         Item {
             Layout.fillWidth: true
@@ -927,6 +1011,31 @@ Page {
         })
     }
 
+    function openStatusFromIcon() {
+        if (notesController.conflictNotesCount > 0 && notesController.firstConflictNoteId !== 0) {
+            var title = page.titleForNoteId(notesController.firstConflictNoteId)
+            page.selectedNoteId = notesController.firstConflictNoteId
+            notesController.loadNote(notesController.firstConflictNoteId, title)
+            pageStack.push(Qt.resolvedUrl("ConflictResolutionPage.qml"), {
+                "noteTitle": title,
+                "notesController": notesController
+            })
+            return
+        }
+
+        PopupUtils.open(statusDetailsDialog)
+    }
+
+    function titleForNoteId(noteId) {
+        for (var i = 0; i < notesController.allNotes.length; ++i) {
+            var note = notesController.allNotes[i]
+            if (Number(note.noteId) === Number(noteId)) {
+                return note.title && note.title.length > 0 ? note.title : i18n.tr("Untitled note")
+            }
+        }
+        return i18n.tr("Untitled note")
+    }
+
     function createNote() {
         if (searchField.text.length > 0) {
             searchField.text = ""
@@ -1015,4 +1124,49 @@ Page {
         return message
     }
 
+    function statusIconKind() {
+        if (notesController.loading || notesController.syncRunning) {
+            return "syncing"
+        }
+        if (notesController.conflictNotesCount > 0) {
+            return "conflict"
+        }
+        if (notesController.dirtyNotesCount > 0 || notesController.syncRetryPending || notesController.connectionRecoveryPending) {
+            return "dirty"
+        }
+        return "synced"
+    }
+
+    function statusAccentColor() {
+        if (notesController.loading || notesController.syncRunning) {
+            return "#2c7fb8"
+        }
+        if (notesController.conflictNotesCount > 0) {
+            return "#c7162b"
+        }
+        if (notesController.dirtyNotesCount > 0 || notesController.syncRetryPending || notesController.connectionRecoveryPending) {
+            return "#c65d00"
+        }
+        return notesController.syncStateColor
+    }
+
+    function statusDetailsText() {
+        var parts = []
+        if (notesController.statusText.length > 0) {
+            parts.push(notesController.statusText)
+        }
+        if (notesController.syncStateText.length > 0) {
+            parts.push(i18n.tr("Sync: %1").arg(notesController.syncStateText))
+        }
+        if (notesController.conflictNotesCount > 0) {
+            parts.push(i18n.tr("%1 notes have conflicts.").arg(notesController.conflictNotesCount))
+        }
+        if (notesController.dirtyNotesCount > 0) {
+            parts.push(i18n.tr("%1 notes have unsynced local changes.").arg(notesController.dirtyNotesCount))
+        }
+        if (parts.length === 0) {
+            parts.push(i18n.tr("No status message."))
+        }
+        return parts.join("\n")
+    }
 }

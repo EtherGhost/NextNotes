@@ -14,7 +14,8 @@ NextNotes is not affiliated with, endorsed by, or sponsored by Nextcloud GmbH or
 - Keep local note caches separated per selected Online Accounts account.
 - Automatically sync local changes while the app is active.
 - Preserve local drafts when server conflicts are detected.
-- Review conflicts by choosing the local or server version.
+- Review conflicts on a dedicated conflict page by choosing the local or server version.
+- Keep the note editor stable while sync state changes by showing sync/conflict state in the top bar.
 - Follow the system language or manually choose a supported language.
 - View version, license, and project information from the About page.
 
@@ -149,6 +150,7 @@ Important runtime areas:
 - `qml/backend/NotesCache.qml`: local SQLite cache through Qt LocalStorage.
 - `qml/backend/NotesController.qml`: note loading, filtering, sync orchestration, local draft handling, and UI-facing state.
 - `qml/backend/*.js`: small testable helper modules.
+- `qml/pages/ConflictResolutionPage.qml`: full-screen local/server conflict review and resolution.
 - `po/`: gettext translation catalogs.
 - `tests/`: local regression/contract tests.
 - `tests_live/`: opt-in live Nextcloud Notes API tests.

@@ -298,6 +298,7 @@ class NotesControllerContractTests(unittest.TestCase):
 
     def test_automatic_sync_lifecycle_and_retry_are_present(self):
         self.assertIn("autoSyncTimer", self.controller)
+        self.assertRegex(self.controller, r"id:\s*autoSyncTimer\s*\n\s*interval:\s*500")
         self.assertIn("autoSyncRetryTimer", self.controller)
         self.assertIn("lifecycleSyncTimer", self.controller)
         self.assertIn("connectionRecoveryTimer", self.controller)
@@ -452,6 +453,11 @@ class UiFlowContractTests(unittest.TestCase):
             "placeholderText: notesController.selectedCategoryType",
             "accountAvatarUrl",
             "OpacityMask",
+            "conflictNotesCount",
+            "firstConflictNoteId",
+            "statusIconKind",
+            "openStatusFromIcon",
+            "ConflictResolutionPage.qml",
             "pullRefreshThreshold",
             "section.property",
             "toggleFavoriteFromList",
@@ -469,30 +475,21 @@ class UiFlowContractTests(unittest.TestCase):
 
     def test_note_editor_autosaves_flushes_and_exposes_required_note_actions(self):
         editor = read_text("qml/pages/NoteEditorPage.qml")
+        conflict_page = read_text("qml/pages/ConflictResolutionPage.qml")
 
         for snippet in [
             "interval: 2000",
             "Component.onDestruction: page.flushPendingDraft()",
             "onVisibleChanged",
             "saveDraftNow",
-            "Upload changes",
-            "Create note",
-            "Review a version",
-            "Keep local version",
-            "Use server version",
-            "Server version",
-            "Local version",
-            "conflictPreviewChoice",
-            "selectConflictVersion",
-            "applyConflictEditorContent",
-            "conflictLocalContent",
-            "notesController.noteConflict && page.conflictPreviewChoice === \"server\"",
-            "!notesController.noteConflict || page.conflictPreviewChoice === \"local\"",
-            "page.conflictPreviewChoice === \"server\"",
-            "border.color: theme.palette.normal.backgroundText",
             "syncStateText",
-            "noteServerContent",
-            "noteConflictEtag",
+            "statusIconKind",
+            "statusAccentColor",
+            "Canvas",
+            "Resolve conflict",
+            "openStatusFromIcon",
+            "openConflictResolution",
+            "ConflictResolutionPage.qml",
             "Edit title",
             "Category",
             "Delete",
@@ -501,6 +498,35 @@ class UiFlowContractTests(unittest.TestCase):
             "onPendingNoteIdChanged",
         ]:
             self.assertIn(snippet, editor)
+
+        for removed in [
+            "Save locally",
+            "Upload changes",
+            "Create note",
+            "conflictPreviewChoice",
+            "selectConflictVersion",
+            "applyConflictEditorContent",
+            "conflictLocalContent",
+            "The server changed this note while you had local edits. Review a version",
+        ]:
+            self.assertNotIn(removed, editor)
+
+        for snippet in [
+            "Server version",
+            "Local version",
+            "Use server version",
+            "Keep local version",
+            "discardLocalDraftAndUseServer",
+            "keepLocalDraftAfterConflict",
+            'page.selectedVersion === "server"',
+            "noteServerContent",
+            "noteConflictEtag",
+            "readOnly: true",
+        ]:
+            self.assertIn(snippet, conflict_page)
+
+        self.assertEqual(conflict_page.count("discardLocalDraftAndUseServer"), 1)
+        self.assertEqual(conflict_page.count("keepLocalDraftAfterConflict"), 1)
 
     def test_note_editor_title_dialog_preserves_retyped_title(self):
         editor = read_text("qml/pages/NoteEditorPage.qml")
