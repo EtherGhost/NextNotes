@@ -76,6 +76,7 @@ Item {
     property string currentServiceId: ""
     property string currentServerUrl: ""
     property string currentAvatarUrl: ""
+    property int accountRequestGeneration: 0
     property double lastLifecycleSyncStartedAt: 0
     property double lastServerSyncCompletedAt: 0
     property string deferredAutomaticReason: ""
@@ -155,7 +156,18 @@ Item {
     AccountSessionAdapter {
         id: accountSession
 
-        onAuthenticated: {
+        onAuthenticated: function(userName, secret, serverUrl, accountId, serviceId) {
+            if (!controller.isCurrentAccountResponse(accountId, serviceId, serverUrl)) {
+                console.log(
+                    "NextNotes NotesApi ignored stale auth response"
+                    + " responseAccountId=" + accountId
+                    + " currentAccountId=" + controller.currentAccountId
+                    + " responseServiceId=" + serviceId
+                    + " currentServiceId=" + controller.currentServiceId
+                )
+                return
+            }
+
             controller.accountAvatarUrl = controller.avatarUrl(serverUrl, userName)
             controller.currentAvatarUrl = controller.accountAvatarUrl
             if (serverUrl && serverUrl.length > 0) {
@@ -209,7 +221,12 @@ Item {
     NotesApiClient {
         id: notesApiClient
 
-        onNotesLoaded: {
+        onNotesLoaded: function(notes, responseEtag, responseLastModified, generation) {
+            if (!controller.isCurrentApiGeneration(generation)) {
+                console.log("NextNotes NotesApi ignored stale notes response generation=" + generation + " current=" + controller.accountRequestGeneration)
+                return
+            }
+
             notesCache.replaceServerNotes(notes, responseEtag, responseLastModified)
             controller.populateNotes(notesCache.loadNotes())
             controller.hasCachedNotes = controller.totalNotesCount > 0
@@ -229,7 +246,12 @@ Item {
             }
         }
 
-        onNoteLoaded: {
+        onNoteLoaded: function(note, generation) {
+            if (!controller.isCurrentApiGeneration(generation)) {
+                console.log("NextNotes NotesApi ignored stale note response generation=" + generation + " current=" + controller.accountRequestGeneration)
+                return
+            }
+
             if (controller.noteFetchMode === "prefetch" && note.noteId === controller.detailPrefetchCurrentNoteId) {
                 notesCache.saveNote(note)
                 controller.refreshNotesFromCache()
@@ -257,7 +279,12 @@ Item {
                 : i18n.tr("Loaded from server"))
         }
 
-        onNoteUploaded: {
+        onNoteUploaded: function(note, generation) {
+            if (!controller.isCurrentApiGeneration(generation)) {
+                console.log("NextNotes NotesApi ignored stale upload response generation=" + generation + " current=" + controller.accountRequestGeneration)
+                return
+            }
+
             if (controller.syncRunning) {
                 notesCache.saveUploadedNote(note)
                 controller.syncUploadedCount += 1
@@ -277,7 +304,12 @@ Item {
             }
         }
 
-        onNoteCreated: {
+        onNoteCreated: function(localNoteId, note, generation) {
+            if (!controller.isCurrentApiGeneration(generation)) {
+                console.log("NextNotes NotesApi ignored stale create response generation=" + generation + " current=" + controller.accountRequestGeneration)
+                return
+            }
+
             if (controller.syncRunning) {
                 notesCache.saveCreatedNote(localNoteId, note)
                 controller.syncUploadedCount += 1
@@ -302,7 +334,12 @@ Item {
             }
         }
 
-        onNoteDeleted: {
+        onNoteDeleted: function(noteId, generation) {
+            if (!controller.isCurrentApiGeneration(generation)) {
+                console.log("NextNotes NotesApi ignored stale delete response generation=" + generation + " current=" + controller.accountRequestGeneration)
+                return
+            }
+
             if (controller.syncRunning) {
                 notesCache.deleteNote(noteId)
                 controller.syncUploadedCount += 1
@@ -320,7 +357,12 @@ Item {
             controller.refreshNotesFromCache()
         }
 
-        onUploadConflict: {
+        onUploadConflict: function(noteId, serverNote, message, generation) {
+            if (!controller.isCurrentApiGeneration(generation)) {
+                console.log("NextNotes NotesApi ignored stale conflict response generation=" + generation + " current=" + controller.accountRequestGeneration)
+                return
+            }
+
             if (controller.syncRunning) {
                 notesCache.markConflict(noteId, serverNote)
                 controller.syncConflictCount += 1
@@ -343,7 +385,13 @@ Item {
             }
         }
 
-        onFailed: controller.fail(message)
+        onFailed: function(message, generation) {
+            if (!controller.isCurrentApiGeneration(generation)) {
+                console.log("NextNotes NotesApi ignored stale failure generation=" + generation + " current=" + controller.accountRequestGeneration)
+                return
+            }
+            controller.fail(message)
+        }
     }
 
     function loadNotes() {
@@ -375,6 +423,8 @@ Item {
     }
 
     function applyAccountSelection(accountId, displayName, providerId, serviceId, serverUrl, avatarUrl) {
+        accountRequestGeneration += 1
+        stopAccountActivity()
         accountSettings.accountId = accountId
         accountSettings.displayName = displayName || ""
         accountSettings.providerId = providerId || ""
@@ -401,6 +451,7 @@ Item {
     }
 
     function refreshSelectedAccountFromServer() {
+        var generation = accountRequestGeneration
         configureAccountRuntime()
         cancelDetailPrefetch()
         pendingNoteId = 0
@@ -411,7 +462,9 @@ Item {
         hasCachedNote = false
         loading = true
         statusText = i18n.tr("Account changed. Refreshing...")
-        accountSession.authenticate()
+        if (generation === accountRequestGeneration) {
+            accountSession.authenticate()
+        }
     }
 
     function restoreAccountRuntimeFromSettings() {
@@ -434,6 +487,7 @@ Item {
 
         accountSession.setAccount(currentAccountId, currentProviderId, currentServiceId, currentServerUrl)
         notesCache.setScope(accountKey())
+        notesApiClient.requestGeneration = accountRequestGeneration
     }
 
     function clearAccountData() {
@@ -447,6 +501,60 @@ Item {
         statusText = currentAccountId > 0
             ? i18n.tr("Account changed. Refreshing...")
             : i18n.tr("Open your Nextcloud notes.")
+    }
+
+    function stopAccountActivity() {
+        autoSyncTimer.stop()
+        autoSyncRetryTimer.stop()
+        lifecycleSyncTimer.stop()
+        connectionRecoveryTimer.stop()
+        accountRefreshTimer.stop()
+        cancelDetailPrefetch()
+        loading = false
+        noteLoading = false
+        syncRunning = false
+        syncProgressText = ""
+        syncSummaryText = ""
+        syncPhase = "idle"
+        syncAutomatic = false
+        syncQueue = []
+        syncIndex = 0
+        syncTotal = 0
+        syncUploadedCount = 0
+        syncFailedCount = 0
+        syncConflictCount = 0
+        syncSkippedCount = 0
+        syncCurrentNote = null
+        syncUserName = ""
+        syncSecret = ""
+        syncServerUrl = ""
+        sessionUserName = ""
+        sessionSecret = ""
+        sessionServerUrl = ""
+        pendingNoteId = 0
+        pendingUpload = false
+        pendingUploadNote = null
+        pendingDelete = false
+        pendingDeleteNoteId = 0
+        deferredAutomaticReason = ""
+        automaticServerCycleRunning = false
+    }
+
+    function isCurrentAccountResponse(accountId, serviceId, serverUrl) {
+        if (currentAccountId > 0 && accountId !== currentAccountId) {
+            return false
+        }
+        if (currentServiceId.length > 0 && serviceId !== currentServiceId) {
+            return false
+        }
+        if (currentServerUrl.length > 0 && serverUrl !== currentServerUrl) {
+            return false
+        }
+        return true
+    }
+
+    function isCurrentApiGeneration(generation) {
+        return generation === accountRequestGeneration
     }
 
     function accountKey() {

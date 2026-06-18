@@ -5,6 +5,7 @@
 - Improved the account setup prompt so a selected account stays selected and is verified automatically after the user returns from Ubuntu Touch account settings.
 - Added a swipe-action direction setting with Ubuntu Touch style as the default and Android-compatible style as an option.
 - Updated account page wording and Swedish translations for Ubuntu Touch Online Accounts guidance.
+- Fixed stale authentication/API callbacks so delayed sync or refresh responses from a previous account are ignored after switching accounts.
 
 ## 0.1.3 - 2026-06-17
 

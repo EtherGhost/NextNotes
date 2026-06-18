@@ -22,7 +22,7 @@ Item {
     property string envTestUserName: typeof desktopTestUserName !== "undefined" ? desktopTestUserName : ""
     property string envTestSecret: typeof desktopTestSecret !== "undefined" ? desktopTestSecret : ""
 
-    signal authenticated(string userName, string secret, string serverUrl)
+    signal authenticated(string userName, string secret, string serverUrl, int accountId, string serviceId)
     signal failed(string message)
 
     Settings {
@@ -77,11 +77,11 @@ Item {
             adapter.cachedUserName = userName
             adapter.cachedSecret = secret
 
-            adapter.authenticated(userName, secret, adapter.cachedServerUrl)
+            adapter.authenticated(userName, secret, adapter.cachedServerUrl, adapter.cachedAccountId, adapter.cachedServiceId)
             if (adapter.pendingCallback) {
                 var callback = adapter.pendingCallback
                 adapter.pendingCallback = null
-                callback(userName, secret, adapter.cachedServerUrl)
+                callback(userName, secret, adapter.cachedServerUrl, adapter.cachedAccountId, adapter.cachedServiceId)
             }
         }
 
@@ -112,11 +112,11 @@ Item {
             cachedUserName = envTestUserName
             cachedSecret = envTestSecret
             console.log("NextNotes NotesApi auth using desktop test environment credentials serverUrlConfigured=" + hasValue(testServerUrl))
-            authenticated(cachedUserName, cachedSecret, cachedServerUrl)
+            authenticated(cachedUserName, cachedSecret, cachedServerUrl, cachedAccountId, cachedServiceId)
             if (pendingCallback) {
                 var callback = pendingCallback
                 pendingCallback = null
-                callback(cachedUserName, cachedSecret, cachedServerUrl)
+                callback(cachedUserName, cachedSecret, cachedServerUrl, cachedAccountId, cachedServiceId)
             }
             return
         }
@@ -140,11 +140,11 @@ Item {
                 + " serviceId=" + effectiveServiceId()
                 + " serverUrlConfigured=" + hasValue(serverUrl)
             )
-            authenticated(cachedUserName, cachedSecret, cachedServerUrl)
+            authenticated(cachedUserName, cachedSecret, cachedServerUrl, cachedAccountId, cachedServiceId)
             if (pendingCallback) {
                 var callback = pendingCallback
                 pendingCallback = null
-                callback(cachedUserName, cachedSecret, cachedServerUrl)
+                callback(cachedUserName, cachedSecret, cachedServerUrl, cachedAccountId, cachedServiceId)
             }
             return
         }

@@ -208,8 +208,22 @@ class NotesApiClientContractTests(unittest.TestCase):
     def test_delete_treats_already_gone_as_success(self):
         self.assertRegex(
             self.api_compact,
-            r"request\.status === 404 \|\| request\.status === 410.*client\.noteDeleted\(noteId\)",
+            r"request\.status === 404 \|\| request\.status === 410.*client\.noteDeleted\(noteId, generation\)",
         )
+
+    def test_api_responses_carry_request_generation(self):
+        self.assertIn("property int requestGeneration: 0", self.api)
+        for signal in [
+            "signal notesLoaded(var notes, string responseEtag, string responseLastModified, int generation)",
+            "signal noteLoaded(var note, int generation)",
+            "signal noteUploaded(var note, int generation)",
+            "signal noteCreated(int localNoteId, var note, int generation)",
+            "signal noteDeleted(int noteId, int generation)",
+            "signal uploadConflict(int noteId, var serverNote, string message, int generation)",
+            "signal failed(string message, int generation)",
+        ]:
+            self.assertIn(signal, self.api)
+        self.assertIn("var generation = requestGeneration", self.api)
 
     def test_logs_do_not_include_secret_or_full_note_content(self):
         unsafe_patterns = [
@@ -326,6 +340,20 @@ class NotesControllerContractTests(unittest.TestCase):
         self.assertIn("connection-recovery", self.controller)
         self.assertIn("connectionRecoveryTimer.restart()", self.controller)
 
+    def test_account_switch_cancels_stale_async_work(self):
+        for snippet in [
+            "property int accountRequestGeneration",
+            "accountRequestGeneration += 1",
+            "function stopAccountActivity()",
+            "function isCurrentAccountResponse",
+            "function isCurrentApiGeneration",
+            "ignored stale auth response",
+            "ignored stale notes response",
+            "notesApiClient.requestGeneration = accountRequestGeneration",
+        ]:
+            self.assertIn(snippet, self.controller)
+        self.assertLess(self.controller.index("accountRequestGeneration += 1"), self.controller.index("accountSettings.accountId = accountId"))
+
     def test_sync_updates_current_open_note_state(self):
         self.assertIn("applySyncedOpenNote", self.controller)
         self.assertIn("controller.applySyncedOpenNote(note.noteId", self.controller)
@@ -386,6 +414,8 @@ class RefactoredCoreContractTests(unittest.TestCase):
         self.assertIn("desktopTestAuthEnabled", session)
         self.assertIn("auth using desktop test environment credentials", session)
         self.assertIn("var accountChanged = currentAccountId !== accountId", session)
+        self.assertIn("signal authenticated(string userName, string secret, string serverUrl, int accountId, string serviceId)", session)
+        self.assertIn("adapter.cachedAccountId, adapter.cachedServiceId", session)
         self.assertIn("property var pendingCallback: null", session)
         self.assertIn("function withCredentials(callback)", session)
         self.assertIn("cachedSecret = \"\"", session)
