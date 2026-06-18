@@ -8,9 +8,9 @@ NextNotes is not affiliated with, endorsed by, or sponsored by Nextcloud GmbH or
 
 ## Current Status
 
-Current release candidate: `0.1.3`.
+Current release candidate: `0.1.4`.
 
-This release focuses on editor status stability, direct conflict review access, and correct note-list ordering after favorite changes sync.
+This release focuses on account-flow polish, swipe direction preferences, editor status stability, direct conflict review access, and correct note-list ordering after favorite changes sync.
 
 ## Features
 
@@ -42,13 +42,15 @@ NextNotes focuses on a small reliable V1. It does not implement:
 
 ## Authentication
 
-NextNotes always uses Ubuntu Touch Online Accounts. Add your Nextcloud or ownCloud account in Ubuntu Touch System Settings > Accounts, then select that account inside NextNotes. If Ubuntu Touch has not yet allowed NextNotes to use the account, the account page tells you to allow it in System Settings > Accounts and then select it again.
+NextNotes always uses Ubuntu Touch Online Accounts. Add your Nextcloud or ownCloud account in Ubuntu Touch System Settings > Accounts, then select that account inside NextNotes. If Ubuntu Touch has not yet allowed NextNotes to use the account, the account page opens a guided prompt to System Settings > Accounts, keeps the account selected, and verifies access automatically when you return.
 
 Credentials are requested from Online Accounts at runtime and are not stored by NextNotes. After successful runtime authentication, credentials may be kept only in process memory for the current app session.
 
 The account flow follows the shared Nextcloud suite pattern: account rows are selected directly, verification is serialized while running, stale in-memory credentials are cleared when switching accounts, and technical diagnostics are kept out of the normal UI.
 
-Each Ubuntu Touch account must be allowed for NextNotes in System Settings > Accounts. If one account works and another account does not, open the OS account settings for the failing account, allow NextNotes, then select that account again inside the app.
+Each Ubuntu Touch account must be allowed for NextNotes in System Settings > Accounts. If one account works and another account does not, open the OS account settings for the failing account, allow NextNotes, then return to the app so it can verify the selected account automatically.
+
+The notes list includes a swipe-action direction setting in the hamburger menu. Ubuntu Touch style is the default; Android-compatible style can be selected for users who prefer the upstream Android direction.
 
 ## Languages
 

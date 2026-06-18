@@ -10,10 +10,11 @@ find_package(Qt5Quick REQUIRED)
 
 set(PROJECT_NAME "nextnotes")
 set(FULL_PROJECT_NAME "nextnotes.cloudsite")
+set(NEXTNOTES_VERSION "0.1.4")
 set(DATA_DIR /)
 set(DESKTOP_FILE_NAME ${PROJECT_NAME}.desktop)
 
-configure_file(manifest.json.in ${CMAKE_CURRENT_BINARY_DIR}/manifest.json)
+configure_file(manifest.json.in ${CMAKE_CURRENT_BINARY_DIR}/manifest.json @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/manifest.json DESTINATION ${CMAKE_INSTALL_PREFIX})
 install(FILES ${PROJECT_NAME}.apparmor DESTINATION ${DATA_DIR})
 install(FILES ${PROJECT_NAME}.accounts DESTINATION ${DATA_DIR})
@@ -23,6 +24,7 @@ qt5_add_resources(QT_RESOURCES qml/qml.qrc assets/assets.qrc)
 
 add_executable(${PROJECT_NAME} main.cpp ${QT_RESOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS_RELEASE -s)
+target_compile_definitions(${PROJECT_NAME} PRIVATE NEXTNOTES_VERSION="${NEXTNOTES_VERSION}")
 target_link_libraries(${PROJECT_NAME} Qt5::Gui Qt5::Qml Qt5::Quick)
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
 

@@ -18,9 +18,11 @@ def compact(text):
 class ProjectMetadataTests(unittest.TestCase):
     def test_manifest_identity_and_version_are_consistent(self):
         manifest = json.loads(read_text("manifest.json.in"))
+        cmake = read_text("CMakeLists.txt")
 
         self.assertEqual(manifest["name"], "nextnotes.cloudsite")
-        self.assertEqual(manifest["version"], "0.1.3")
+        self.assertIn('set(NEXTNOTES_VERSION "0.1.4")', cmake)
+        self.assertEqual(manifest["version"], "@NEXTNOTES_VERSION@")
         self.assertIn("nextnotes", manifest["hooks"])
         self.assertEqual(manifest["hooks"]["nextnotes"]["apparmor"], "nextnotes.apparmor")
         self.assertEqual(manifest["hooks"]["nextnotes"]["desktop"], "nextnotes.desktop")
@@ -41,6 +43,13 @@ class ProjectMetadataTests(unittest.TestCase):
         self.assertIn("nextnotes.cloudsite_nextnotes_owncloud", account_page)
         self.assertIn("findPreferredAppService", account_page)
         self.assertIn("service-not-enabled", account_page)
+        self.assertIn("openSystemAccountsDialog", account_page)
+        self.assertIn('Qt.openUrlExternally("settings://system/online-accounts")', account_page)
+        self.assertIn("function systemAccountsDialogText()", account_page)
+        self.assertIn("function retryAfterSystemApproval()", account_page)
+        self.assertIn("waitingForSystemApproval", account_page)
+        self.assertIn("verify it automatically", account_page)
+        self.assertIn('i18n.tr("Open system accounts")', account_page)
         self.assertIn("clearSelectedAccount()", account_page)
         self.assertIn("notesController.applyAccountSelection(", account_page)
         self.assertIn("authorizationRunning", account_page)
@@ -48,6 +57,7 @@ class ProjectMetadataTests(unittest.TestCase):
         self.assertIn("page.selectAccount(", account_page)
         self.assertIn("function restoreSelectedAccountFromSettings()", account_page)
         self.assertIn("Open Ubuntu Touch System Settings > Accounts", account_page)
+        self.assertNotIn("select it again", account_page)
         self.assertNotIn("selectedService.updateServiceEnabled(true)", account_page)
         self.assertNotIn('text: row.isSelected ? i18n.tr("Selected") : i18n.tr("Use")', account_page)
         self.assertNotIn("accountSetup.exec()", account_page)
@@ -141,14 +151,14 @@ class ProjectMetadataTests(unittest.TestCase):
 
         for snippet in [
             "Version %1",
-            "0.1.3",
+            "nextnotesAppVersion",
             "MIT License",
             "Etherghost",
             "not affiliated",
             "qrc:/assets/logo.svg",
         ]:
             self.assertIn(snippet, page)
-        self.assertIn("## 0.1.3", changelog)
+        self.assertIn("## 0.1.4", changelog)
         self.assertIn("## 0.1.0", changelog)
 
 
@@ -388,7 +398,7 @@ class RefactoredCoreContractTests(unittest.TestCase):
         self.assertIn("function setScope(scopeKey)", read_text("qml/backend/NotesCache.qml"))
         self.assertIn('Sql.LocalStorage.openDatabaseSync(databaseName', read_text("qml/backend/NotesCache.qml"))
         self.assertIn('message.indexOf("AppArmor policy prevents")', account_page)
-        self.assertIn("page.clearSelectedAccount()", account_page)
+        self.assertNotIn("page.clearSelectedAccount()", account_page)
 
         forbidden = [
             "manualAccount",
@@ -468,6 +478,14 @@ class UiFlowContractTests(unittest.TestCase):
             "section.property",
             "toggleFavoriteFromList",
             "requestDelete",
+            "property string activeSwipeActionLayout",
+            "androidSwipeActions",
+            "function actionForOffset(offset)",
+            "function triggerSwipeAction(offset)",
+            "function setSwipeActionLayout(value)",
+            '"notesListPage": page',
+            'page.activeSwipeActionLayout = appSettings.swipeActionLayout === "android" ? "android" : "ut"',
+            "SettingsPage.qml",
             "selectionMode",
             "onPressAndHold",
             "deleteNotes(page.selectedNoteIds)",
@@ -478,6 +496,24 @@ class UiFlowContractTests(unittest.TestCase):
             "pullRefreshArmed && !notesController.loading",
         ]:
             self.assertIn(snippet, notes_list)
+
+        settings_page = read_text("qml/pages/SettingsPage.qml")
+        for snippet in [
+            'property string swipeActionLayout: "ut"',
+            'i18n.tr("Settings")',
+            'i18n.tr("Android-compatible swipe direction")',
+            'i18n.tr("Swipe right to delete, left to favorite.")',
+            'i18n.tr("Swipe right to favorite, left to delete.")',
+            "Switch {",
+            "function setSwipeActionLayout(value)",
+            "property var notesListPage",
+            "page.notesListPage.setSwipeActionLayout(normalized)",
+        ]:
+            self.assertIn(snippet, settings_page)
+
+        self.assertNotIn('i18n.tr("List")', settings_page)
+        self.assertNotIn("property var swipeActionLayoutChanged", settings_page)
+        self.assertNotIn("property var applySwipeActionLayout", settings_page)
 
     def test_note_editor_autosaves_flushes_and_exposes_required_note_actions(self):
         editor = read_text("qml/pages/NoteEditorPage.qml")

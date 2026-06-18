@@ -23,6 +23,8 @@ Page {
     property int bulkDeleteDirtyCount: 0
     property int bulkDeleteNewCount: 0
     readonly property real pullRefreshThreshold: units.gu(7)
+    property string activeSwipeActionLayout: appSettings.swipeActionLayout
+    readonly property bool androidSwipeActions: activeSwipeActionLayout === "android"
     readonly property string accountInitial: accountSettings.displayName.length > 0
         ? accountSettings.displayName.charAt(0).toUpperCase()
         : "N"
@@ -260,6 +262,12 @@ Page {
         property string displayName: ""
     }
 
+    Settings {
+        id: appSettings
+        category: "app"
+        property string swipeActionLayout: "ut"
+    }
+
     Component {
         id: statusDetailsDialog
 
@@ -443,6 +451,27 @@ Page {
                         PopupUtils.open(listDeleteConfirmDialog)
                     }
 
+                    function actionForOffset(offset) {
+                        if (offset > 0) {
+                            return page.androidSwipeActions ? "favorite" : "delete"
+                        }
+                        if (offset < 0) {
+                            return page.androidSwipeActions ? "delete" : "favorite"
+                        }
+                        return ""
+                    }
+
+                    function triggerSwipeAction(offset) {
+                        var action = row.actionForOffset(offset)
+                        if (action === "favorite") {
+                            if (model.readonly !== true) {
+                                notesController.toggleFavoriteFromList(model.noteId)
+                            }
+                        } else if (action === "delete") {
+                            row.requestDelete()
+                        }
+                    }
+
                     Rectangle {
                         anchors {
                             fill: parent
@@ -450,7 +479,7 @@ Page {
                             rightMargin: units.gu(0.25)
                         }
                         radius: units.gu(0.75)
-                        color: swipeContent.x >= 0 ? "#f6c343" : "#c7162b"
+                        color: row.actionForOffset(swipeContent.x) === "favorite" ? "#f6c343" : "#c7162b"
                         opacity: Math.min(1, Math.abs(swipeContent.x) / row.actionThreshold)
 
                         Label {
@@ -460,7 +489,9 @@ Page {
                                 leftMargin: units.gu(2)
                             }
                             visible: swipeContent.x > units.gu(1)
-                            text: model.favorite === true ? i18n.tr("Unfavorite") : i18n.tr("Favorite")
+                            text: row.actionForOffset(swipeContent.x) === "favorite"
+                                ? (model.favorite === true ? i18n.tr("Unfavorite") : i18n.tr("Favorite"))
+                                : i18n.tr("Delete")
                             color: "white"
                             font.bold: true
                         }
@@ -472,7 +503,9 @@ Page {
                                 rightMargin: units.gu(2)
                             }
                             visible: swipeContent.x < -units.gu(1)
-                            text: i18n.tr("Delete")
+                            text: row.actionForOffset(swipeContent.x) === "favorite"
+                                ? (model.favorite === true ? i18n.tr("Unfavorite") : i18n.tr("Favorite"))
+                                : i18n.tr("Delete")
                             color: "white"
                             font.bold: true
                         }
@@ -721,13 +754,13 @@ Page {
                                             return
                                         }
                                         if (swipeContent.x > row.actionThreshold) {
+                                            var positiveOffset = swipeContent.x
                                             row.resetSwipe()
-                                            if (model.readonly !== true) {
-                                                notesController.toggleFavoriteFromList(model.noteId)
-                                            }
+                                            row.triggerSwipeAction(positiveOffset)
                                         } else if (swipeContent.x < -row.actionThreshold) {
+                                            var negativeOffset = swipeContent.x
                                             row.resetSwipe()
-                                            row.requestDelete()
+                                            row.triggerSwipeAction(negativeOffset)
                                         } else {
                                             var wasTap = Math.abs(swipeContent.x) < units.gu(1)
                                             row.resetSwipe()
@@ -960,6 +993,18 @@ Page {
 
                 Button {
                     Layout.fillWidth: true
+                    text: i18n.tr("Settings")
+                    onClicked: {
+                        page.menuOpen = false
+                        pageStack.push(Qt.resolvedUrl("SettingsPage.qml"), {
+                            "swipeActionLayout": page.activeSwipeActionLayout,
+                            "notesListPage": page
+                        })
+                    }
+                }
+
+                Button {
+                    Layout.fillWidth: true
                     text: i18n.tr("Language")
                     onClicked: {
                         page.menuOpen = false
@@ -997,6 +1042,7 @@ Page {
 
     onVisibleChanged: {
         if (visible && initialLoadDone) {
+            page.activeSwipeActionLayout = appSettings.swipeActionLayout === "android" ? "android" : "ut"
             notesController.loadCachedNotesOnly()
         }
     }
@@ -1009,6 +1055,12 @@ Page {
             "initialTitle": title,
             "notesController": notesController
         })
+    }
+
+    function setSwipeActionLayout(value) {
+        var normalized = value === "android" ? "android" : "ut"
+        page.activeSwipeActionLayout = normalized
+        appSettings.swipeActionLayout = normalized
     }
 
     function openStatusFromIcon() {

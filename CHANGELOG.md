@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.4 - 2026-06-18
+
+- Improved the account setup prompt so a selected account stays selected and is verified automatically after the user returns from Ubuntu Touch account settings.
+- Added a swipe-action direction setting with Ubuntu Touch style as the default and Android-compatible style as an option.
+- Updated account page wording and Swedish translations for Ubuntu Touch Online Accounts guidance.
+
 ## 0.1.3 - 2026-06-17
 
 - Fixed note list ordering after toggling a note as favorite so successful sync and server refresh no longer move the note back to an older modified position.

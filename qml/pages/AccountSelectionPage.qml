@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.3
 import Lomiri.Components 1.3
+import Lomiri.Components.Popups 1.3
 import Ubuntu.OnlineAccounts 0.1
 import Lomiri.OnlineAccounts.Client 0.1
 import Qt.labs.settings 1.0
@@ -26,6 +27,7 @@ Page {
     property string serverUrl: accountSettings.serverUrl
     property string pendingServerUrlAction: ""
     property bool authorizationRunning: false
+    property bool waitingForSystemApproval: false
     property int visibleCloudAccounts: 0
     property string authorizationStatus: i18n.tr("Select an account and authorize it for NextNotes.")
     readonly property real oskOverlap: Qt.inputMethod.visible && Qt.inputMethod.keyboardRectangle.height > 0
@@ -63,6 +65,7 @@ Page {
 
         onAuthenticated: {
             page.authorizationRunning = false
+            page.waitingForSystemApproval = false
             var data = reply && reply.data ? reply.data : reply
             var userName = page.firstValue(data, ["UserName", "Username", "userName", "username"])
             var secret = page.firstValue(data, ["Secret", "Password", "password", "secret"])
@@ -116,8 +119,9 @@ Page {
                 + " message=" + message
             )
             if (message.indexOf("AppArmor policy prevents") >= 0 || message.indexOf("AccessDenied") >= 0) {
-                page.authorizationStatus = i18n.tr("NextNotes is not allowed to use this account yet. Open Ubuntu Touch System Settings > Accounts, select the Nextcloud account, allow NextNotes, then return here and select the account again.")
-                page.clearSelectedAccount()
+                page.waitingForSystemApproval = true
+                page.authorizationStatus = i18n.tr("NextNotes is not allowed to use this account yet. Open Ubuntu Touch System Settings > Accounts, allow NextNotes for this account, then return here.")
+                PopupUtils.open(openSystemAccountsDialog)
             } else {
                 page.authorizationStatus = i18n.tr("Authorization failed: %1. If the system did not show an Online Accounts prompt, open System Settings > Accounts and allow NextNotes for this account, then try again.")
                     .arg(message)
@@ -179,6 +183,52 @@ Page {
         page.updateVisibleCloudAccounts()
         page.restoreSelectedAccountFromSettings()
     })
+
+    onVisibleChanged: {
+        if (visible && page.waitingForSystemApproval) {
+            retrySystemApprovalTimer.restart()
+        }
+    }
+
+    Connections {
+        target: Qt.application
+        onActiveChanged: {
+            if (Qt.application.active && page.waitingForSystemApproval) {
+                retrySystemApprovalTimer.restart()
+            }
+        }
+    }
+
+    Timer {
+        id: retrySystemApprovalTimer
+        interval: 900
+        repeat: false
+        onTriggered: page.retryAfterSystemApproval()
+    }
+
+    Component {
+        id: openSystemAccountsDialog
+
+        Dialog {
+            id: dialog
+            title: i18n.tr("Open system accounts?")
+            text: page.systemAccountsDialogText()
+
+            Button {
+                text: i18n.tr("Open accounts")
+                color: theme.palette.normal.positive
+                onClicked: {
+                    PopupUtils.close(dialog)
+                    page.openSystemAccounts()
+                }
+            }
+
+            Button {
+                text: i18n.tr("Later")
+                onClicked: PopupUtils.close(dialog)
+            }
+        }
+    }
 
     Flickable {
         id: pageFlickable
@@ -287,7 +337,7 @@ Page {
 
             Label {
                 Layout.fillWidth: true
-                text: i18n.tr("The account still comes from Ubuntu Touch Online Accounts. Edit this only if the system account did not expose the correct server address.")
+                text: i18n.tr("This app uses Ubuntu Touch Online Accounts. Edit this only if the system account did not expose the correct server address.")
                 wrapMode: Text.WordWrap
                 maximumLineCount: 3
                 opacity: 0.68
@@ -332,6 +382,12 @@ Page {
                         wrapMode: Text.WordWrap
                         maximumLineCount: 4
                         opacity: 0.82
+                    }
+
+                    Button {
+                        Layout.fillWidth: true
+                        text: i18n.tr("Open system accounts")
+                        onClicked: PopupUtils.open(openSystemAccountsDialog)
                     }
                 }
             }
@@ -715,14 +771,15 @@ Page {
 
         if (!selectedEnabled) {
             page.authorizationRunning = false
+            page.waitingForSystemApproval = true
             console.log(
                 "NextNotes OnlineAccountsAuthorization service-not-enabled"
                 + " accountId=" + selectedAccountId
                 + " providerId=" + selectedProviderId
                 + " serviceId=" + selectedServiceId
             )
-            authorizationStatus = i18n.tr("This account is not allowed for NextNotes yet. Open Ubuntu Touch System Settings > Accounts, select the Nextcloud account, allow NextNotes, then return here and select the account again.")
-            clearSelectedAccount()
+            authorizationStatus = i18n.tr("This account is not allowed for NextNotes yet. Open Ubuntu Touch System Settings > Accounts, allow NextNotes for this account, then return here.")
+            PopupUtils.open(openSystemAccountsDialog)
             return
         }
         page.authorizationRunning = true
@@ -732,6 +789,7 @@ Page {
 
     function clearSelectedAccount() {
         page.authorizationRunning = false
+        page.waitingForSystemApproval = false
         selectedService.objectHandle = null
         selectedAccountId = 0
         selectedDisplayName = ""
@@ -741,6 +799,42 @@ Page {
         selectedServiceId = ""
         selectedServiceTypeId = ""
         selectedEnabled = false
+    }
+
+    function openSystemAccounts() {
+        page.waitingForSystemApproval = true
+        Qt.openUrlExternally("settings://system/online-accounts")
+    }
+
+    function systemAccountsDialogText() {
+        if (page.visibleCloudAccounts === 0) {
+            return i18n.tr("Add a Nextcloud or ownCloud account in Ubuntu Touch System Settings, then return to NextNotes.")
+        }
+
+        var accountName = page.selectedDisplayName.length > 0
+            ? page.selectedDisplayName
+            : accountSettings.displayName
+        if (accountName.length > 0) {
+            return i18n.tr("Open Ubuntu Touch System Settings, select %1, allow NextNotes for that account, then return here. NextNotes will verify it automatically.")
+                .arg(accountName)
+        }
+
+        return i18n.tr("Open Ubuntu Touch System Settings, select the Nextcloud account, allow NextNotes for that account, then return here. NextNotes will verify it automatically.")
+    }
+
+    function retryAfterSystemApproval() {
+        if (!page.waitingForSystemApproval || page.authorizationRunning || selectedAccountId <= 0) {
+            return
+        }
+
+        refreshSelectedServiceHandle()
+        if (selectedEnabled) {
+            authorizationStatus = i18n.tr("Account permission detected. Verifying access...")
+            page.waitingForSystemApproval = false
+            page.authenticateSelectedAccount()
+        } else {
+            authorizationStatus = i18n.tr("Waiting for account permission. If you already allowed NextNotes, return here and wait a moment.")
+        }
     }
 
     function commitServerUrlInput(action) {

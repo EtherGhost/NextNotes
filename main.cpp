@@ -10,6 +10,10 @@
 #include <QUrl>
 #include <QtGlobal>
 
+#ifndef NEXTNOTES_VERSION
+#define NEXTNOTES_VERSION "development"
+#endif
+
 namespace {
 QString environmentValue(const char *name)
 {
@@ -149,6 +153,7 @@ int main(int argc, char *argv[])
         && !desktopTestSecret.isEmpty();
 
     QQuickView view;
+    view.rootContext()->setContextProperty(QStringLiteral("nextnotesAppVersion"), QStringLiteral(NEXTNOTES_VERSION));
     view.rootContext()->setContextProperty(QStringLiteral("desktopLarge"), desktopLarge);
     view.rootContext()->setContextProperty(QStringLiteral("desktopDarkMode"), desktopDarkMode);
     view.rootContext()->setContextProperty(QStringLiteral("desktopTestAuthEnabled"), desktopTestAuthEnabled);

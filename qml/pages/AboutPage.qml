@@ -5,7 +5,7 @@ import Lomiri.Components 1.3
 Page {
     id: page
 
-    readonly property string appVersion: "0.1.3"
+    readonly property string appVersion: typeof nextnotesAppVersion !== "undefined" ? nextnotesAppVersion : "development"
 
     header: PageHeader {
         title: i18n.tr("About")

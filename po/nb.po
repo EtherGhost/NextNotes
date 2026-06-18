@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nextnotes.cloudsite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-17 17:25+0000\n"
+"POT-Creation-Date: 2026-06-18 22:16+0200\n"
 "PO-Revision-Date: 2026-06-12 00:00+0200\n"
 "Last-Translator: Etherghost\n"
 "Language-Team: Norwegian Bokmal\n"
@@ -74,11 +74,12 @@ msgid "Server version changed. Local draft was not uploaded."
 msgstr "Server version endret. Lokal draft was not laste opped."
 
 #: qml/backend/NotesApiClient.qml:215 qml/backend/NotesApiClient.qml:233
-#: qml/backend/NotesApiClient.qml:307 qml/backend/NotesCache.qml:343
-#: qml/backend/NotesCache.qml:352 qml/backend/NotesCache.qml:431
-#: qml/pages/ConflictResolutionPage.qml:28 qml/pages/NoteEditorPage.qml:576
-#: qml/pages/NotesListPage.qml:164 qml/pages/NotesListPage.qml:356
-#: qml/pages/NotesListPage.qml:491 qml/pages/NotesListPage.qml:939
+#: qml/backend/NotesApiClient.qml:307 qml/backend/NotesCache.qml:345
+#: qml/backend/NotesCache.qml:354 qml/backend/NotesCache.qml:434
+#: qml/pages/ConflictResolutionPage.qml:28 qml/pages/NoteEditorPage.qml:668
+#: qml/pages/NotesListPage.qml:296 qml/pages/NotesListPage.qml:448
+#: qml/pages/NotesListPage.qml:608 qml/pages/NotesListPage.qml:1084
+#: qml/pages/NotesListPage.qml:1087 qml/pages/NotesListPage.qml:1099
 msgid "Untitled note"
 msgstr "Notat uten tittel"
 
@@ -98,284 +99,284 @@ msgstr "Could not parse notat response."
 msgid "Could not parse upload response."
 msgstr "Could not parse laste opp response."
 
-#: qml/backend/NotesController.qml:10 qml/backend/NotesController.qml:447
+#: qml/backend/NotesController.qml:10 qml/backend/NotesController.qml:449
 msgid "Open your Nextcloud notes."
 msgstr "Open your Nextcloud notater."
 
-#: qml/backend/NotesController.qml:14 qml/backend/NotesController.qml:1074
-#: qml/backend/NotesController.qml:1106 qml/backend/NotesController.qml:1221
+#: qml/backend/NotesController.qml:14 qml/backend/NotesController.qml:1087
+#: qml/backend/NotesController.qml:1119 qml/backend/NotesController.qml:1234
 msgid "All notes"
 msgstr "Alle notater"
 
-#: qml/backend/NotesController.qml:84
+#: qml/backend/NotesController.qml:86
 msgid "Offline, will retry"
 msgstr "Offline, will retry"
 
-#: qml/backend/NotesController.qml:86
+#: qml/backend/NotesController.qml:88
 msgid "%1 pending"
 msgstr "%1 pending"
 
-#: qml/backend/NotesController.qml:88
+#: qml/backend/NotesController.qml:90
 msgid "Synced %1"
 msgstr "Synced %1"
 
-#: qml/backend/NotesController.qml:89
+#: qml/backend/NotesController.qml:91
 msgid "Not synced yet"
 msgstr "Not synced yet"
 
-#: qml/backend/NotesController.qml:174
+#: qml/backend/NotesController.qml:176
 msgid "Deleting note..."
 msgstr "Deleting notat..."
 
-#: qml/backend/NotesController.qml:178
+#: qml/backend/NotesController.qml:180
 msgid "Creating note..."
 msgstr "Creating notat..."
 
-#: qml/backend/NotesController.qml:181
+#: qml/backend/NotesController.qml:183
 msgid "Uploading changes..."
 msgstr "Last opping endringer..."
 
-#: qml/backend/NotesController.qml:185
+#: qml/backend/NotesController.qml:187
 msgid "Loading note..."
 msgstr "Laster notat..."
 
-#: qml/backend/NotesController.qml:188
+#: qml/backend/NotesController.qml:190
 msgid "Loading notes..."
 msgstr "Laster notater..."
 
-#: qml/backend/NotesController.qml:224 qml/backend/NotesController.qml:965
+#: qml/backend/NotesController.qml:226 qml/backend/NotesController.qml:978
 msgid "%1 notes synced."
 msgstr "%1 notater synced."
 
-#: qml/backend/NotesController.qml:225 qml/backend/NotesController.qml:966
+#: qml/backend/NotesController.qml:227 qml/backend/NotesController.qml:979
 msgid "No notes yet."
 msgstr "No notater yet."
 
-#: qml/backend/NotesController.qml:254 qml/backend/NotesController.qml:675
-#: qml/backend/NotesController.qml:722
+#: qml/backend/NotesController.qml:256 qml/backend/NotesController.qml:677
+#: qml/backend/NotesController.qml:724
 msgid "Local changes saved on this device"
 msgstr "Lokal endringer lagret on this device"
 
-#: qml/backend/NotesController.qml:255
+#: qml/backend/NotesController.qml:257
 msgid "Loaded from server"
 msgstr "Loaded from server"
 
-#: qml/backend/NotesController.qml:262 qml/backend/NotesController.qml:271
+#: qml/backend/NotesController.qml:264 qml/backend/NotesController.qml:273
 msgid "Uploaded changes."
 msgstr "Last opped endringer."
 
-#: qml/backend/NotesController.qml:284 qml/backend/NotesController.qml:295
+#: qml/backend/NotesController.qml:286 qml/backend/NotesController.qml:297
 msgid "Created note."
 msgstr "Created notat."
 
-#: qml/backend/NotesController.qml:317
+#: qml/backend/NotesController.qml:319
 msgid "Deleted note."
 msgstr "Slettd notat."
 
-#: qml/backend/NotesController.qml:362
+#: qml/backend/NotesController.qml:364
 msgid "Showing saved notes. Syncing local changes..."
 msgstr "Showing lagret notater. Syncing lokal endringer..."
 
-#: qml/backend/NotesController.qml:363
+#: qml/backend/NotesController.qml:365
 msgid "Syncing local changes..."
 msgstr "Syncing lokal endringer..."
 
-#: qml/backend/NotesController.qml:370 qml/backend/NotesController.qml:870
+#: qml/backend/NotesController.qml:372 qml/backend/NotesController.qml:883
 msgid "Showing saved notes. Checking for updates..."
 msgstr "Showing lagret notater. Checking for updates..."
 
-#: qml/backend/NotesController.qml:371 qml/backend/NotesController.qml:871
+#: qml/backend/NotesController.qml:373 qml/backend/NotesController.qml:884
 msgid "Connecting to Nextcloud..."
 msgstr "Connecting to Nextcloud..."
 
-#: qml/backend/NotesController.qml:411 qml/backend/NotesController.qml:446
+#: qml/backend/NotesController.qml:413 qml/backend/NotesController.qml:448
 #, fuzzy
 msgid "Account changed. Refreshing..."
 msgstr "Loaded cached notat. Refreshing..."
 
-#: qml/backend/NotesController.qml:471
+#: qml/backend/NotesController.qml:473
 msgid "Showing saved notes."
 msgstr "Showing lagret notater."
 
-#: qml/backend/NotesController.qml:472
+#: qml/backend/NotesController.qml:474
 msgid "No saved notes on this device."
 msgstr "No lagret notater on this device."
 
-#: qml/backend/NotesController.qml:483
+#: qml/backend/NotesController.qml:485
 msgid "No local draft is available to upload."
 msgstr "No lokal draft is available to laste opp."
 
-#: qml/backend/NotesController.qml:491
+#: qml/backend/NotesController.qml:493
 msgid "Cannot upload safely because the server etag is missing."
 msgstr "Cannot laste opp safely because the server etag is missing."
 
-#: qml/backend/NotesController.qml:499 qml/backend/NotesController.qml:547
-#: qml/backend/NotesController.qml:676 qml/backend/NotesController.qml:699
+#: qml/backend/NotesController.qml:501 qml/backend/NotesController.qml:549
+#: qml/backend/NotesController.qml:678 qml/backend/NotesController.qml:701
 msgid "Authenticating..."
 msgstr "Autentiserar..."
 
-#: qml/backend/NotesController.qml:540 qml/backend/NotesController.qml:924
+#: qml/backend/NotesController.qml:542 qml/backend/NotesController.qml:937
 msgid "Checking for server changes..."
 msgstr "Checking for server endringer..."
 
-#: qml/backend/NotesController.qml:567 qml/backend/NotesController.qml:568
+#: qml/backend/NotesController.qml:569 qml/backend/NotesController.qml:570
 msgid "No cached note is available to delete."
 msgstr "No cached notat is available to slette."
 
-#: qml/backend/NotesController.qml:577 qml/backend/NotesController.qml:579
-#: qml/backend/NotesController.qml:624 qml/backend/NotesController.qml:635
+#: qml/backend/NotesController.qml:579 qml/backend/NotesController.qml:581
+#: qml/backend/NotesController.qml:626 qml/backend/NotesController.qml:637
 msgid "Deleted local draft."
 msgstr "Slettd lokal draft."
 
-#: qml/backend/NotesController.qml:587 qml/backend/NotesController.qml:589
-#: qml/backend/NotesController.qml:625
+#: qml/backend/NotesController.qml:589 qml/backend/NotesController.qml:591
+#: qml/backend/NotesController.qml:627
 msgid "Deleted locally. Syncing deletion..."
 msgstr "Slettd lokally. Syncing deletion..."
 
-#: qml/backend/NotesController.qml:631
+#: qml/backend/NotesController.qml:633
 msgid "Deleted %1 notes locally. Syncing deletions..."
 msgstr "Slettd %1 notater lokally. Syncing deletions..."
 
-#: qml/backend/NotesController.qml:636
+#: qml/backend/NotesController.qml:638
 msgid "Deleted %1 local drafts."
 msgstr "Slettd %1 lokal drafts."
 
-#: qml/backend/NotesController.qml:649
+#: qml/backend/NotesController.qml:651
 msgid "Local draft kept. You can try uploading again."
 msgstr "Lokal draft kept. You can try laste opping again."
 
-#: qml/backend/NotesController.qml:661
+#: qml/backend/NotesController.qml:663
 msgid "Using server version."
 msgstr "Using server version."
 
-#: qml/backend/NotesController.qml:675
+#: qml/backend/NotesController.qml:677
 msgid "Loaded cached note. Refreshing..."
 msgstr "Loaded cached notat. Refreshing..."
 
-#: qml/backend/NotesController.qml:731 qml/pages/NoteEditorPage.qml:435
+#: qml/backend/NotesController.qml:733 qml/pages/NoteEditorPage.qml:527
 msgid "This note is read-only."
 msgstr "This notat is read-only."
 
-#: qml/backend/NotesController.qml:741
+#: qml/backend/NotesController.qml:743
 msgid "Favorite changed locally."
 msgstr "Favorite endret lokally."
 
-#: qml/backend/NotesController.qml:745
+#: qml/backend/NotesController.qml:747
 msgid "Favorite changed locally. Syncing soon."
 msgstr "Favorite endret lokally. Syncing soon."
 
-#: qml/backend/NotesController.qml:897
+#: qml/backend/NotesController.qml:910
 msgid "Uploading %1 of %2..."
 msgstr "Last opping %1 of %2..."
 
-#: qml/backend/NotesController.qml:946
+#: qml/backend/NotesController.qml:959
 msgid "Caching note previews..."
 msgstr "Caching notat previews..."
 
-#: qml/backend/NotesController.qml:1000
+#: qml/backend/NotesController.qml:1013
 msgid "Sync complete: %1 uploaded, %2 failed, %3 conflicts, %4 skipped."
 msgstr "Sync complete: %1 laste opped, %2 mislyktes, %3 conflicts, %4 skipped."
 
-#: qml/backend/NotesController.qml:1081 qml/backend/NotesController.qml:1213
+#: qml/backend/NotesController.qml:1094 qml/backend/NotesController.qml:1226
 msgid "Favorites"
 msgstr "Favoritter"
 
-#: qml/backend/NotesController.qml:1088 qml/backend/NotesController.qml:1216
-#: qml/pages/NoteEditorPage.qml:314
+#: qml/backend/NotesController.qml:1101 qml/backend/NotesController.qml:1229
+#: qml/pages/NoteEditorPage.qml:406
 msgid "Uncategorized"
 msgstr "Ukategorisert"
 
-#: qml/backend/NotesController.qml:1246
+#: qml/backend/NotesController.qml:1259
 msgid "Potential conflict: local changes are not uploaded"
 msgstr "Potential conflict: lokal endringer are not laste opped"
 
-#: qml/backend/NotesController.qml:1248
+#: qml/backend/NotesController.qml:1261
 msgid "New local draft. Upload to create it on the server."
 msgstr "New lokal draft. Last opp to create it on the server."
 
-#: qml/backend/NotesController.qml:1299 qml/backend/NotesController.qml:1312
+#: qml/backend/NotesController.qml:1312 qml/backend/NotesController.qml:1325
 msgid "Delete failed: %1"
 msgstr "Slett mislyktes: %1"
 
-#: qml/backend/NotesController.qml:1314
+#: qml/backend/NotesController.qml:1327
 msgid "Create failed: %1"
 msgstr "Create mislyktes: %1"
 
-#: qml/backend/NotesController.qml:1314
+#: qml/backend/NotesController.qml:1327
 msgid "Upload failed: %1"
 msgstr "Last opp mislyktes: %1"
 
-#: qml/backend/NotesController.qml:1316
+#: qml/backend/NotesController.qml:1329
 msgid "Showing cached note. Refresh failed: %1"
 msgstr "Showing cached notat. Refresh mislyktes: %1"
 
-#: qml/backend/NotesController.qml:1321
+#: qml/backend/NotesController.qml:1334
 msgid "Showing saved notes. Could not refresh."
 msgstr "Showing lagret notater. Could not refresh."
 
-#: qml/backend/NotesController.qml:1322
+#: qml/backend/NotesController.qml:1335
 msgid "Could not load notes. Check the account and connection."
 msgstr "Could not load notater. Check the account and connection."
 
-#: qml/backend/NotesController.qml:1333
+#: qml/backend/NotesController.qml:1346
 msgid "never"
 msgstr "never"
 
-#: qml/backend/NotesController.qml:1338
+#: qml/backend/NotesController.qml:1351
 msgid "just now"
 msgstr "just now"
 
-#: qml/backend/NotesController.qml:1343
+#: qml/backend/NotesController.qml:1356
 msgid "%1m ago"
 msgstr "%1m ago"
 
-#: qml/backend/NotesController.qml:1348
+#: qml/backend/NotesController.qml:1361
 msgid "%1h ago"
 msgstr "%1h ago"
 
-#: qml/backend/NotesController.qml:1351
+#: qml/backend/NotesController.qml:1364
 #, javascript-format
 msgid "%1d ago"
 msgstr "%1d ago"
 
-#: qml/backend/NotesController.qml:1365 qml/pages/NotesListPage.qml:501
-#: qml/pages/NotesListPage.qml:575
+#: qml/backend/NotesController.qml:1378 qml/pages/NotesListPage.qml:618
+#: qml/pages/NotesListPage.qml:692
 msgid "New"
 msgstr "New"
 
-#: qml/backend/NotesController.qml:1373
+#: qml/backend/NotesController.qml:1386
 msgid "now"
 msgstr "now"
 
-#: qml/backend/NotesController.qml:1376
+#: qml/backend/NotesController.qml:1389
 msgid "%1m"
 msgstr "%1m"
 
-#: qml/backend/NotesController.qml:1379
+#: qml/backend/NotesController.qml:1392
 msgid "%1h"
 msgstr "%1h"
 
-#: qml/backend/NotesController.qml:1398
+#: qml/backend/NotesController.qml:1411
 msgid "No date"
 msgstr "No date"
 
-#: qml/backend/NotesController.qml:1408
+#: qml/backend/NotesController.qml:1421
 msgid "Today"
 msgstr "I dag"
 
-#: qml/backend/NotesController.qml:1411
+#: qml/backend/NotesController.qml:1424
 msgid "Yesterday"
 msgstr "I gar"
 
-#: qml/backend/NotesController.qml:1414
+#: qml/backend/NotesController.qml:1427
 msgid "Last week"
 msgstr "Forrige uke"
 
-#: qml/pages/AboutPage.qml:11 qml/pages/NotesListPage.qml:899
+#: qml/pages/AboutPage.qml:11 qml/pages/NotesListPage.qml:1028
 msgid "About"
 msgstr ""
 
-#: qml/pages/AboutPage.qml:44 qml/pages/NotesListPage.qml:780
+#: qml/pages/AboutPage.qml:44 qml/pages/NotesListPage.qml:897
 msgid "NextNotes"
 msgstr "NextNotater"
 
@@ -402,21 +403,21 @@ msgid ""
 "owners."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:30
+#: qml/pages/AccountSelectionPage.qml:32
 msgid "Select an account and authorize it for NextNotes."
 msgstr "Select an account and authorize it for NextNotater."
 
-#: qml/pages/AccountSelectionPage.qml:37
+#: qml/pages/AccountSelectionPage.qml:39
 msgid "Accounts"
 msgstr "Kontoer"
 
-#: qml/pages/AccountSelectionPage.qml:84
+#: qml/pages/AccountSelectionPage.qml:87
 msgid ""
 "Authorization succeeded, but the Ubuntu Touch account did not expose a "
 "server address for NextNotes."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:86
+#: qml/pages/AccountSelectionPage.qml:89
 msgid ""
 "Authorization succeeded for %1. Credentials are available to the app, but "
 "were not displayed or stored."
@@ -424,17 +425,16 @@ msgstr ""
 "Authorization succeeded for %1. Credentials are available to the app, but "
 "were not displayed or stored."
 
-#: qml/pages/AccountSelectionPage.qml:119
+#: qml/pages/AccountSelectionPage.qml:123
 #, fuzzy
 msgid ""
 "NextNotes is not allowed to use this account yet. Open Ubuntu Touch System "
-"Settings > Accounts, select the Nextcloud account, allow NextNotes, then "
-"return here and select the account again."
+"Settings > Accounts, allow NextNotes for this account, then return here."
 msgstr ""
 "Add a Nextcloud or ownCloud account in Ubuntu Touch System Settings > "
 "Accounts. Then return here and select it."
 
-#: qml/pages/AccountSelectionPage.qml:122
+#: qml/pages/AccountSelectionPage.qml:126
 msgid ""
 "Authorization failed: %1. If the system did not show an Online Accounts "
 "prompt, open System Settings > Accounts and allow NextNotes for this "
@@ -444,46 +444,59 @@ msgstr ""
 "prompt, open System Settings > Accounts and allow NextNotater for this "
 "account, then try again."
 
-#: qml/pages/AccountSelectionPage.qml:146
+#: qml/pages/AccountSelectionPage.qml:150
 #, fuzzy
 msgid "System account authorization completed. Verifying access..."
 msgstr ""
 "System account authorization was cancelled or did not return an account."
 
-#: qml/pages/AccountSelectionPage.qml:149
+#: qml/pages/AccountSelectionPage.qml:153
 msgid ""
 "System account authorization was cancelled or did not return an account."
 msgstr ""
 "System account authorization was cancelled or did not return an account."
 
-#: qml/pages/AccountSelectionPage.qml:206 qml/pages/NotesListPage.qml:888
+#: qml/pages/AccountSelectionPage.qml:214
+msgid "Open system accounts?"
+msgstr ""
+
+#: qml/pages/AccountSelectionPage.qml:218
+#, fuzzy
+msgid "Open accounts"
+msgstr "Saved account"
+
+#: qml/pages/AccountSelectionPage.qml:227
+msgid "Later"
+msgstr ""
+
+#: qml/pages/AccountSelectionPage.qml:256 qml/pages/NotesListPage.qml:1017
 msgid "Account"
 msgstr "Konto"
 
-#: qml/pages/AccountSelectionPage.qml:273
+#: qml/pages/AccountSelectionPage.qml:323
 #, fuzzy
 msgid "Server address"
 msgstr "Server version"
 
-#: qml/pages/AccountSelectionPage.qml:281
+#: qml/pages/AccountSelectionPage.qml:331
 msgid "https://cloud.example.com"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:290
+#: qml/pages/AccountSelectionPage.qml:340
 msgid ""
 "The account still comes from Ubuntu Touch Online Accounts. Edit this only if "
 "the system account did not expose the correct server address."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:298
+#: qml/pages/AccountSelectionPage.qml:348
 msgid "Available accounts"
 msgstr "Tilgjengelige kontoer"
 
-#: qml/pages/AccountSelectionPage.qml:324
+#: qml/pages/AccountSelectionPage.qml:374
 msgid "No Nextcloud account found"
 msgstr "No Nextcloud account found"
 
-#: qml/pages/AccountSelectionPage.qml:331
+#: qml/pages/AccountSelectionPage.qml:381
 msgid ""
 "Add a Nextcloud or ownCloud account in Ubuntu Touch System Settings > "
 "Accounts. Then return here and select it."
@@ -491,54 +504,93 @@ msgstr ""
 "Add a Nextcloud or ownCloud account in Ubuntu Touch System Settings > "
 "Accounts. Then return here and select it."
 
-#: qml/pages/AccountSelectionPage.qml:448
+#: qml/pages/AccountSelectionPage.qml:498
 msgid "Allow NextNotes in Ubuntu Touch account settings first"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:448
+#: qml/pages/AccountSelectionPage.qml:498
 #, fuzzy
 msgid "Allowed for NextNotes"
 msgstr "NextNotater"
 
-#: qml/pages/AccountSelectionPage.qml:449
+#: qml/pages/AccountSelectionPage.qml:499
 #, fuzzy
 msgid "Nextcloud account discovered"
 msgstr "No Nextcloud account found"
 
-#: qml/pages/AccountSelectionPage.qml:462
+#: qml/pages/AccountSelectionPage.qml:512
 msgid "Verify selected account"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:462
+#: qml/pages/AccountSelectionPage.qml:512
 msgid "Verifying account..."
 msgstr "Kontrollerer konto..."
 
-#: qml/pages/AccountSelectionPage.qml:512
+#: qml/pages/AccountSelectionPage.qml:562
 #, fuzzy
 msgid "Selected %1. Verifying authorization..."
 msgstr "Verifying Online Accounts authorization..."
 
-#: qml/pages/AccountSelectionPage.qml:569
+#: qml/pages/AccountSelectionPage.qml:619
 msgid "Saved account selected. Verify again if needed."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:687
-#: qml/pages/AccountSelectionPage.qml:700
+#: qml/pages/AccountSelectionPage.qml:737
+#: qml/pages/AccountSelectionPage.qml:750
 msgid "Select an account first."
 msgstr "Select an account first."
 
-#: qml/pages/AccountSelectionPage.qml:705
+#: qml/pages/AccountSelectionPage.qml:755
 msgid "Verifying Online Accounts authorization..."
 msgstr "Verifying Online Accounts authorization..."
 
-#: qml/pages/AccountSelectionPage.qml:724
+#: qml/pages/AccountSelectionPage.qml:775
+#, fuzzy
 msgid ""
 "This account is not allowed for NextNotes yet. Open Ubuntu Touch System "
-"Settings > Accounts, select the Nextcloud account, allow NextNotes, then "
-"return here and select the account again."
+"Settings > Accounts, allow NextNotes for this account, then return here."
+msgstr ""
+"Add a Nextcloud or ownCloud account in Ubuntu Touch System Settings > "
+"Accounts. Then return here and select it."
+
+#: qml/pages/AccountSelectionPage.qml:805
+#, fuzzy
+msgid ""
+"Add a Nextcloud or ownCloud account in Ubuntu Touch System Settings, then "
+"return to NextNotes."
+msgstr ""
+"Add a Nextcloud or ownCloud account in Ubuntu Touch System Settings > "
+"Accounts. Then return here and select it."
+
+#: qml/pages/AccountSelectionPage.qml:812
+msgid ""
+"Open Ubuntu Touch System Settings, select %1, allow NextNotes for that "
+"account, then return here. NextNotes will verify it automatically."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:778
+#: qml/pages/AccountSelectionPage.qml:816
+#, fuzzy
+msgid ""
+"Open Ubuntu Touch System Settings, select the Nextcloud account, allow "
+"NextNotes for that account, then return here. NextNotes will verify it "
+"automatically."
+msgstr ""
+"Add a Nextcloud or ownCloud account in Ubuntu Touch System Settings > "
+"Accounts. Then return here and select it."
+
+#: qml/pages/AccountSelectionPage.qml:826
+#, fuzzy
+msgid "Account permission detected. Verifying access..."
+msgstr ""
+"System account authorization was cancelled or did not return an account."
+
+#: qml/pages/AccountSelectionPage.qml:830
+msgid ""
+"Waiting for account permission. If you already allowed NextNotes, return "
+"here and wait a moment."
+msgstr ""
+
+#: qml/pages/AccountSelectionPage.qml:866
 msgid ""
 "No account is saved yet. Select a Nextcloud account below, authorize it, and "
 "verify access."
@@ -546,7 +598,7 @@ msgstr ""
 "No account is lagret yet. Select a Nextcloud account below, authorize it, "
 "and verify access."
 
-#: qml/pages/AccountSelectionPage.qml:781
+#: qml/pages/AccountSelectionPage.qml:869
 msgid ""
 "%1 on %2\n"
 "providerId=%3 serviceId=%4"
@@ -554,25 +606,25 @@ msgstr ""
 "%1 on %2\n"
 "providerId=%3 serviceId=%4"
 
-#: qml/pages/AccountSelectionPage.qml:782
+#: qml/pages/AccountSelectionPage.qml:870
 msgid "Saved account"
 msgstr "Saved account"
 
-#: qml/pages/AccountSelectionPage.qml:783
+#: qml/pages/AccountSelectionPage.qml:871
 msgid "server URL missing"
 msgstr "server URL missing"
 
-#: qml/pages/AccountSelectionPage.qml:795
-#: qml/pages/AccountSelectionPage.qml:823
+#: qml/pages/AccountSelectionPage.qml:883
+#: qml/pages/AccountSelectionPage.qml:911
 msgid "No account selected"
 msgstr "No account selected"
 
-#: qml/pages/AccountSelectionPage.qml:806
+#: qml/pages/AccountSelectionPage.qml:894
 msgid "The selected Ubuntu Touch account did not expose a server address."
 msgstr ""
 
-#: qml/pages/ConflictResolutionPage.qml:13 qml/pages/NoteEditorPage.qml:620
-#: qml/pages/NotesListPage.qml:560
+#: qml/pages/ConflictResolutionPage.qml:13 qml/pages/NoteEditorPage.qml:712
+#: qml/pages/NotesListPage.qml:677
 msgid "Conflict"
 msgstr "Konflikt"
 
@@ -580,7 +632,9 @@ msgstr "Konflikt"
 msgid ""
 "The server changed this note while you had local edits. Review one version, "
 "then choose which version to keep."
-msgstr "Serveren endret dette notatet mens du hadde lokale endringer. Se gjennom en versjon, og velg deretter hvilken versjon som skal beholdes."
+msgstr ""
+"Serveren endret dette notatet mens du hadde lokale endringer. Se gjennom en "
+"versjon, og velg deretter hvilken versjon som skal beholdes."
 
 #: qml/pages/ConflictResolutionPage.qml:49
 msgid "Server version"
@@ -590,32 +644,32 @@ msgstr "Server version"
 msgid "Local version"
 msgstr "Lokal version"
 
-#: qml/pages/ConflictResolutionPage.qml:105
+#: qml/pages/ConflictResolutionPage.qml:102
 msgid "Use server version"
 msgstr "Use server version"
 
-#: qml/pages/ConflictResolutionPage.qml:115
+#: qml/pages/ConflictResolutionPage.qml:103
 msgid "Keep local version"
 msgstr "Keep lokal version"
 
+#: qml/pages/ConflictResolutionPage.qml:119
 #: qml/pages/ConflictResolutionPage.qml:128
-#: qml/pages/ConflictResolutionPage.qml:137
 msgid "unknown"
 msgstr "unknown"
 
-#: qml/pages/ConflictResolutionPage.qml:130
+#: qml/pages/ConflictResolutionPage.qml:121
 msgid "Server version - modified: %1 - ETag available"
 msgstr "Serverversjon - endret: %1 - ETag tilgjengelig"
 
-#: qml/pages/ConflictResolutionPage.qml:131
+#: qml/pages/ConflictResolutionPage.qml:122
 msgid "Server version - modified: %1"
 msgstr "Serverversjon - endret: %1"
 
-#: qml/pages/ConflictResolutionPage.qml:139
+#: qml/pages/ConflictResolutionPage.qml:130
 msgid "Local version - saved: %1 - unsynced"
 msgstr "Lokal versjon - lagret: %1 - ikke synkronisert"
 
-#: qml/pages/ConflictResolutionPage.qml:140
+#: qml/pages/ConflictResolutionPage.qml:131
 msgid "Local version - saved: %1"
 msgstr "Lokal versjon - lagret: %1"
 
@@ -641,7 +695,7 @@ msgstr "Innebygd kildesprak"
 msgid "AI-assisted translation"
 msgstr "KI-assistert oversettelse"
 
-#: qml/pages/LanguageSelectionPage.qml:23 qml/pages/NotesListPage.qml:879
+#: qml/pages/LanguageSelectionPage.qml:23 qml/pages/NotesListPage.qml:1008
 msgid "Language"
 msgstr "Sprak"
 
@@ -669,55 +723,55 @@ msgstr "NextNotes folger systemspraket etter omstart."
 msgid "NextNotes will use %1 after restart."
 msgstr "NextNotes bruker %1 etter omstart."
 
-#: qml/pages/NoteEditorPage.qml:208 qml/pages/NoteEditorPage.qml:504
+#: qml/pages/NoteEditorPage.qml:300 qml/pages/NoteEditorPage.qml:596
 msgid "Edit title"
 msgstr "Rediger tittel"
 
-#: qml/pages/NoteEditorPage.qml:209
+#: qml/pages/NoteEditorPage.qml:301
 msgid "Update the note title."
 msgstr "Update the notat title."
 
-#: qml/pages/NoteEditorPage.qml:215
+#: qml/pages/NoteEditorPage.qml:307
 msgid "Title"
 msgstr "Tittel"
 
-#: qml/pages/NoteEditorPage.qml:244 qml/pages/NoteEditorPage.qml:324
+#: qml/pages/NoteEditorPage.qml:336 qml/pages/NoteEditorPage.qml:416
 msgid "Save"
 msgstr "Lagre"
 
-#: qml/pages/NoteEditorPage.qml:254 qml/pages/NoteEditorPage.qml:334
-#: qml/pages/NoteEditorPage.qml:391 qml/pages/NoteEditorPage.qml:530
-#: qml/pages/NotesListPage.qml:178 qml/pages/NotesListPage.qml:210
+#: qml/pages/NoteEditorPage.qml:346 qml/pages/NoteEditorPage.qml:426
+#: qml/pages/NoteEditorPage.qml:483 qml/pages/NoteEditorPage.qml:622
+#: qml/pages/NotesListPage.qml:310 qml/pages/NotesListPage.qml:342
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: qml/pages/NoteEditorPage.qml:268 qml/pages/NoteEditorPage.qml:275
-#: qml/pages/NoteEditorPage.qml:517
+#: qml/pages/NoteEditorPage.qml:360 qml/pages/NoteEditorPage.qml:367
+#: qml/pages/NoteEditorPage.qml:609
 msgid "Category"
 msgstr "Kategori"
 
-#: qml/pages/NoteEditorPage.qml:269
+#: qml/pages/NoteEditorPage.qml:361
 msgid "Choose an existing category or enter a new one."
 msgstr "Choose an existing category or enter a new one."
 
-#: qml/pages/NoteEditorPage.qml:348 qml/pages/NotesListPage.qml:144
+#: qml/pages/NoteEditorPage.qml:440 qml/pages/NotesListPage.qml:276
 msgid "Status"
 msgstr "Status"
 
-#: qml/pages/NoteEditorPage.qml:352
+#: qml/pages/NoteEditorPage.qml:444
 msgid "Resolve conflict"
 msgstr "Løs konflikt"
 
-#: qml/pages/NoteEditorPage.qml:362 qml/pages/NotesListPage.qml:148
-#: qml/pages/NotesListPage.qml:785
+#: qml/pages/NoteEditorPage.qml:454 qml/pages/NotesListPage.qml:280
+#: qml/pages/NotesListPage.qml:902
 msgid "Close"
 msgstr "Lukk"
 
-#: qml/pages/NoteEditorPage.qml:373 qml/pages/NotesListPage.qml:159
+#: qml/pages/NoteEditorPage.qml:465 qml/pages/NotesListPage.qml:291
 msgid "Delete note?"
 msgstr "Slette notat?"
 
-#: qml/pages/NoteEditorPage.qml:375 qml/pages/NotesListPage.qml:161
+#: qml/pages/NoteEditorPage.qml:467 qml/pages/NotesListPage.qml:293
 msgid ""
 "This local draft has not been uploaded. Deleting it will remove it from this "
 "device."
@@ -725,7 +779,7 @@ msgstr ""
 "This lokal draft has not been laste opped. Deleting it will remove it from "
 "this device."
 
-#: qml/pages/NoteEditorPage.qml:377 qml/pages/NotesListPage.qml:163
+#: qml/pages/NoteEditorPage.qml:469 qml/pages/NotesListPage.qml:295
 msgid ""
 "This note has unsynced local changes. Deleting it will discard those changes "
 "and delete the server note."
@@ -733,183 +787,219 @@ msgstr ""
 "This notat has unsynced lokal endringer. Deleting it will discard those "
 "endringer and slette the server notat."
 
-#: qml/pages/NoteEditorPage.qml:378
+#: qml/pages/NoteEditorPage.qml:470
 msgid "This will delete the note from Nextcloud."
 msgstr "This will slette the notat from Nextcloud."
 
-#: qml/pages/NoteEditorPage.qml:381 qml/pages/NoteEditorPage.qml:541
-#: qml/pages/NotesListPage.qml:79 qml/pages/NotesListPage.qml:167
-#: qml/pages/NotesListPage.qml:197 qml/pages/NotesListPage.qml:391
+#: qml/pages/NoteEditorPage.qml:473 qml/pages/NoteEditorPage.qml:633
+#: qml/pages/NotesListPage.qml:81 qml/pages/NotesListPage.qml:299
+#: qml/pages/NotesListPage.qml:329 qml/pages/NotesListPage.qml:494
+#: qml/pages/NotesListPage.qml:508
 msgid "Delete"
 msgstr "Slett"
 
-#: qml/pages/NoteEditorPage.qml:416
+#: qml/pages/NoteEditorPage.qml:508
 msgid "Search in note"
 msgstr "Search in notat"
 
-#: qml/pages/NoteEditorPage.qml:422
+#: qml/pages/NoteEditorPage.qml:514
 msgid "Find"
 msgstr "Find"
 
-#: qml/pages/NoteEditorPage.qml:436
+#: qml/pages/NoteEditorPage.qml:528
 msgid "Note content"
 msgstr "Notat content"
 
-#: qml/pages/NoteEditorPage.qml:492
+#: qml/pages/NoteEditorPage.qml:584
 msgid "Add favorite"
 msgstr "Add favorite"
 
-#: qml/pages/NoteEditorPage.qml:492
+#: qml/pages/NoteEditorPage.qml:584
 msgid "Remove favorite"
 msgstr "Remove favorite"
 
-#: qml/pages/NoteEditorPage.qml:559
+#: qml/pages/NoteEditorPage.qml:651
 msgid "No note selected."
 msgstr "No notat selected."
 
-#: qml/pages/NoteEditorPage.qml:623
+#: qml/pages/NoteEditorPage.qml:715
 msgid "New note"
 msgstr "Nytt notat"
 
-#: qml/pages/NoteEditorPage.qml:626
+#: qml/pages/NoteEditorPage.qml:718
 msgid "Unsynced changes"
 msgstr "Unsynced endringer"
 
-#: qml/pages/NoteEditorPage.qml:629 qml/pages/NotesListPage.qml:605
+#: qml/pages/NoteEditorPage.qml:721 qml/pages/NotesListPage.qml:722
 msgid "Read-only"
 msgstr "Skrivebeskyttet"
 
-#: qml/pages/NoteEditorPage.qml:638
+#: qml/pages/NoteEditorPage.qml:730
 msgid "%1 - %2"
 msgstr "%1 - %2"
 
-#: qml/pages/NoteEditorPage.qml:688
+#: qml/pages/NoteEditorPage.qml:784
 msgid "Modified: %1"
 msgstr "Modified: %1"
 
-#: qml/pages/NoteEditorPage.qml:691
+#: qml/pages/NoteEditorPage.qml:787
 msgid "Local draft saved: %1"
 msgstr "Lokal draft lagret: %1"
 
-#: qml/pages/NoteEditorPage.qml:694
+#: qml/pages/NoteEditorPage.qml:790
 msgid "Server conflict etag is available."
 msgstr "Server conflict etag is available."
 
-#: qml/pages/NoteEditorPage.qml:697
+#: qml/pages/NoteEditorPage.qml:793 qml/pages/NotesListPage.qml:1210
 msgid "Sync: %1"
 msgstr "Sync: %1"
 
-#: qml/pages/NotesListPage.qml:58
+#: qml/pages/NotesListPage.qml:60
 msgid "%1 selected"
 msgstr "%1 selected"
 
-#: qml/pages/NotesListPage.qml:68
+#: qml/pages/NotesListPage.qml:70
 msgid "Search notes"
 msgstr "Sok i notater"
 
-#: qml/pages/NotesListPage.qml:69
+#: qml/pages/NotesListPage.qml:71
 msgid "Search %1"
 msgstr "Sok %1"
 
-#: qml/pages/NotesListPage.qml:164
+#: qml/pages/NotesListPage.qml:296
 msgid "This will delete \"%1\" from Nextcloud."
 msgstr "This will slette \"%1\" from Nextcloud."
 
-#: qml/pages/NotesListPage.qml:193
+#: qml/pages/NotesListPage.qml:325
 msgid "Delete selected notes?"
 msgstr "Slett selected notater?"
 
-#: qml/pages/NotesListPage.qml:204
+#: qml/pages/NotesListPage.qml:336
 msgid "No selected notes could be deleted."
 msgstr "No selected notater could be sletted."
 
-#: qml/pages/NotesListPage.qml:259
-msgid "Details"
-msgstr "Detaljer"
-
-#: qml/pages/NotesListPage.qml:311 qml/pages/NotesListPage.qml:792
+#: qml/pages/NotesListPage.qml:403 qml/pages/NotesListPage.qml:909
 msgid "Refreshing..."
 msgstr "Refreshing..."
 
-#: qml/pages/NotesListPage.qml:313
+#: qml/pages/NotesListPage.qml:405
 msgid "Release to refresh"
 msgstr "Release to refresh"
 
-#: qml/pages/NotesListPage.qml:314
+#: qml/pages/NotesListPage.qml:406
 msgid "Pull to refresh"
 msgstr "Pull to refresh"
 
-#: qml/pages/NotesListPage.qml:379
+#: qml/pages/NotesListPage.qml:493 qml/pages/NotesListPage.qml:507
 msgid "Favorite"
 msgstr "Favoritt"
 
-#: qml/pages/NotesListPage.qml:379
+#: qml/pages/NotesListPage.qml:493 qml/pages/NotesListPage.qml:507
 msgid "Unfavorite"
 msgstr "Fjern favoritt"
 
-#: qml/pages/NotesListPage.qml:590
+#: qml/pages/NotesListPage.qml:707
 msgid "Unsynced"
 msgstr "Ikke synkronisert"
 
-#: qml/pages/NotesListPage.qml:675
+#: qml/pages/NotesListPage.qml:792
 msgid "No matching notes"
 msgstr "Ingen treff"
 
-#: qml/pages/NotesListPage.qml:677
+#: qml/pages/NotesListPage.qml:794
 msgid "No notes in %1"
 msgstr "No notater in %1"
 
-#: qml/pages/NotesListPage.qml:679
+#: qml/pages/NotesListPage.qml:796
 msgid "No notes to show"
 msgstr "Ingen notater a vise"
 
-#: qml/pages/NotesListPage.qml:680
+#: qml/pages/NotesListPage.qml:797
 msgid "No saved notes"
 msgstr "Ingen lagrede notater"
 
-#: qml/pages/NotesListPage.qml:689
+#: qml/pages/NotesListPage.qml:806
 msgid "Search matches note titles and content already cached on this device."
 msgstr "Search matches notat titles and content already cached on this device."
 
-#: qml/pages/NotesListPage.qml:691
+#: qml/pages/NotesListPage.qml:808
 msgid "Use another category or create a new note here."
 msgstr "Use another category or create a new notat here."
 
-#: qml/pages/NotesListPage.qml:693
+#: qml/pages/NotesListPage.qml:810
 msgid "Pull down to refresh from Nextcloud."
 msgstr "Pull down to refresh from Nextcloud."
 
-#: qml/pages/NotesListPage.qml:694
+#: qml/pages/NotesListPage.qml:811
 msgid "Connect to Nextcloud while online to load notes onto this device."
 msgstr "Connect to Nextcloud while online to load notater onto this device."
 
-#: qml/pages/NotesListPage.qml:792
+#: qml/pages/NotesListPage.qml:909
 msgid "Refresh"
 msgstr "Oppdater"
 
-#: qml/pages/NotesListPage.qml:804
+#: qml/pages/NotesListPage.qml:921
 msgid "Syncing..."
 msgstr "Synkroniserer..."
 
-#: qml/pages/NotesListPage.qml:806
+#: qml/pages/NotesListPage.qml:923
 msgid "Sync now (%1)"
 msgstr "Synkroniser na (%1)"
 
-#: qml/pages/NotesListPage.qml:807
+#: qml/pages/NotesListPage.qml:924
 msgid "Sync now"
 msgstr "Synkroniser na"
 
-#: qml/pages/NotesListPage.qml:1008
+#: qml/pages/NotesListPage.qml:996 qml/pages/SettingsPage.qml:14
+msgid "Settings"
+msgstr ""
+
+#: qml/pages/NotesListPage.qml:1168
 msgid "This will delete %1 selected notes."
 msgstr "This will slette %1 selected notater."
 
-#: qml/pages/NotesListPage.qml:1010
+#: qml/pages/NotesListPage.qml:1170
 msgid "%1 local-only drafts will be removed from this device."
 msgstr "%1 lokal-only drafts will be removed from this device."
 
-#: qml/pages/NotesListPage.qml:1013
+#: qml/pages/NotesListPage.qml:1173
 msgid "%1 notes have unsynced local changes that will be discarded."
 msgstr "%1 notater have unsynced lokal endringer that will be discarded."
+
+#: qml/pages/NotesListPage.qml:1213
+#, fuzzy
+msgid "%1 notes have conflicts."
+msgstr "Løs konflikt"
+
+#: qml/pages/NotesListPage.qml:1216
+#, fuzzy
+msgid "%1 notes have unsynced local changes."
+msgstr "%1 notater have unsynced lokal endringer that will be discarded."
+
+#: qml/pages/NotesListPage.qml:1219
+msgid "No status message."
+msgstr ""
+
+#: qml/pages/SettingsPage.qml:50
+msgid "Android-compatible swipe direction"
+msgstr ""
+
+#: qml/pages/SettingsPage.qml:58
+msgid "Swipe right to favorite, left to delete."
+msgstr ""
+
+#: qml/pages/SettingsPage.qml:59
+msgid "Swipe right to delete, left to favorite."
+msgstr ""
+
+#: qml/pages/SettingsPage.qml:76
+msgid ""
+"Ubuntu Touch style is the default. Enable Android-compatible direction if "
+"you prefer the upstream Android Notes swipe behavior."
+msgstr ""
+
+#~ msgid "Details"
+#~ msgstr "Detaljer"
 
 #~ msgid "Save locally"
 #~ msgstr "Save lokally"

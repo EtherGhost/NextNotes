@@ -7,6 +7,7 @@
         <file>pages/LanguageSelectionPage.qml</file>
         <file>pages/NotesListPage.qml</file>
         <file>pages/NoteEditorPage.qml</file>
+        <file>pages/SettingsPage.qml</file>
         <file>backend/AccountSessionAdapter.qml</file>
         <file>backend/AuthCore.js</file>
         <file>backend/NotesCache.qml</file>
