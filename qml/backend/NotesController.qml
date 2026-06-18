@@ -81,6 +81,8 @@ Item {
     property double lastServerSyncCompletedAt: 0
     property string deferredAutomaticReason: ""
     property bool automaticServerCycleRunning: false
+    property bool accountSwitchRefreshRunning: false
+    property bool accountSwitchFavoriteRetryUsed: false
     readonly property string syncStateText: syncRunning
         ? syncProgressText
         : syncRetryPending || connectionRecoveryPending
@@ -119,6 +121,13 @@ Item {
         interval: 1200
         repeat: false
         onTriggered: controller.runLifecycleSync("foreground")
+    }
+
+    Timer {
+        id: accountSwitchFavoriteRetryTimer
+        interval: 1200
+        repeat: false
+        onTriggered: controller.retryAccountSwitchFavoriteRefresh()
     }
 
     Timer {
@@ -227,6 +236,11 @@ Item {
                 return
             }
 
+            if (controller.shouldRetryAccountSwitchFavoriteRefresh(notes)) {
+                return
+            }
+
+            controller.accountSwitchRefreshRunning = false
             notesCache.replaceServerNotes(notes, responseEtag, responseLastModified)
             controller.populateNotes(notesCache.loadNotes())
             controller.hasCachedNotes = controller.totalNotesCount > 0
@@ -460,7 +474,10 @@ Item {
         pendingDelete = false
         pendingDeleteNoteId = 0
         hasCachedNote = false
-        populateNotes(notesCache.loadNotes())
+        accountSwitchRefreshRunning = true
+        accountSwitchFavoriteRetryUsed = false
+        var cachedNotes = notesCache.loadNotes()
+        populateNotes(cachedNotes)
         hasCachedNotes = totalNotesCount > 0
         loading = true
         statusText = hasCachedNotes
@@ -469,6 +486,36 @@ Item {
         if (generation === accountRequestGeneration) {
             accountSession.authenticate()
         }
+    }
+
+    function shouldRetryAccountSwitchFavoriteRefresh(notes) {
+        if (!accountSwitchRefreshRunning || accountSwitchFavoriteRetryUsed || !notes || notes.length === 0) {
+            return false
+        }
+
+        var cachedFavoriteCount = notesCache.countCachedFavorites()
+        var incomingFavoriteCount = countFavoriteNotes(notes)
+        var incomingFavoriteKnownCount = countFavoriteKnownNotes(notes)
+        if (cachedFavoriteCount > 0 && incomingFavoriteCount === 0 && incomingFavoriteKnownCount === notes.length) {
+            accountSwitchFavoriteRetryUsed = true
+            accountSwitchFavoriteRetryTimer.restart()
+            return true
+        }
+
+        return false
+    }
+
+    function retryAccountSwitchFavoriteRefresh() {
+        if (!accountSwitchRefreshRunning || !accountSwitchFavoriteRetryUsed) {
+            return
+        }
+        if (sessionUserName.length === 0 || sessionSecret.length === 0 || sessionServerUrl.length === 0) {
+            accountSwitchRefreshRunning = false
+            accountSession.authenticate()
+            return
+        }
+
+        notesApiClient.fetchNotes(sessionServerUrl, sessionUserName, sessionSecret)
     }
 
     function restoreAccountRuntimeFromSettings() {
@@ -762,6 +809,7 @@ Item {
         if (cachedNote) {
             applyNote(cachedNote, i18n.tr("Local draft kept. You can try uploading again."))
         }
+        refreshNotesFromCache()
     }
 
     function discardLocalDraftAndUseServer() {
@@ -774,6 +822,7 @@ Item {
         if (cachedNote) {
             applyNote(cachedNote, i18n.tr("Using server version."))
         }
+        refreshNotesFromCache()
     }
 
     function loadNote(noteId, initialTitle) {
@@ -888,8 +937,29 @@ Item {
 
     function refreshNotesFromCache() {
         configureAccountRuntime()
-        populateNotes(notesCache.loadNotes())
+        var cachedNotes = notesCache.loadNotes()
+        populateNotes(cachedNotes)
         hasCachedNotes = totalNotesCount > 0
+    }
+
+    function countFavoriteNotes(notes) {
+        var count = 0
+        for (var i = 0; i < notes.length; ++i) {
+            if (notes[i].favorite === true) {
+                count += 1
+            }
+        }
+        return count
+    }
+
+    function countFavoriteKnownNotes(notes) {
+        var count = 0
+        for (var i = 0; i < notes.length; ++i) {
+            if (notes[i].favoriteKnown === true) {
+                count += 1
+            }
+        }
+        return count
     }
 
     function scheduleAutoSync() {

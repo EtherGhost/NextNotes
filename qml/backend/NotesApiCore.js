@@ -18,12 +18,16 @@ function normalizeServerUrl(value) {
     return "https://" + url
 }
 
-function notesUrl(serverUrl) {
+function notesBaseUrl(serverUrl) {
     return normalizeServerUrl(serverUrl) + "/index.php/apps/notes/api/v1/notes"
 }
 
+function notesUrl(serverUrl) {
+    return notesBaseUrl(serverUrl)
+}
+
 function noteUrl(serverUrl, noteId) {
-    return notesUrl(serverUrl) + "/" + encodeURIComponent(noteId)
+    return notesBaseUrl(serverUrl) + "/" + encodeURIComponent(noteId)
 }
 
 function notePayload(note) {
@@ -66,7 +70,8 @@ function parseNotesJson(responseText, fallbackTitle) {
                 "etag": note.etag,
                 "modified": note.modified,
                 "readonly": note.readonly,
-                "favorite": note.favorite
+                "favorite": note.favorite,
+                "favoriteKnown": note.favoriteKnown
             })
         }
     }
@@ -105,8 +110,17 @@ function parseNoteObject(parsed, fallbackTitle) {
         "content": parsed.content !== undefined && parsed.content !== null ? String(parsed.content) : "",
         "modified": parsed.modified !== undefined && parsed.modified !== null ? Number(parsed.modified) : 0,
         "readonly": parsed.readonly === true,
-        "favorite": parsed.favorite === true
+        "favorite": parseBoolean(parsed.favorite),
+        "favoriteKnown": parsed.favorite !== undefined && parsed.favorite !== null
     }
+}
+
+function parseBoolean(value) {
+    if (value === true || value === 1) {
+        return true
+    }
+    var text = String(value || "").toLowerCase()
+    return text === "true" || text === "1"
 }
 
 function hasValue(value) {

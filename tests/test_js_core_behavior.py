@@ -63,6 +63,7 @@ class NotesApiCoreBehaviorTests(unittest.TestCase):
         result = run_js(
             module,
             """({
+                notesBaseUrl: notesBaseUrl("cloudsite.se/"),
                 notesUrl: notesUrl("cloudsite.se/"),
                 noteUrl: noteUrl("https://cloudsite.se/", 42),
                 payload: notePayload({ title: "Title", category: "Work", favorite: true, content: "Body" }),
@@ -70,23 +71,35 @@ class NotesApiCoreBehaviorTests(unittest.TestCase):
                 weakEtag: formatEtagHeader("W/\\\"abc\\\""),
                 notes: parseNotesJson(JSON.stringify([
                     { id: 1, title: "One", etag: "e1", modified: 10, favorite: true },
+                    { id: 4, title: "Four", favorite: 1 },
+                    { id: 5, title: "Five", favorite: "true" },
                     { id: null, title: "skip" },
                     { id: 2, content: "Body" }
                 ]), "Untitled note"),
-                note: parseNoteJson(JSON.stringify({ id: 3, content: "Only content" }), "Untitled note")
+                note: parseNoteJson(JSON.stringify({ id: 3, content: "Only content" }), "Untitled note"),
+                stringFavorite: parseNoteJson(JSON.stringify({ id: 6, favorite: "1" }), "Untitled note")
             })""",
         )
 
+        self.assertEqual(result["notesBaseUrl"], "https://cloudsite.se/index.php/apps/notes/api/v1/notes")
         self.assertEqual(result["notesUrl"], "https://cloudsite.se/index.php/apps/notes/api/v1/notes")
         self.assertEqual(result["noteUrl"], "https://cloudsite.se/index.php/apps/notes/api/v1/notes/42")
         self.assertEqual(result["payload"], {"title": "Title", "category": "Work", "favorite": True, "content": "Body"})
         self.assertEqual(result["quotedEtag"], '"abc"')
         self.assertEqual(result["weakEtag"], 'W/"abc"')
         self.assertTrue(result["notes"]["ok"])
-        self.assertEqual(len(result["notes"]["notes"]), 2)
-        self.assertEqual(result["notes"]["notes"][1]["title"], "Untitled note")
+        self.assertEqual(len(result["notes"]["notes"]), 4)
+        self.assertTrue(result["notes"]["notes"][1]["favorite"])
+        self.assertTrue(result["notes"]["notes"][1]["favoriteKnown"])
+        self.assertTrue(result["notes"]["notes"][2]["favorite"])
+        self.assertTrue(result["notes"]["notes"][2]["favoriteKnown"])
+        self.assertEqual(result["notes"]["notes"][3]["title"], "Untitled note")
+        self.assertFalse(result["notes"]["notes"][3]["favoriteKnown"])
         self.assertTrue(result["note"]["ok"])
         self.assertEqual(result["note"]["note"]["noteId"], 3)
+        self.assertFalse(result["note"]["note"]["favoriteKnown"])
+        self.assertTrue(result["stringFavorite"]["note"]["favorite"])
+        self.assertTrue(result["stringFavorite"]["note"]["favoriteKnown"])
 
 
 class SyncPlannerBehaviorTests(unittest.TestCase):

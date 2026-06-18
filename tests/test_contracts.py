@@ -48,6 +48,9 @@ class ProjectMetadataTests(unittest.TestCase):
         self.assertIn("function systemAccountsDialogText()", account_page)
         self.assertIn("function retryAfterSystemApproval()", account_page)
         self.assertIn("waitingForSystemApproval", account_page)
+        self.assertIn("selectedHasServiceHandle", account_page)
+        self.assertIn("if (!selectedEnabled && !selectedHasServiceHandle)", account_page)
+        self.assertIn("if (selectedEnabled || selectedHasServiceHandle)", account_page)
         self.assertIn("verify it automatically", account_page)
         self.assertIn('i18n.tr("Open system accounts")', account_page)
         self.assertIn("clearSelectedAccount()", account_page)
@@ -275,6 +278,8 @@ class NotesCacheContractTests(unittest.TestCase):
         self.assertIn("saveNote preserved local edit", self.cache)
         self.assertIn("status === statusClean", self.cache)
         self.assertIn("reconciled server-deleted", self.cache)
+        self.assertIn("note.favoriteKnown === false", self.cache)
+        self.assertIn("SELECT etag, modified, favorite, server_content", self.cache)
 
     def test_new_note_ids_are_local_negative_until_created_on_server(self):
         self.assertIn("SELECT MIN(id) AS min_id FROM notes", self.cache)
@@ -450,6 +455,7 @@ class RefactoredCoreContractTests(unittest.TestCase):
         core = read_text("qml/backend/NotesApiCore.js")
 
         for snippet in [
+            "function notesBaseUrl",
             "function notesUrl",
             "function noteUrl",
             "function notePayload",
@@ -468,6 +474,7 @@ class RefactoredCoreContractTests(unittest.TestCase):
             "NotesApiCore.parseNoteJson",
         ]:
             self.assertIn(snippet, api)
+        self.assertIn("return notesBaseUrl(serverUrl)", core)
 
     def test_sync_planner_classifies_dirty_notes_before_controller_uploads(self):
         controller = read_text("qml/backend/NotesController.qml")
@@ -600,6 +607,20 @@ class UiFlowContractTests(unittest.TestCase):
         self.assertEqual(conflict_page.count("discardLocalDraftAndUseServer"), 1)
         self.assertEqual(conflict_page.count("keepLocalDraftAfterConflict"), 1)
 
+        controller = read_text("qml/backend/NotesController.qml")
+        self.assertIn("function keepLocalDraftAfterConflict()", controller)
+        self.assertIn("function discardLocalDraftAndUseServer()", controller)
+        keep_local_block = controller[
+            controller.index("function keepLocalDraftAfterConflict()"):
+            controller.index("function discardLocalDraftAndUseServer()")
+        ]
+        discard_block = controller[
+            controller.index("function discardLocalDraftAndUseServer()"):
+            controller.index("function loadNote(")
+        ]
+        self.assertIn("refreshNotesFromCache()", keep_local_block)
+        self.assertIn("refreshNotesFromCache()", discard_block)
+
     def test_note_editor_title_dialog_preserves_retyped_title(self):
         editor = read_text("qml/pages/NoteEditorPage.qml")
 
@@ -630,11 +651,18 @@ class UiFlowContractTests(unittest.TestCase):
         controller = read_text("qml/backend/NotesController.qml")
 
         self.assertIn("function refreshSelectedAccountFromServer()", controller)
-        self.assertIn("populateNotes(notesCache.loadNotes())", controller)
+        self.assertIn("var cachedNotes = notesCache.loadNotes()", controller)
+        self.assertIn("populateNotes(cachedNotes)", controller)
         self.assertIn("hasCachedNotes = totalNotesCount > 0", controller)
         self.assertIn('i18n.tr("Showing saved notes. Checking for updates...")', controller)
+        self.assertIn("accountSwitchRefreshRunning = true", controller)
+        self.assertIn("accountSwitchFavoriteRetryUsed = false", controller)
+        self.assertIn("function shouldRetryAccountSwitchFavoriteRefresh(notes)", controller)
+        self.assertIn("cachedFavoriteCount > 0 && incomingFavoriteCount === 0", controller)
+        self.assertIn("accountSwitchFavoriteRetryTimer.restart()", controller)
+        self.assertIn("function retryAccountSwitchFavoriteRefresh()", controller)
         self.assertLess(
-            controller.index("populateNotes(notesCache.loadNotes())", controller.index("function refreshSelectedAccountFromServer()")),
+            controller.index("populateNotes(cachedNotes)", controller.index("function refreshSelectedAccountFromServer()")),
             controller.index("accountSession.authenticate()", controller.index("function refreshSelectedAccountFromServer()")),
         )
 

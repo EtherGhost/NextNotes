@@ -7,6 +7,10 @@
 - Updated account page wording and Swedish translations for Ubuntu Touch Online Accounts guidance.
 - Fixed stale authentication/API callbacks so delayed sync or refresh responses from a previous account are ignored after switching accounts.
 - Fixed the note list after account switching so cached favorites are shown immediately before the server refresh completes.
+- Fixed favorite parsing from the Nextcloud Notes API so favorite stars stay filled when the API returns numeric or string values.
+- Added a guarded retry for the first server refresh after account switching so a transient zero-favorites response does not overwrite cached favorite state.
+- Reduced false OS-account-settings prompts during account switching by trying authentication when the app-specific service handle is available.
+- Refreshed list/status state immediately after conflict resolution so the top-bar status icon uses the correct synced or dirty color.
 - Made the note editor header title directly editable while keeping the existing Edit title menu action.
 
 ## 0.1.3 - 2026-06-17

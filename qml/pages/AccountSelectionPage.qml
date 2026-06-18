@@ -24,6 +24,7 @@ Page {
     property string selectedServiceName: ""
     property string selectedServiceTypeId: ""
     property bool selectedEnabled: false
+    property bool selectedHasServiceHandle: false
     property string serverUrl: accountSettings.serverUrl
     property string pendingServerUrlAction: ""
     property bool authorizationRunning: false
@@ -549,6 +550,7 @@ Page {
         selectedServiceId = serviceId
         selectedServiceTypeId = serviceTypeId
         selectedEnabled = enabled
+        selectedHasServiceHandle = handle ? true : false
 
         var resolvedServerUrl = findServerUrlForAccount(accountId, displayName)
         serverUrl = normalizeServerUrl(resolvedServerUrl)
@@ -620,6 +622,7 @@ Page {
         selectedServiceId = appService.serviceId
         selectedServiceTypeId = appService.serviceTypeId
         selectedEnabled = appService.enabled
+        selectedHasServiceHandle = appService.handle ? true : false
         serverUrl = normalizeServerUrl(accountSettings.serverUrl)
         serverUrlField.text = serverUrl
         authorizationStatus = i18n.tr("Saved account selected. Verify again if needed.")
@@ -769,7 +772,7 @@ Page {
             + " hostAvailable=" + hasValue(normalizeServerUrl(serverUrl))
         )
 
-        if (!selectedEnabled) {
+        if (!selectedEnabled && !selectedHasServiceHandle) {
             page.authorizationRunning = false
             page.waitingForSystemApproval = true
             console.log(
@@ -799,6 +802,7 @@ Page {
         selectedServiceId = ""
         selectedServiceTypeId = ""
         selectedEnabled = false
+        selectedHasServiceHandle = false
     }
 
     function openSystemAccounts() {
@@ -828,7 +832,7 @@ Page {
         }
 
         refreshSelectedServiceHandle()
-        if (selectedEnabled) {
+        if (selectedEnabled || selectedHasServiceHandle) {
             authorizationStatus = i18n.tr("Account permission detected. Verifying access...")
             page.waitingForSystemApproval = false
             page.authenticateSelectedAccount()
@@ -859,6 +863,7 @@ Page {
         selectedServiceId = appService.serviceId
         selectedServiceTypeId = appService.serviceTypeId
         selectedEnabled = appService.enabled
+        selectedHasServiceHandle = appService.handle ? true : false
     }
 
     function saveServerUrl() {

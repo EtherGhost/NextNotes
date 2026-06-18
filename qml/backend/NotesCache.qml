@@ -223,6 +223,17 @@ Item {
         replaceServerNotes(notes, "", "")
     }
 
+    function countCachedFavorites() {
+        var count = 0
+        db().readTransaction(function(tx) {
+            var result = tx.executeSql("SELECT COUNT(*) AS favorite_count FROM notes WHERE status != ? AND favorite = 1", [statusDeleted])
+            if (result.rows.length > 0) {
+                count = Number(result.rows.item(0).favorite_count || 0)
+            }
+        })
+        return count
+    }
+
     function upsertServerMetadata(tx, note, now) {
         var existingResult = tx.executeSql(
             "SELECT title, category, favorite, etag, modified, status, conflict FROM notes WHERE id = ?",
@@ -238,7 +249,9 @@ Item {
         var conflict = existingConflict || etagChangedOnServer
         var preservedTitle = existingDirty ? (existing.title || note.title) : note.title
         var preservedCategory = existingDirty ? (existing.category || "") : (note.category || "")
-        var preservedFavorite = existingDirty ? Number(existing.favorite || 0) : (note.favorite ? 1 : 0)
+        var preservedFavorite = existingDirty || note.favoriteKnown === false
+            ? Number(existing && existing.favorite || 0)
+            : (note.favorite ? 1 : 0)
         var effectiveModified = Math.max(Number(note.modified || 0), existing ? Number(existing.modified || 0) : 0)
 
         tx.executeSql(
@@ -275,7 +288,7 @@ Item {
         var now = Math.floor(Date.now() / 1000)
         db().transaction(function(tx) {
             var existingResult = tx.executeSql(
-                "SELECT etag, modified, server_content, status, conflict, is_new FROM notes WHERE id = ?",
+                "SELECT etag, modified, favorite, server_content, status, conflict, is_new FROM notes WHERE id = ?",
                 [note.noteId]
             )
             var existing = existingResult.rows.length > 0 ? existingResult.rows.item(0) : null
@@ -320,7 +333,7 @@ Item {
                     serverEtag,
                     effectiveModified,
                     note.readonly ? 1 : 0,
-                    note.favorite ? 1 : 0,
+                    note.favoriteKnown === false && existing ? Number(existing.favorite || 0) : (note.favorite ? 1 : 0),
                     serverContent,
                     serverContent,
                     now
@@ -388,7 +401,7 @@ Item {
         var now = Math.floor(Date.now() / 1000)
         var serverContent = note.content || ""
         db().transaction(function(tx) {
-            var existingResult = tx.executeSql("SELECT content, content_loaded, local_modified FROM notes WHERE id = ?", [note.noteId])
+            var existingResult = tx.executeSql("SELECT content, content_loaded, favorite, local_modified FROM notes WHERE id = ?", [note.noteId])
             var existing = existingResult.rows.length > 0 ? existingResult.rows.item(0) : null
             if (serverContent.length === 0 && existing && Number(existing.content_loaded || 0) === 1) {
                 serverContent = existing.content || ""
@@ -406,7 +419,7 @@ Item {
                     note.etag || "",
                     effectiveModified,
                     note.readonly ? 1 : 0,
-                    note.favorite ? 1 : 0,
+                    note.favoriteKnown === false && existing ? Number(existing.favorite || 0) : (note.favorite ? 1 : 0),
                     serverContent,
                     serverContent,
                     now
@@ -438,7 +451,9 @@ Item {
             if (serverCategory.length === 0 && local && local.category) {
                 serverCategory = local.category
             }
-            var serverFavorite = serverNote.favorite === true || (local && Number(local.favorite || 0) === 1)
+            var serverFavorite = serverNote.favoriteKnown === false && local
+                ? Number(local.favorite || 0) === 1
+                : serverNote.favorite === true
             var effectiveModified = Math.max(Number(serverNote.modified || 0), local ? Number(local.local_modified || 0) : 0)
 
             tx.executeSql("DELETE FROM notes WHERE id = ?", [localNoteId])

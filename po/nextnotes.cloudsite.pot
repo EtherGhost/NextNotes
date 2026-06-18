@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nextnotes.cloudsite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-18 22:17+0000\n"
+"POT-Creation-Date: 2026-06-18 23:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,8 +73,8 @@ msgid "Server version changed. Local draft was not uploaded."
 msgstr ""
 
 #: qml/backend/NotesApiClient.qml:222 qml/backend/NotesApiClient.qml:240
-#: qml/backend/NotesApiClient.qml:314 qml/backend/NotesCache.qml:345
-#: qml/backend/NotesCache.qml:354 qml/backend/NotesCache.qml:434
+#: qml/backend/NotesApiClient.qml:314 qml/backend/NotesCache.qml:358
+#: qml/backend/NotesCache.qml:367 qml/backend/NotesCache.qml:447
 #: qml/pages/ConflictResolutionPage.qml:28 qml/pages/NoteEditorPage.qml:45
 #: qml/pages/NoteEditorPage.qml:699 qml/pages/NotesListPage.qml:296
 #: qml/pages/NotesListPage.qml:448 qml/pages/NotesListPage.qml:608
@@ -99,276 +99,276 @@ msgstr ""
 msgid "Could not parse upload response."
 msgstr ""
 
-#: qml/backend/NotesController.qml:10 qml/backend/NotesController.qml:507
+#: qml/backend/NotesController.qml:10 qml/backend/NotesController.qml:554
 msgid "Open your Nextcloud notes."
 msgstr ""
 
-#: qml/backend/NotesController.qml:14 qml/backend/NotesController.qml:1199
-#: qml/backend/NotesController.qml:1231 qml/backend/NotesController.qml:1346
+#: qml/backend/NotesController.qml:14 qml/backend/NotesController.qml:1269
+#: qml/backend/NotesController.qml:1301 qml/backend/NotesController.qml:1416
 msgid "All notes"
 msgstr ""
 
-#: qml/backend/NotesController.qml:87
+#: qml/backend/NotesController.qml:89
 msgid "Offline, will retry"
 msgstr ""
 
-#: qml/backend/NotesController.qml:89
+#: qml/backend/NotesController.qml:91
 msgid "%1 pending"
 msgstr ""
 
-#: qml/backend/NotesController.qml:91
+#: qml/backend/NotesController.qml:93
 msgid "Synced %1"
 msgstr ""
 
-#: qml/backend/NotesController.qml:92
+#: qml/backend/NotesController.qml:94
 msgid "Not synced yet"
 msgstr ""
 
-#: qml/backend/NotesController.qml:188
+#: qml/backend/NotesController.qml:197
 msgid "Deleting note..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:192
+#: qml/backend/NotesController.qml:201
 msgid "Creating note..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:195
+#: qml/backend/NotesController.qml:204
 msgid "Uploading changes..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:199
+#: qml/backend/NotesController.qml:208
 msgid "Loading note..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:202
+#: qml/backend/NotesController.qml:211
 msgid "Loading notes..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:243 qml/backend/NotesController.qml:1090
+#: qml/backend/NotesController.qml:257 qml/backend/NotesController.qml:1160
 msgid "%1 notes synced."
 msgstr ""
 
-#: qml/backend/NotesController.qml:244 qml/backend/NotesController.qml:1091
+#: qml/backend/NotesController.qml:258 qml/backend/NotesController.qml:1161
 msgid "No notes yet."
 msgstr ""
 
-#: qml/backend/NotesController.qml:278 qml/backend/NotesController.qml:789
-#: qml/backend/NotesController.qml:836
+#: qml/backend/NotesController.qml:292 qml/backend/NotesController.qml:838
+#: qml/backend/NotesController.qml:885
 msgid "Local changes saved on this device"
 msgstr ""
 
-#: qml/backend/NotesController.qml:279
+#: qml/backend/NotesController.qml:293
 msgid "Loaded from server"
 msgstr ""
 
-#: qml/backend/NotesController.qml:291 qml/backend/NotesController.qml:300
+#: qml/backend/NotesController.qml:305 qml/backend/NotesController.qml:314
 msgid "Uploaded changes."
 msgstr ""
 
-#: qml/backend/NotesController.qml:318 qml/backend/NotesController.qml:329
+#: qml/backend/NotesController.qml:332 qml/backend/NotesController.qml:343
 msgid "Created note."
 msgstr ""
 
-#: qml/backend/NotesController.qml:356
+#: qml/backend/NotesController.qml:370
 msgid "Deleted note."
 msgstr ""
 
-#: qml/backend/NotesController.qml:412
+#: qml/backend/NotesController.qml:426
 msgid "Showing saved notes. Syncing local changes..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:413
+#: qml/backend/NotesController.qml:427
 msgid "Syncing local changes..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:420 qml/backend/NotesController.qml:467
-#: qml/backend/NotesController.qml:995
+#: qml/backend/NotesController.qml:434 qml/backend/NotesController.qml:484
+#: qml/backend/NotesController.qml:1065
 msgid "Showing saved notes. Checking for updates..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:421 qml/backend/NotesController.qml:996
+#: qml/backend/NotesController.qml:435 qml/backend/NotesController.qml:1066
 msgid "Connecting to Nextcloud..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:468 qml/backend/NotesController.qml:506
+#: qml/backend/NotesController.qml:485 qml/backend/NotesController.qml:553
 msgid "Account changed. Refreshing..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:585
+#: qml/backend/NotesController.qml:632
 msgid "Showing saved notes."
 msgstr ""
 
-#: qml/backend/NotesController.qml:586
+#: qml/backend/NotesController.qml:633
 msgid "No saved notes on this device."
 msgstr ""
 
-#: qml/backend/NotesController.qml:597
+#: qml/backend/NotesController.qml:644
 msgid "No local draft is available to upload."
 msgstr ""
 
-#: qml/backend/NotesController.qml:605
+#: qml/backend/NotesController.qml:652
 msgid "Cannot upload safely because the server etag is missing."
 msgstr ""
 
-#: qml/backend/NotesController.qml:613 qml/backend/NotesController.qml:661
-#: qml/backend/NotesController.qml:790 qml/backend/NotesController.qml:813
+#: qml/backend/NotesController.qml:660 qml/backend/NotesController.qml:708
+#: qml/backend/NotesController.qml:839 qml/backend/NotesController.qml:862
 msgid "Authenticating..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:654 qml/backend/NotesController.qml:1049
+#: qml/backend/NotesController.qml:701 qml/backend/NotesController.qml:1119
 msgid "Checking for server changes..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:681 qml/backend/NotesController.qml:682
+#: qml/backend/NotesController.qml:728 qml/backend/NotesController.qml:729
 msgid "No cached note is available to delete."
 msgstr ""
 
-#: qml/backend/NotesController.qml:691 qml/backend/NotesController.qml:693
-#: qml/backend/NotesController.qml:738 qml/backend/NotesController.qml:749
+#: qml/backend/NotesController.qml:738 qml/backend/NotesController.qml:740
+#: qml/backend/NotesController.qml:785 qml/backend/NotesController.qml:796
 msgid "Deleted local draft."
 msgstr ""
 
-#: qml/backend/NotesController.qml:701 qml/backend/NotesController.qml:703
-#: qml/backend/NotesController.qml:739
+#: qml/backend/NotesController.qml:748 qml/backend/NotesController.qml:750
+#: qml/backend/NotesController.qml:786
 msgid "Deleted locally. Syncing deletion..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:745
+#: qml/backend/NotesController.qml:792
 msgid "Deleted %1 notes locally. Syncing deletions..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:750
+#: qml/backend/NotesController.qml:797
 msgid "Deleted %1 local drafts."
 msgstr ""
 
-#: qml/backend/NotesController.qml:763
+#: qml/backend/NotesController.qml:810
 msgid "Local draft kept. You can try uploading again."
 msgstr ""
 
-#: qml/backend/NotesController.qml:775
+#: qml/backend/NotesController.qml:823
 msgid "Using server version."
 msgstr ""
 
-#: qml/backend/NotesController.qml:789
+#: qml/backend/NotesController.qml:838
 msgid "Loaded cached note. Refreshing..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:845 qml/pages/NoteEditorPage.qml:558
+#: qml/backend/NotesController.qml:894 qml/pages/NoteEditorPage.qml:558
 msgid "This note is read-only."
 msgstr ""
 
-#: qml/backend/NotesController.qml:855
+#: qml/backend/NotesController.qml:904
 msgid "Favorite changed locally."
 msgstr ""
 
-#: qml/backend/NotesController.qml:859
+#: qml/backend/NotesController.qml:908
 msgid "Favorite changed locally. Syncing soon."
 msgstr ""
 
-#: qml/backend/NotesController.qml:1022
+#: qml/backend/NotesController.qml:1092
 msgid "Uploading %1 of %2..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:1071
+#: qml/backend/NotesController.qml:1141
 msgid "Caching note previews..."
 msgstr ""
 
-#: qml/backend/NotesController.qml:1125
+#: qml/backend/NotesController.qml:1195
 msgid "Sync complete: %1 uploaded, %2 failed, %3 conflicts, %4 skipped."
 msgstr ""
 
-#: qml/backend/NotesController.qml:1206 qml/backend/NotesController.qml:1338
+#: qml/backend/NotesController.qml:1276 qml/backend/NotesController.qml:1408
 msgid "Favorites"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1213 qml/backend/NotesController.qml:1341
+#: qml/backend/NotesController.qml:1283 qml/backend/NotesController.qml:1411
 #: qml/pages/NoteEditorPage.qml:437
 msgid "Uncategorized"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1371
+#: qml/backend/NotesController.qml:1441
 msgid "Potential conflict: local changes are not uploaded"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1373
+#: qml/backend/NotesController.qml:1443
 msgid "New local draft. Upload to create it on the server."
 msgstr ""
 
-#: qml/backend/NotesController.qml:1424 qml/backend/NotesController.qml:1437
+#: qml/backend/NotesController.qml:1494 qml/backend/NotesController.qml:1507
 msgid "Delete failed: %1"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1439
+#: qml/backend/NotesController.qml:1509
 msgid "Create failed: %1"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1439
+#: qml/backend/NotesController.qml:1509
 msgid "Upload failed: %1"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1441
+#: qml/backend/NotesController.qml:1511
 msgid "Showing cached note. Refresh failed: %1"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1446
+#: qml/backend/NotesController.qml:1516
 msgid "Showing saved notes. Could not refresh."
 msgstr ""
 
-#: qml/backend/NotesController.qml:1447
+#: qml/backend/NotesController.qml:1517
 msgid "Could not load notes. Check the account and connection."
 msgstr ""
 
-#: qml/backend/NotesController.qml:1458
+#: qml/backend/NotesController.qml:1528
 msgid "never"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1463
+#: qml/backend/NotesController.qml:1533
 msgid "just now"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1468
+#: qml/backend/NotesController.qml:1538
 msgid "%1m ago"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1473
+#: qml/backend/NotesController.qml:1543
 msgid "%1h ago"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1476
+#: qml/backend/NotesController.qml:1546
 #, javascript-format
 msgid "%1d ago"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1490 qml/pages/NotesListPage.qml:618
+#: qml/backend/NotesController.qml:1560 qml/pages/NotesListPage.qml:618
 #: qml/pages/NotesListPage.qml:692
 msgid "New"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1498
+#: qml/backend/NotesController.qml:1568
 msgid "now"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1501
+#: qml/backend/NotesController.qml:1571
 msgid "%1m"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1504
+#: qml/backend/NotesController.qml:1574
 msgid "%1h"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1523
+#: qml/backend/NotesController.qml:1593
 msgid "No date"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1533
+#: qml/backend/NotesController.qml:1603
 msgid "Today"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1536
+#: qml/backend/NotesController.qml:1606
 msgid "Yesterday"
 msgstr ""
 
-#: qml/backend/NotesController.qml:1539
+#: qml/backend/NotesController.qml:1609
 msgid "Last week"
 msgstr ""
 
@@ -403,194 +403,194 @@ msgid ""
 "owners."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:32
+#: qml/pages/AccountSelectionPage.qml:33
 msgid "Select an account and authorize it for NextNotes."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:39
+#: qml/pages/AccountSelectionPage.qml:40
 msgid "Accounts"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:87
+#: qml/pages/AccountSelectionPage.qml:88
 msgid ""
 "Authorization succeeded, but the Ubuntu Touch account did not expose a "
 "server address for NextNotes."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:89
+#: qml/pages/AccountSelectionPage.qml:90
 msgid ""
 "Authorization succeeded for %1. Credentials are available to the app, but "
 "were not displayed or stored."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:123
+#: qml/pages/AccountSelectionPage.qml:124
 msgid ""
 "NextNotes is not allowed to use this account yet. Open Ubuntu Touch System "
 "Settings > Accounts, allow NextNotes for this account, then return here."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:126
+#: qml/pages/AccountSelectionPage.qml:127
 msgid ""
 "Authorization failed: %1. If the system did not show an Online Accounts "
 "prompt, open System Settings > Accounts and allow NextNotes for this "
 "account, then try again."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:150
+#: qml/pages/AccountSelectionPage.qml:151
 msgid "System account authorization completed. Verifying access..."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:153
+#: qml/pages/AccountSelectionPage.qml:154
 msgid ""
 "System account authorization was cancelled or did not return an account."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:214
+#: qml/pages/AccountSelectionPage.qml:215
 msgid "Open system accounts?"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:218
+#: qml/pages/AccountSelectionPage.qml:219
 msgid "Open accounts"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:227
+#: qml/pages/AccountSelectionPage.qml:228
 msgid "Later"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:256 qml/pages/NotesListPage.qml:1017
+#: qml/pages/AccountSelectionPage.qml:257 qml/pages/NotesListPage.qml:1017
 msgid "Account"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:323
+#: qml/pages/AccountSelectionPage.qml:324
 msgid "Server address"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:331
+#: qml/pages/AccountSelectionPage.qml:332
 msgid "https://cloud.example.com"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:340
+#: qml/pages/AccountSelectionPage.qml:341
 msgid ""
 "This app uses Ubuntu Touch Online Accounts. Edit this only if the system "
 "account did not expose the correct server address."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:348
+#: qml/pages/AccountSelectionPage.qml:349
 msgid "Available accounts"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:374
+#: qml/pages/AccountSelectionPage.qml:375
 msgid "No Nextcloud account found"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:381
+#: qml/pages/AccountSelectionPage.qml:382
 msgid ""
 "Add a Nextcloud or ownCloud account in Ubuntu Touch System Settings > "
 "Accounts. Then return here and select it."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:389
+#: qml/pages/AccountSelectionPage.qml:390
 msgid "Open system accounts"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:504
+#: qml/pages/AccountSelectionPage.qml:505
 msgid "Allow NextNotes in Ubuntu Touch account settings first"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:504
+#: qml/pages/AccountSelectionPage.qml:505
 msgid "Allowed for NextNotes"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:505
+#: qml/pages/AccountSelectionPage.qml:506
 msgid "Nextcloud account discovered"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:518
+#: qml/pages/AccountSelectionPage.qml:519
 msgid "Verify selected account"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:518
+#: qml/pages/AccountSelectionPage.qml:519
 msgid "Verifying account..."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:568
+#: qml/pages/AccountSelectionPage.qml:570
 msgid "Selected %1. Verifying authorization..."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:625
+#: qml/pages/AccountSelectionPage.qml:628
 msgid "Saved account selected. Verify again if needed."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:743
-#: qml/pages/AccountSelectionPage.qml:756
+#: qml/pages/AccountSelectionPage.qml:746
+#: qml/pages/AccountSelectionPage.qml:759
 msgid "Select an account first."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:761
+#: qml/pages/AccountSelectionPage.qml:764
 msgid "Verifying Online Accounts authorization..."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:781
+#: qml/pages/AccountSelectionPage.qml:784
 msgid ""
 "This account is not allowed for NextNotes yet. Open Ubuntu Touch System "
 "Settings > Accounts, allow NextNotes for this account, then return here."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:811
+#: qml/pages/AccountSelectionPage.qml:815
 msgid ""
 "Add a Nextcloud or ownCloud account in Ubuntu Touch System Settings, then "
 "return to NextNotes."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:818
+#: qml/pages/AccountSelectionPage.qml:822
 msgid ""
 "Open Ubuntu Touch System Settings, select %1, allow NextNotes for that "
 "account, then return here. NextNotes will verify it automatically."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:822
+#: qml/pages/AccountSelectionPage.qml:826
 msgid ""
 "Open Ubuntu Touch System Settings, select the Nextcloud account, allow "
 "NextNotes for that account, then return here. NextNotes will verify it "
 "automatically."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:832
+#: qml/pages/AccountSelectionPage.qml:836
 msgid "Account permission detected. Verifying access..."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:836
+#: qml/pages/AccountSelectionPage.qml:840
 msgid ""
 "Waiting for account permission. If you already allowed NextNotes, return "
 "here and wait a moment."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:872
+#: qml/pages/AccountSelectionPage.qml:877
 msgid ""
 "No account is saved yet. Select a Nextcloud account below, authorize it, and "
 "verify access."
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:875
+#: qml/pages/AccountSelectionPage.qml:880
 msgid ""
 "%1 on %2\n"
 "providerId=%3 serviceId=%4"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:876
+#: qml/pages/AccountSelectionPage.qml:881
 msgid "Saved account"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:877
+#: qml/pages/AccountSelectionPage.qml:882
 msgid "server URL missing"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:889
-#: qml/pages/AccountSelectionPage.qml:917
+#: qml/pages/AccountSelectionPage.qml:894
+#: qml/pages/AccountSelectionPage.qml:922
 msgid "No account selected"
 msgstr ""
 
-#: qml/pages/AccountSelectionPage.qml:900
+#: qml/pages/AccountSelectionPage.qml:905
 msgid "The selected Ubuntu Touch account did not expose a server address."
 msgstr ""
 
