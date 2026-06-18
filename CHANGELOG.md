@@ -6,6 +6,8 @@
 - Added a swipe-action direction setting with Ubuntu Touch style as the default and Android-compatible style as an option.
 - Updated account page wording and Swedish translations for Ubuntu Touch Online Accounts guidance.
 - Fixed stale authentication/API callbacks so delayed sync or refresh responses from a previous account are ignored after switching accounts.
+- Fixed the note list after account switching so cached favorites are shown immediately before the server refresh completes.
+- Made the note editor header title directly editable while keeping the existing Edit title menu action.
 
 ## 0.1.3 - 2026-06-17
 

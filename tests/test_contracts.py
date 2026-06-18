@@ -603,6 +603,11 @@ class UiFlowContractTests(unittest.TestCase):
     def test_note_editor_title_dialog_preserves_retyped_title(self):
         editor = read_text("qml/pages/NoteEditorPage.qml")
 
+        self.assertIn("id: headerTitleField", editor)
+        self.assertIn("TextField {", editor)
+        self.assertIn("page.commitHeaderTitle(text)", editor)
+        self.assertIn("function commitHeaderTitle(value)", editor)
+        self.assertIn("localSaveTimer.restart()", editor)
         self.assertIn("titleDialogField.selectAll()", editor)
         self.assertIn("Qt.inputMethod.commit()", editor)
         self.assertIn("titleCommitTimer.restart()", editor)
@@ -619,6 +624,18 @@ class UiFlowContractTests(unittest.TestCase):
         self.assertLess(
             editor.index("page.editTitleText = page.currentDraftTitle()"),
             editor.index("page.editingTitle = true"),
+        )
+
+    def test_account_switch_loads_scoped_cache_before_server_refresh(self):
+        controller = read_text("qml/backend/NotesController.qml")
+
+        self.assertIn("function refreshSelectedAccountFromServer()", controller)
+        self.assertIn("populateNotes(notesCache.loadNotes())", controller)
+        self.assertIn("hasCachedNotes = totalNotesCount > 0", controller)
+        self.assertIn('i18n.tr("Showing saved notes. Checking for updates...")', controller)
+        self.assertLess(
+            controller.index("populateNotes(notesCache.loadNotes())", controller.index("function refreshSelectedAccountFromServer()")),
+            controller.index("accountSession.authenticate()", controller.index("function refreshSelectedAccountFromServer()")),
         )
 
     def test_note_editor_category_dialog_commits_preedit_and_allows_empty_category(self):

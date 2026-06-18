@@ -460,8 +460,12 @@ Item {
         pendingDelete = false
         pendingDeleteNoteId = 0
         hasCachedNote = false
+        populateNotes(notesCache.loadNotes())
+        hasCachedNotes = totalNotesCount > 0
         loading = true
-        statusText = i18n.tr("Account changed. Refreshing...")
+        statusText = hasCachedNotes
+            ? i18n.tr("Showing saved notes. Checking for updates...")
+            : i18n.tr("Account changed. Refreshing...")
         if (generation === accountRequestGeneration) {
             accountSession.authenticate()
         }

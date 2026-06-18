@@ -38,12 +38,40 @@ Page {
             }
             spacing: units.gu(0.75)
 
-            Label {
+            TextField {
+                id: headerTitleField
                 Layout.fillWidth: true
                 text: page.displayTitle()
+                placeholderText: i18n.tr("Untitled note")
+                readOnly: notesController.noteReadOnly || notesController.noteLoading || noteId === 0
+                inputMethodHints: Qt.ImhNoPredictiveText
                 font.bold: true
-                elide: Text.ElideRight
-                maximumLineCount: 1
+                onActiveFocusChanged: {
+                    if (activeFocus) {
+                        page.editTitleText = page.currentDraftTitle()
+                        page.editingTitle = true
+                        if (text !== page.editTitleText) {
+                            text = page.editTitleText
+                        }
+                    } else if (page.editingTitle) {
+                        Qt.inputMethod.commit()
+                        page.commitHeaderTitle(text)
+                    }
+                }
+                onTextChanged: {
+                    if (!activeFocus || page.applyingControllerContent) {
+                        return
+                    }
+                    page.editTitleText = text
+                    page.draftTitle = text
+                    page.draftTitleInitialized = true
+                    localSaveTimer.restart()
+                }
+                onAccepted: {
+                    Qt.inputMethod.commit()
+                    focus = false
+                    page.commitHeaderTitle(text)
+                }
             }
 
             Rectangle {
@@ -247,6 +275,9 @@ Page {
                 page.applyingControllerContent = true
                 page.draftTitle = title
                 page.draftTitleInitialized = true
+                if (headerTitleField.text !== page.displayTitle()) {
+                    headerTitleField.text = page.displayTitle()
+                }
                 page.applyingControllerContent = false
             }
         }
@@ -799,6 +830,19 @@ Page {
         if (!page.applyingControllerContent && !notesController.noteReadOnly && noteId !== 0) {
             notesController.saveLocalDraft(page.draftTitle, contentEditor.text, page.draftCategory, page.favoriteSelected)
         }
+    }
+
+    function commitHeaderTitle(value) {
+        if (notesController.noteReadOnly || notesController.noteLoading || noteId === 0) {
+            page.editingTitle = false
+            return
+        }
+        page.editTitleText = value || ""
+        page.draftTitle = page.editTitleText
+        page.draftTitleInitialized = true
+        page.editingTitle = false
+        localSaveTimer.stop()
+        saveDraftNow()
     }
 
     function flushPendingDraft() {
