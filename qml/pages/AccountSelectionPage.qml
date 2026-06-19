@@ -110,6 +110,7 @@ Page {
 
         onAuthenticationError: {
             page.authorizationRunning = false
+            page.waitingForSystemApproval = true
             var message = error && error.message ? error.message : JSON.stringify(error)
             console.log(
                 "NextNotes OnlineAccountsAuthorization error"
@@ -120,13 +121,12 @@ Page {
                 + " message=" + message
             )
             if (message.indexOf("AppArmor policy prevents") >= 0 || message.indexOf("AccessDenied") >= 0) {
-                page.waitingForSystemApproval = true
                 page.authorizationStatus = i18n.tr("NextNotes is not allowed to use this account yet. Open Ubuntu Touch System Settings > Accounts, allow NextNotes for this account, then return here.")
-                PopupUtils.open(openSystemAccountsDialog)
             } else {
                 page.authorizationStatus = i18n.tr("Authorization failed: %1. If the system did not show an Online Accounts prompt, open System Settings > Accounts and allow NextNotes for this account, then try again.")
                     .arg(message)
             }
+            PopupUtils.open(openSystemAccountsDialog)
         }
     }
 
@@ -519,6 +519,14 @@ Page {
                 text: page.authorizationRunning ? i18n.tr("Verifying account...") : i18n.tr("Verify selected account")
                 enabled: page.selectedAccountId > 0 && !page.authorizationRunning
                 onClicked: page.authenticateSelectedAccount()
+            }
+
+            Button {
+                Layout.fillWidth: true
+                visible: page.selectedAccountId > 0 && page.waitingForSystemApproval && !page.authorizationRunning
+                text: i18n.tr("Open system accounts")
+                color: theme.palette.normal.positive
+                onClicked: PopupUtils.open(openSystemAccountsDialog)
             }
 
             Label {
