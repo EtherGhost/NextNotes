@@ -176,14 +176,6 @@ NextNotes does not request unconfined mode.
 
 NextNotes is intended for OpenStore distribution as a click package.
 
-Before release:
-
-- Build and review amd64 and arm64 packages.
-- Test on Ubuntu Touch Stable.
-- Prepare OpenStore screenshots and banner.
-- Verify maintainer metadata.
-- Verify the Online Accounts setup flow on a fresh install.
-
 Release notes are maintained in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
