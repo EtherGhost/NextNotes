@@ -21,7 +21,7 @@ class ProjectMetadataTests(unittest.TestCase):
         cmake = read_text("CMakeLists.txt")
 
         self.assertEqual(manifest["name"], "nextnotes.cloudsite")
-        self.assertIn('set(NEXTNOTES_VERSION "0.1.5")', cmake)
+        self.assertIn('set(NEXTNOTES_VERSION "0.1.6")', cmake)
         self.assertEqual(manifest["version"], "@NEXTNOTES_VERSION@")
         self.assertIn("nextnotes", manifest["hooks"])
         self.assertEqual(manifest["hooks"]["nextnotes"]["apparmor"], "nextnotes.apparmor")

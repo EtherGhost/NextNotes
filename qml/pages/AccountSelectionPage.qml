@@ -217,7 +217,7 @@ Page {
 
             Button {
                 text: i18n.tr("Open accounts")
-                color: theme.palette.normal.positive
+                color: "#2c7fb8"
                 onClicked: {
                     PopupUtils.close(dialog)
                     page.openSystemAccounts()
@@ -385,10 +385,21 @@ Page {
                         opacity: 0.82
                     }
 
-                    Button {
+                    Item {
                         Layout.fillWidth: true
-                        text: i18n.tr("Open system accounts")
-                        onClicked: PopupUtils.open(openSystemAccountsDialog)
+                        Layout.preferredHeight: units.gu(5)
+
+                        Label {
+                            anchors.centerIn: parent
+                            text: i18n.tr("Open system accounts")
+                            color: theme.palette.normal.backgroundText
+                            font.bold: true
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: PopupUtils.open(openSystemAccountsDialog)
+                        }
                     }
                 }
             }
@@ -514,19 +525,48 @@ Page {
                 }
             }
 
-            Button {
+            Rectangle {
                 Layout.fillWidth: true
-                text: page.authorizationRunning ? i18n.tr("Verifying account...") : i18n.tr("Verify selected account")
+                Layout.preferredHeight: units.gu(5)
+                radius: units.gu(0.6)
+                color: page.selectedAccountId > 0 && !page.authorizationRunning ? "#2c7fb8" : "transparent"
+                border.width: page.selectedAccountId > 0 && !page.authorizationRunning ? 0 : 1
+                border.color: "#7a7a7a"
                 enabled: page.selectedAccountId > 0 && !page.authorizationRunning
-                onClicked: page.authenticateSelectedAccount()
+
+                Label {
+                    anchors.centerIn: parent
+                    text: page.authorizationRunning ? i18n.tr("Verifying account...") : i18n.tr("Verify selected account")
+                    color: parent.enabled ? "white" : theme.palette.normal.backgroundText
+                    opacity: parent.enabled ? 1.0 : 0.55
+                    font.bold: true
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    enabled: parent.enabled
+                    onClicked: page.authenticateSelectedAccount()
+                }
             }
 
-            Button {
+            Rectangle {
                 Layout.fillWidth: true
+                Layout.preferredHeight: units.gu(5)
                 visible: page.selectedAccountId > 0 && page.waitingForSystemApproval && !page.authorizationRunning
-                text: i18n.tr("Open system accounts")
-                color: theme.palette.normal.positive
-                onClicked: PopupUtils.open(openSystemAccountsDialog)
+                radius: units.gu(0.6)
+                color: "#2c7fb8"
+
+                Label {
+                    anchors.centerIn: parent
+                    text: i18n.tr("Open system accounts")
+                    color: "white"
+                    font.bold: true
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: PopupUtils.open(openSystemAccountsDialog)
+                }
             }
 
             Label {

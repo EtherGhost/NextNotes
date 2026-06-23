@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.6 - 2026-06-23
+
+- Updated the notes list, navigation drawer, top bar, and account page with the cleaner Nextcloud suite visual style.
+- Removed the drawer refresh action; pull-to-refresh remains available in the notes list.
+- Kept the account, sync, editing, and cache behavior unchanged while polishing the UI.
+
 ## 0.1.5 - 2026-06-19
 
 - Fixed account setup for accounts that are not yet approved for NextNotes in Ubuntu Touch Online Accounts. If authorization fails, the account page now shows the system accounts dialog and an Open system accounts button so the user can grant access.

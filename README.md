@@ -8,9 +8,9 @@ NextNotes is not affiliated with, endorsed by, or sponsored by Nextcloud GmbH or
 
 ## Current Status
 
-Current release candidate: `0.1.4`.
+Current release candidate: `0.1.6`.
 
-This release focuses on account-flow polish, swipe direction preferences, editor status stability, direct conflict review access, correct note-list ordering after favorite changes sync, and more reliable favorite/status refresh after account switching or conflict resolution.
+This release focuses on visual polish: the notes list, navigation drawer, top bar, and account page now follow the cleaner shared Nextcloud suite style. Account, sync, editing, and cache behavior are unchanged.
 
 ## Features
 

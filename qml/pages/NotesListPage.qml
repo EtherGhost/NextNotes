@@ -36,20 +36,31 @@ Page {
         contents: RowLayout {
             anchors {
                 fill: parent
-                leftMargin: units.gu(1)
-                rightMargin: units.gu(1)
+                leftMargin: units.gu(0.5)
+                rightMargin: units.gu(0.5)
             }
             spacing: units.gu(0.75)
 
-            Button {
-                Layout.preferredWidth: units.gu(5)
+            Item {
+                Layout.preferredWidth: units.gu(3.4)
                 Layout.preferredHeight: units.gu(5)
-                text: page.selectionMode ? "\u2715" : "\u2630"
-                onClicked: {
-                    if (page.selectionMode) {
-                        page.clearSelection()
-                    } else {
-                        page.menuOpen = true
+
+                Label {
+                    anchors.centerIn: parent
+                    text: page.selectionMode ? "\u2715" : "\u2630"
+                    color: theme.palette.normal.backgroundText
+                    font.pixelSize: page.selectionMode ? units.gu(2.2) : units.gu(2.6)
+                    font.bold: true
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        if (page.selectionMode) {
+                            page.clearSelection()
+                        } else {
+                            page.menuOpen = true
+                        }
                     }
                 }
             }
@@ -73,14 +84,26 @@ Page {
                 onTextChanged: notesController.setSearchQuery(text)
             }
 
-            Button {
+            Rectangle {
                 Layout.preferredWidth: units.gu(8)
                 Layout.preferredHeight: units.gu(5)
                 visible: page.selectionMode
                 enabled: page.selectedNoteIds.length > 0
-                text: i18n.tr("Delete")
+                radius: units.gu(0.6)
                 color: "#c7162b"
-                onClicked: page.requestBulkDelete()
+
+                Label {
+                    anchors.centerIn: parent
+                    text: i18n.tr("Delete")
+                    color: "white"
+                    font.bold: true
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    enabled: parent.enabled
+                    onClicked: page.requestBulkDelete()
+                }
             }
 
             Rectangle {
@@ -895,37 +918,57 @@ Page {
                     Label {
                         Layout.fillWidth: true
                         text: i18n.tr("NextNotes")
+                        fontSize: "large"
+                        font.bold: true
+                        elide: Text.ElideRight
+                    }
+
+                    Item {
+                        Layout.preferredWidth: units.gu(5)
+                        Layout.preferredHeight: units.gu(5)
+
+                        Label {
+                            anchors.centerIn: parent
+                            text: "\u2715"
+                            color: theme.palette.normal.backgroundText
+                            font.pixelSize: units.gu(2.2)
+                            font.bold: true
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: page.menuOpen = false
+                        }
+                    }
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: units.gu(5)
+                    visible: notesController.dirtyNotesCount > 0 || notesController.syncRunning || notesController.syncSummaryText.length > 0
+                    enabled: notesController.dirtyNotesCount > 0 && !notesController.syncRunning && !notesController.loading
+
+                    Label {
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.leftMargin: units.gu(1)
+                        text: notesController.syncRunning
+                            ? i18n.tr("Syncing...")
+                            : notesController.dirtyNotesCount > 0
+                            ? i18n.tr("Sync now (%1)").arg(notesController.dirtyNotesCount)
+                            : i18n.tr("Sync now")
+                        color: theme.palette.normal.backgroundText
+                        opacity: parent.enabled ? 1.0 : 0.55
                         font.bold: true
                     }
 
-                    Button {
-                        text: i18n.tr("Close")
-                        onClicked: page.menuOpen = false
-                    }
-                }
-
-                Button {
-                    Layout.fillWidth: true
-                    text: notesController.loading ? i18n.tr("Refreshing...") : i18n.tr("Refresh")
-                    enabled: !notesController.loading
-                    onClicked: {
-                        page.menuOpen = false
-                        notesController.loadNotes()
-                    }
-                }
-
-                Button {
-                    Layout.fillWidth: true
-                    visible: notesController.dirtyNotesCount > 0 || notesController.syncRunning || notesController.syncSummaryText.length > 0
-                    text: notesController.syncRunning
-                        ? i18n.tr("Syncing...")
-                        : notesController.dirtyNotesCount > 0
-                        ? i18n.tr("Sync now (%1)").arg(notesController.dirtyNotesCount)
-                        : i18n.tr("Sync now")
-                    enabled: notesController.dirtyNotesCount > 0 && !notesController.syncRunning && !notesController.loading
-                    onClicked: {
-                        page.menuOpen = false
-                        notesController.syncNow()
+                    MouseArea {
+                        anchors.fill: parent
+                        enabled: parent.enabled
+                        onClicked: {
+                            page.menuOpen = false
+                            notesController.syncNow()
+                        }
                     }
                 }
 
@@ -966,18 +1009,12 @@ Page {
                                 elide: Text.ElideRight
                             }
 
-                            Rectangle {
-                                height: categoryMenuCount.implicitHeight + units.gu(0.4)
-                                width: categoryMenuCount.implicitWidth + units.gu(1)
-                                radius: units.gu(0.35)
-                                color: categoryMenuItem.selected ? "white" : "#7a7a7a"
-
-                                Label {
-                                    id: categoryMenuCount
-                                    anchors.centerIn: parent
-                                    text: model.count
-                                    color: categoryMenuItem.selected ? "#2c7fb8" : "white"
-                                }
+                            Label {
+                                id: categoryMenuCount
+                                text: model.count
+                                color: categoryMenuItem.selected ? "white" : theme.palette.normal.backgroundText
+                                opacity: categoryMenuItem.selected ? 1.0 : 0.72
+                                horizontalAlignment: Text.AlignRight
                             }
                         }
 
@@ -991,45 +1028,32 @@ Page {
                     }
                 }
 
-                Button {
+                Item {
                     Layout.fillWidth: true
-                    text: i18n.tr("Settings")
-                    onClicked: {
-                        page.menuOpen = false
-                        pageStack.push(Qt.resolvedUrl("SettingsPage.qml"), {
-                            "swipeActionLayout": page.activeSwipeActionLayout,
-                            "notesListPage": page
-                        })
-                    }
+                    Layout.preferredHeight: units.gu(5)
+                    Label { anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter; anchors.leftMargin: units.gu(1); text: i18n.tr("Language"); color: theme.palette.normal.backgroundText; font.bold: true }
+                    MouseArea { anchors.fill: parent; onClicked: { page.menuOpen = false; pageStack.push(Qt.resolvedUrl("LanguageSelectionPage.qml")) } }
                 }
 
-                Button {
+                Item {
                     Layout.fillWidth: true
-                    text: i18n.tr("Language")
-                    onClicked: {
-                        page.menuOpen = false
-                        pageStack.push(Qt.resolvedUrl("LanguageSelectionPage.qml"))
-                    }
+                    Layout.preferredHeight: units.gu(5)
+                    Label { anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter; anchors.leftMargin: units.gu(1); text: i18n.tr("Account"); color: theme.palette.normal.backgroundText; font.bold: true }
+                    MouseArea { anchors.fill: parent; onClicked: { page.menuOpen = false; pageStack.push(Qt.resolvedUrl("AccountSelectionPage.qml"), { "notesController": notesController }) } }
                 }
 
-                Button {
+                Item {
                     Layout.fillWidth: true
-                    text: i18n.tr("Account")
-                    onClicked: {
-                        page.menuOpen = false
-                        pageStack.push(Qt.resolvedUrl("AccountSelectionPage.qml"), {
-                            "notesController": notesController
-                        })
-                    }
+                    Layout.preferredHeight: units.gu(5)
+                    Label { anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter; anchors.leftMargin: units.gu(1); text: i18n.tr("Settings"); color: theme.palette.normal.backgroundText; font.bold: true }
+                    MouseArea { anchors.fill: parent; onClicked: { page.menuOpen = false; pageStack.push(Qt.resolvedUrl("SettingsPage.qml"), { "swipeActionLayout": page.activeSwipeActionLayout, "notesListPage": page }) } }
                 }
 
-                Button {
+                Item {
                     Layout.fillWidth: true
-                    text: i18n.tr("About")
-                    onClicked: {
-                        page.menuOpen = false
-                        pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
-                    }
+                    Layout.preferredHeight: units.gu(5)
+                    Label { anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter; anchors.leftMargin: units.gu(1); text: i18n.tr("About"); color: theme.palette.normal.backgroundText; font.bold: true }
+                    MouseArea { anchors.fill: parent; onClicked: { page.menuOpen = false; pageStack.push(Qt.resolvedUrl("AboutPage.qml")) } }
                 }
             }
         }

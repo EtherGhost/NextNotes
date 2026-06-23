@@ -9,8 +9,8 @@ MainView {
     applicationName: "nextnotes.cloudsite"
     automaticOrientation: true
 
-    width: desktopLarge ? units.gu(90) : units.gu(45)
-    height: desktopLarge ? units.gu(120) : units.gu(75)
+    width: desktopLarge ? units.gu(45) : units.gu(45)
+    height: desktopLarge ? units.gu(80) : units.gu(75)
 
     Component.onCompleted: {
         if (desktopDarkMode) {

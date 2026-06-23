@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
     view.setSource(QUrl(QStringLiteral("qrc:/Main.qml")));
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     if (desktopLarge) {
-        view.resize(QSize(1080, 1600));
+        view.resize(QSize(540, 960));
     }
     view.show();
     qInfo("NextNotes desktopLarge=%s desktopDarkMode=%s desktopTestAuth=%s",
