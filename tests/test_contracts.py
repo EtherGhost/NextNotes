@@ -21,18 +21,65 @@ class ProjectMetadataTests(unittest.TestCase):
         cmake = read_text("CMakeLists.txt")
 
         self.assertEqual(manifest["name"], "nextnotes.cloudsite")
-        self.assertIn('set(NEXTNOTES_VERSION "0.1.6")', cmake)
+        self.assertIn('set(NEXTNOTES_VERSION "0.1.6.1")', cmake)
         self.assertEqual(manifest["version"], "@NEXTNOTES_VERSION@")
         self.assertIn("nextnotes", manifest["hooks"])
         self.assertEqual(manifest["hooks"]["nextnotes"]["apparmor"], "nextnotes.apparmor")
         self.assertEqual(manifest["hooks"]["nextnotes"]["desktop"], "nextnotes.desktop")
+        self.assertEqual(manifest["hooks"]["nextnotes"]["content-hub"], "nextnotes-contenthub.json")
 
     def test_apparmor_keeps_minimal_permissions_and_no_unconfined_mode(self):
         apparmor = json.loads(read_text("nextnotes.apparmor"))
 
         self.assertNotIn("template", apparmor)
         self.assertNotIn("unconfined", json.dumps(apparmor).lower())
-        self.assertEqual(sorted(apparmor.get("policy_groups", [])), ["accounts", "networking"])
+        self.assertEqual(sorted(apparmor.get("policy_groups", [])), ["accounts", "content_exchange", "content_exchange_source", "networking"])
+        self.assertNotIn("document_files", apparmor.get("policy_groups", []))
+        self.assertNotIn("document_files_read", apparmor.get("policy_groups", []))
+
+    def test_content_hub_import_is_declared_as_share_destination(self):
+        content_hub = json.loads(read_text("nextnotes-contenthub.json"))
+        main = read_text("qml/Main.qml")
+        handler = read_text("qml/backend/ShareImportHandler.qml")
+        fallback_handler = read_text("qml/backend/ShareImportHandlerUbuntu.qml")
+        controller = read_text("qml/backend/NotesController.qml")
+        cmake = read_text("CMakeLists.txt")
+
+        self.assertEqual(content_hub, {
+            "destination": ["text", "links", "documents"],
+            "share": ["text", "links", "documents"],
+            "source": ["text", "links", "documents"]
+        })
+        self.assertIn("install(FILES ${PROJECT_NAME}-contenthub.json", cmake)
+        self.assertIn("ShareImportHandler.qml", main)
+        self.assertIn("ShareImportHandlerUbuntu.qml", main)
+        self.assertIn("ShareExportPage.qml", read_text("qml/qml.qrc"))
+        self.assertIn("ShareExportPageUbuntu.qml", read_text("qml/qml.qrc"))
+        self.assertIn("active: !desktopLarge", main)
+        self.assertIn("Lomiri.Content handler unavailable", main)
+        self.assertIn("sharedTextImported.connect(root.openSharedTextNote)", main)
+        self.assertIn("function openSharedTextNote(noteId, title)", main)
+        self.assertIn("import Lomiri.Content 1.3", handler)
+        self.assertIn("import Ubuntu.Content 1.3", fallback_handler)
+        self.assertIn("target: ContentHub", handler)
+        self.assertIn("target: ContentHub", fallback_handler)
+        self.assertIn("onImportRequested", handler)
+        self.assertIn("onImportRequested", fallback_handler)
+        self.assertIn("ContentHub.hasPending", handler)
+        self.assertIn("ContentHub.restoreImports()", handler)
+        self.assertIn("ContentHub.finishedImports", handler)
+        self.assertIn("ContentTransfer.Collected", handler)
+        self.assertIn("contentHubBridge.readTextFile", handler)
+        self.assertIn("writeSharedTextFile", read_text("ContentHubBridge.cpp"))
+        export_page = read_text("qml/backend/ShareExportPage.qml")
+        self.assertIn("ContentHandler.Share", export_page)
+        self.assertIn("item.text = shareText", export_page)
+        self.assertIn("Share selected text", read_text("qml/pages/NoteEditorPage.qml"))
+        self.assertIn("createLocalNoteFromSharedText", handler)
+        self.assertIn("function createLocalNoteFromSharedText(title, content)", controller)
+        self.assertIn("notesCache.saveLocalDraft(noteId, cleanTitle, cleanContent", controller)
+        self.assertIn("scheduleAutoSync()", controller)
+        self.assertNotIn("console.log(content", handler)
 
     def test_online_accounts_service_ids_use_current_package_identity(self):
         account_page = read_text("qml/pages/AccountSelectionPage.qml")
@@ -451,7 +498,7 @@ class RefactoredCoreContractTests(unittest.TestCase):
             self.assertNotIn(snippet, account_page + session + auth_core)
 
         self.assertNotIn("unconfined", apparmor.lower())
-        self.assertNotIn('"content-hub"', apparmor)
+        self.assertNotIn("document_files", apparmor)
 
     def test_notes_api_core_owns_payload_parse_url_and_etag_rules(self):
         api = read_text("qml/backend/NotesApiClient.qml")

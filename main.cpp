@@ -1,3 +1,5 @@
+#include "ContentHubBridge.h"
+
 #include <QGuiApplication>
 #include <QQmlContext>
 #include <QQuickView>
@@ -153,6 +155,7 @@ int main(int argc, char *argv[])
         && !desktopTestSecret.isEmpty();
 
     QQuickView view;
+    ContentHubBridge contentHubBridge;
     view.rootContext()->setContextProperty(QStringLiteral("nextnotesAppVersion"), QStringLiteral(NEXTNOTES_VERSION));
     view.rootContext()->setContextProperty(QStringLiteral("desktopLarge"), desktopLarge);
     view.rootContext()->setContextProperty(QStringLiteral("desktopDarkMode"), desktopDarkMode);
@@ -160,6 +163,7 @@ int main(int argc, char *argv[])
     view.rootContext()->setContextProperty(QStringLiteral("desktopTestServerUrl"), desktopTestAuthEnabled ? desktopTestServer : QString());
     view.rootContext()->setContextProperty(QStringLiteral("desktopTestUserName"), desktopTestAuthEnabled ? desktopTestUserName : QString());
     view.rootContext()->setContextProperty(QStringLiteral("desktopTestSecret"), desktopTestAuthEnabled ? desktopTestSecret : QString());
+    view.rootContext()->setContextProperty(QStringLiteral("contentHubBridge"), &contentHubBridge);
     view.setSource(QUrl(QStringLiteral("qrc:/Main.qml")));
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     if (desktopLarge) {

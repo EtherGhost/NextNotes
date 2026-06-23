@@ -7,6 +7,7 @@
         "nextnotes": {
             "accounts": "nextnotes.accounts",
             "apparmor": "nextnotes.apparmor",
+            "content-hub": "nextnotes-contenthub.json",
             "desktop": "nextnotes.desktop"
         }
     },

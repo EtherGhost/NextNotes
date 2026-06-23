@@ -22,6 +22,25 @@ MainView {
         id: appNotesController
     }
 
+    Loader {
+        id: shareImportLoader
+        active: !desktopLarge
+        source: Qt.resolvedUrl("backend/ShareImportHandler.qml")
+
+        onLoaded: {
+            item.notesController = appNotesController
+            item.sharedTextImported.connect(root.openSharedTextNote)
+            item.importFailed.connect(root.showShareImportError)
+        }
+
+        onStatusChanged: {
+            if (status === Loader.Error && source.toString().indexOf("ShareImportHandler.qml") !== -1) {
+                console.log("NextNotes ContentHub Lomiri.Content handler unavailable; trying Ubuntu.Content fallback")
+                source = Qt.resolvedUrl("backend/ShareImportHandlerUbuntu.qml")
+            }
+        }
+    }
+
     Connections {
         target: Qt.application
 
@@ -41,5 +60,17 @@ MainView {
         Component.onCompleted: push(Qt.resolvedUrl("pages/NotesListPage.qml"), {
             "notesController": appNotesController
         })
+    }
+
+    function openSharedTextNote(noteId, title) {
+        pageStack.push(Qt.resolvedUrl("pages/NoteEditorPage.qml"), {
+            "noteId": noteId,
+            "initialTitle": title && title.length > 0 ? title : i18n.tr("Shared note"),
+            "notesController": appNotesController
+        })
+    }
+
+    function showShareImportError(message) {
+        appNotesController.statusText = message
     }
 }

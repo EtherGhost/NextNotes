@@ -874,6 +874,35 @@ Item {
         return noteId
     }
 
+    function createLocalNoteFromSharedText(title, content) {
+        configureAccountRuntime()
+        cancelDetailPrefetch()
+
+        var cleanContent = content ? String(content) : ""
+        var cleanTitle = title && String(title).trim().length > 0
+            ? String(title).trim()
+            : titleFromSharedText(cleanContent)
+
+        var noteId = notesCache.createLocalNote("", false)
+        notesCache.saveLocalDraft(noteId, cleanTitle, cleanContent, "", false)
+        refreshNotesFromCache()
+        loadNote(noteId, cleanTitle)
+        statusText = i18n.tr("Shared text imported as a local note. Syncing soon.")
+        scheduleAutoSync()
+        return noteId
+    }
+
+    function titleFromSharedText(content) {
+        var lines = String(content || "").split(/\r?\n/)
+        for (var i = 0; i < lines.length; ++i) {
+            var line = String(lines[i] || "").trim()
+            if (line.length > 0) {
+                return line.length > 80 ? line.slice(0, 77) + "..." : line
+            }
+        }
+        return i18n.tr("Shared note")
+    }
+
     function saveLocalDraft(title, content, category, favorite) {
         if (pendingNoteId === 0 || noteReadOnly) {
             return

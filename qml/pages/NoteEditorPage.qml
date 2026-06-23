@@ -650,6 +650,16 @@ Page {
 
                 Button {
                     Layout.fillWidth: true
+                    text: page.hasSelectedText() ? i18n.tr("Share selected text") : i18n.tr("Share note text")
+                    enabled: !notesController.noteLoading && noteId !== 0 && page.shareText().length > 0
+                    onClicked: {
+                        page.noteMenuOpen = false
+                        page.shareCurrentText()
+                    }
+                }
+
+                Button {
+                    Layout.fillWidth: true
                     text: i18n.tr("Cancel")
                     onClicked: page.noteMenuOpen = false
                 }
@@ -885,5 +895,47 @@ Page {
             contentEditor.forceActiveFocus()
             contentEditor.select(index, index + query.length)
         }
+    }
+
+    function hasSelectedText() {
+        return contentEditor.selectedText && contentEditor.selectedText.length > 0
+    }
+
+    function shareText() {
+        if (page.hasSelectedText()) {
+            return contentEditor.selectedText
+        }
+        return contentEditor.text || ""
+    }
+
+    function shareCurrentText() {
+        page.flushPendingDraft()
+        var text = page.shareText()
+        if (text.length === 0) {
+            return
+        }
+
+        var sharePage = pageStack.push(Qt.resolvedUrl("../backend/ShareExportPage.qml"), {
+            "shareTitle": page.displayTitle(),
+            "shareText": text
+        })
+        if (!sharePage) {
+            console.log("NextNotes ContentHub Lomiri.Content share page unavailable; trying Ubuntu.Content fallback")
+            sharePage = pageStack.push(Qt.resolvedUrl("../backend/ShareExportPageUbuntu.qml"), {
+                "shareTitle": page.displayTitle(),
+                "shareText": text
+            })
+        }
+        if (!sharePage) {
+            notesController.statusText = i18n.tr("Sharing is not available.")
+            return
+        }
+        sharePage.shareFinished.connect(function() {
+            pageStack.pop()
+        })
+        sharePage.shareFailed.connect(function(message) {
+            notesController.statusText = message
+            pageStack.pop()
+        })
     }
 }

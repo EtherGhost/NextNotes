@@ -14,6 +14,10 @@
         <file>backend/NotesApiClient.qml</file>
         <file>backend/NotesApiCore.js</file>
         <file>backend/NotesController.qml</file>
+        <file>backend/ShareImportHandler.qml</file>
+        <file>backend/ShareImportHandlerUbuntu.qml</file>
+        <file>backend/ShareExportPage.qml</file>
+        <file>backend/ShareExportPageUbuntu.qml</file>
         <file>backend/SyncPlanner.js</file>
     </qresource>
 </RCC>

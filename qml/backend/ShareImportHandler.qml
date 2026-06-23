@@ -1,0 +1,155 @@
+import QtQuick 2.7
+import Lomiri.Content 1.3
+
+Item {
+    id: handler
+    visible: false
+
+    signal sharedTextImported(int noteId, string title)
+    signal importFailed(string message)
+
+    property var notesController
+    property int maxImportedCharacters: 1000000
+
+    Component.onCompleted: {
+        console.log("NextNotes ContentHub import handler ready hasPending=" + ContentHub.hasPending
+                    + " finishedImports=" + finishedImportCount())
+        Qt.callLater(restorePendingImports)
+    }
+
+    Connections {
+        target: ContentHub
+
+        onImportRequested: {
+            handler.handleImportRequested(transfer)
+        }
+
+        onHasPendingChanged: {
+            console.log("NextNotes ContentHub hasPending changed=" + ContentHub.hasPending)
+            if (ContentHub.hasPending) {
+                handler.restorePendingImports()
+            }
+        }
+
+        onFinishedImportsChanged: {
+            console.log("NextNotes ContentHub finishedImports changed count=" + handler.finishedImportCount())
+            handler.processFinishedImports()
+        }
+    }
+
+    Timer {
+        id: pendingImportTimer
+        interval: 250
+        repeat: false
+        onTriggered: handler.processFinishedImports()
+    }
+
+    function restorePendingImports() {
+        console.log("NextNotes ContentHub restore pending hasPending=" + ContentHub.hasPending
+                    + " finishedImports=" + finishedImportCount())
+        if (ContentHub.hasPending) {
+            ContentHub.restoreImports()
+        }
+        pendingImportTimer.restart()
+    }
+
+    function finishedImportCount() {
+        return ContentHub.finishedImports ? ContentHub.finishedImports.length : 0
+    }
+
+    function processFinishedImports() {
+        var count = finishedImportCount()
+        if (count <= 0) {
+            console.log("NextNotes ContentHub no finished imports to process")
+            return
+        }
+
+        console.log("NextNotes ContentHub processing finished imports count=" + count)
+        for (var i = 0; i < count; ++i) {
+            handleImportRequested(ContentHub.finishedImports[i])
+        }
+    }
+
+    function handleImportRequested(transfer) {
+        var count = transfer && transfer.items ? transfer.items.length : 0
+        console.log("NextNotes ContentHub import requested itemCount=" + count)
+
+        if (!notesController || !notesController.createLocalNoteFromSharedText) {
+            importFailed(i18n.tr("Shared text could not be imported."))
+            return
+        }
+
+        if (!transfer || !transfer.items || transfer.items.length === 0) {
+            importFailed(i18n.tr("No shared content was received."))
+            return
+        }
+
+        var textParts = []
+        for (var i = 0; i < transfer.items.length; ++i) {
+            var item = transfer.items[i]
+            var text = textFromItem(item)
+            if (text.length > 0) {
+                textParts.push(text)
+            }
+        }
+
+        var content = textParts.join("\n\n").trim()
+        if (content.length === 0) {
+            importFailed(i18n.tr("The shared content did not contain readable text."))
+            return
+        }
+
+        if (content.length > maxImportedCharacters) {
+            content = content.slice(0, maxImportedCharacters)
+            console.log("NextNotes ContentHub import truncated length=" + content.length)
+        }
+
+        var title = notesController.titleFromSharedText(content)
+        var noteId = notesController.createLocalNoteFromSharedText(title, content)
+        console.log("NextNotes ContentHub import created noteId=" + noteId + " textLength=" + content.length)
+        markTransferCollected(transfer)
+        sharedTextImported(noteId, title)
+    }
+
+    function markTransferCollected(transfer) {
+        if (!transfer) {
+            return
+        }
+        try {
+            transfer.state = ContentTransfer.Collected
+            if (transfer.finalize) {
+                transfer.finalize()
+            }
+        } catch (error) {
+            console.log("NextNotes ContentHub import finalize failed: " + error)
+        }
+    }
+
+    function textFromItem(item) {
+        if (!item) {
+            return ""
+        }
+
+        var url = item.url || ""
+        if (url && String(url).length > 0 && contentHubBridge) {
+            var fileText = contentHubBridge.readTextFile(url)
+            if (fileText && fileText.length > 0) {
+                console.log("NextNotes ContentHub import read local file length=" + fileText.length)
+                return fileText
+            }
+            console.log("NextNotes ContentHub import local file was empty or unreadable")
+        }
+
+        if (item.text && String(item.text).length > 0) {
+            console.log("NextNotes ContentHub import read item text length=" + String(item.text).length)
+            return String(item.text)
+        }
+
+        if (item.name && String(item.name).length > 0) {
+            console.log("NextNotes ContentHub import using item name length=" + String(item.name).length)
+            return String(item.name)
+        }
+
+        return ""
+    }
+}

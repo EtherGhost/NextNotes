@@ -10,6 +10,8 @@ NextNotes is not affiliated with, endorsed by, or sponsored by Nextcloud GmbH or
 
 Current release candidate: `0.1.6`.
 
+Current experimental branch: `experiment/content-hub-share-import` uses local device/debug version `0.1.6.1` while testing Content Hub import/export behavior.
+
 This release focuses on visual polish: the notes list, navigation drawer, top bar, and account page now follow the cleaner shared Nextcloud suite style. Account, sync, editing, and cache behavior are unchanged.
 
 ## Features
@@ -22,6 +24,8 @@ This release focuses on visual polish: the notes list, navigation drawer, top ba
 - Preserve local drafts when server conflicts are detected.
 - Review conflicts on a dedicated conflict page by choosing the local or server version.
 - Keep the note editor stable while sync state changes by showing sync/conflict state in the top bar.
+- Import shared text from other Ubuntu Touch apps through Content Hub as a new local note.
+- Share selected note text or full note text to other Ubuntu Touch apps through Content Hub.
 - Follow the system language or manually choose a supported language.
 - View version, license, and project information from the About page.
 
@@ -33,7 +37,7 @@ NextNotes focuses on a small reliable V1. It does not implement:
 - Markdown rendering
 - Attachments
 - Image handling
-- Sharing
+- Rich note sharing beyond plain text Content Hub import/export
 - Collaboration
 - End-to-end encryption
 - Tags
@@ -169,8 +173,18 @@ The AppArmor profile uses:
 
 - `networking`: connect to the configured Nextcloud server.
 - `accounts`: access Ubuntu Touch Online Accounts after user authorization.
+- `content_exchange`: receive shared/imported content through Ubuntu Touch Content Hub.
+- `content_exchange_source`: register as a Content Hub source/share participant for text import/export.
 
 NextNotes does not request unconfined mode.
+
+## Content Hub Import And Share
+
+NextNotes can receive shared text from other Ubuntu Touch apps. The incoming Content Hub item is read as local text content, saved as a new local note, opened in the editor, and then handled by the existing offline-first autosync flow.
+
+NextNotes can also share selected note text, or the full note text when nothing is selected, to other Ubuntu Touch apps. Content Hub transfers use both the item text field and a temporary UTF-8 text file so receiving apps can use the path that best fits their implementation.
+
+On Pixel 3a / Ubuntu Touch 24.04 Noble, Content Hub text import/export required explicit `text`, `links`, and `documents` categories plus both `content_exchange` and `content_exchange_source` AppArmor policy groups. Reinstalling with a changed Content Hub/AppArmor profile required a local version bump from `0.1.6` to `0.1.6.1`.
 
 ## Deployment
 
