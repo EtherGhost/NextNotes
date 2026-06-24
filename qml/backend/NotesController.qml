@@ -893,14 +893,32 @@ Item {
     }
 
     function titleFromSharedText(content) {
-        var lines = String(content || "").split(/\r?\n/)
+        var text = String(content || "").trim()
+        var lines = text.split(/\r?\n/)
         for (var i = 0; i < lines.length; ++i) {
             var line = String(lines[i] || "").trim()
             if (line.length > 0) {
-                return line.length > 80 ? line.slice(0, 77) + "..." : line
+                if (line.length <= 80) {
+                    return line
+                }
+                break
             }
         }
-        return i18n.tr("Shared note")
+        return sharedDateNoteTitle()
+    }
+
+    function sharedDateNoteTitle() {
+        return i18n.tr("Shared %1").arg(sharedDateTitle())
+    }
+
+    function sharedDateTitle() {
+        var now = new Date()
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        var day = now.getDate()
+        var month = months[now.getMonth()]
+        var year = now.getFullYear()
+        return (day < 10 ? "0" + day : String(day)) + "-" + month + "-" + year
     }
 
     function saveLocalDraft(title, content, category, favorite) {

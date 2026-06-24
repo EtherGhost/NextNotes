@@ -916,13 +916,13 @@ Page {
         }
 
         var sharePage = pageStack.push(Qt.resolvedUrl("../backend/ShareExportPage.qml"), {
-            "shareTitle": page.displayTitle(),
+            "shareTitle": page.shareTitleForExport(),
             "shareText": text
         })
         if (!sharePage) {
             console.log("NextNotes ContentHub Lomiri.Content share page unavailable; trying Ubuntu.Content fallback")
             sharePage = pageStack.push(Qt.resolvedUrl("../backend/ShareExportPageUbuntu.qml"), {
-                "shareTitle": page.displayTitle(),
+                "shareTitle": page.shareTitleForExport(),
                 "shareText": text
             })
         }
@@ -937,5 +937,10 @@ Page {
             notesController.statusText = message
             pageStack.pop()
         })
+    }
+
+    function shareTitleForExport() {
+        var title = page.currentDraftTitle().trim()
+        return title.length > 0 ? title : notesController.sharedDateNoteTitle()
     }
 }

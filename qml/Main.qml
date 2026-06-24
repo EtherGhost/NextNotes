@@ -65,7 +65,7 @@ MainView {
     function openSharedTextNote(noteId, title) {
         pageStack.push(Qt.resolvedUrl("pages/NoteEditorPage.qml"), {
             "noteId": noteId,
-            "initialTitle": title && title.length > 0 ? title : i18n.tr("Shared note"),
+            "initialTitle": title && title.length > 0 ? title : i18n.tr("Shared"),
             "notesController": appNotesController
         })
     }

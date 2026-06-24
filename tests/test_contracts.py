@@ -79,6 +79,12 @@ class ProjectMetadataTests(unittest.TestCase):
         self.assertIn("function createLocalNoteFromSharedText(title, content)", controller)
         self.assertIn("notesCache.saveLocalDraft(noteId, cleanTitle, cleanContent", controller)
         self.assertIn("scheduleAutoSync()", controller)
+        self.assertIn('function sharedDateNoteTitle()', controller)
+        self.assertIn('i18n.tr("Shared %1").arg(sharedDateTitle())', controller)
+        self.assertIn('var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"', controller)
+        self.assertIn("if (line.length <= 80)", controller)
+        self.assertIn("function shareTitleForExport()", read_text("qml/pages/NoteEditorPage.qml"))
+        self.assertIn("notesController.sharedDateNoteTitle()", read_text("qml/pages/NoteEditorPage.qml"))
         self.assertNotIn("console.log(content", handler)
 
     def test_online_accounts_service_ids_use_current_package_identity(self):

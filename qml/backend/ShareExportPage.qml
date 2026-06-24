@@ -43,7 +43,7 @@ Page {
 
         var transfer = peer.request()
         var item = contentItemComponent.createObject(page)
-        item.name = shareTitle && shareTitle.length > 0 ? shareTitle : i18n.tr("Shared note")
+        item.name = shareTitle && shareTitle.length > 0 ? shareTitle : i18n.tr("Shared")
         item.url = url
         item.text = shareText
         transfer.items = [ item ]
