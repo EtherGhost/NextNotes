@@ -8,11 +8,9 @@ NextNotes is not affiliated with, endorsed by, or sponsored by Nextcloud GmbH or
 
 ## Current Status
 
-Current release candidate: `0.1.6`.
+Current release candidate: `0.2.0`.
 
-Current experimental branch: `experiment/content-hub-share-import` uses local device/debug version `0.1.6.1` while testing Content Hub import/export behavior.
-
-This release focuses on visual polish: the notes list, navigation drawer, top bar, and account page now follow the cleaner shared Nextcloud suite style. Account, sync, editing, and cache behavior are unchanged.
+This release adds Ubuntu Touch Content Hub integration. NextNotes can receive shared text from other apps as a new note, and can share selected note text or full note text to other apps.
 
 ## Features
 
@@ -184,7 +182,7 @@ NextNotes can receive shared text from other Ubuntu Touch apps. The incoming Con
 
 NextNotes can also share selected note text, or the full note text when nothing is selected, to other Ubuntu Touch apps. Content Hub transfers use both the item text field and a temporary UTF-8 text file so receiving apps can use the path that best fits their implementation.
 
-On Pixel 3a / Ubuntu Touch 24.04 Noble, Content Hub text import/export required explicit `text`, `links`, and `documents` categories plus both `content_exchange` and `content_exchange_source` AppArmor policy groups. Reinstalling with a changed Content Hub/AppArmor profile required a local version bump from `0.1.6` to `0.1.6.1`.
+On Pixel 3a / Ubuntu Touch 24.04 Noble, Content Hub text import/export required explicit `text`, `links`, and `documents` categories plus both `content_exchange` and `content_exchange_source` AppArmor policy groups.
 
 ## Deployment
 

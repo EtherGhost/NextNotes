@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0 - 2026-06-26
+
+- Added Ubuntu Touch Content Hub sharing support.
+- Shared text from other apps can be imported as a new local note and synced through the existing offline-first flow.
+- Note text can be shared out to other Ubuntu Touch apps, using selected text when available or the full note text otherwise.
+- Added duplicate-import protection so repeated pending Content Hub transfers do not create multiple notes from the same shared text.
+
 ## 0.1.6 - 2026-06-23
 
 - Updated the notes list, navigation drawer, top bar, and account page with the cleaner Nextcloud suite visual style.

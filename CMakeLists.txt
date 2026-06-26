@@ -10,7 +10,7 @@ find_package(Qt5Quick REQUIRED)
 
 set(PROJECT_NAME "nextnotes")
 set(FULL_PROJECT_NAME "nextnotes.cloudsite")
-set(NEXTNOTES_VERSION "0.1.6.1")
+set(NEXTNOTES_VERSION "0.2.0")
 set(DATA_DIR /)
 set(DESKTOP_FILE_NAME ${PROJECT_NAME}.desktop)
 
