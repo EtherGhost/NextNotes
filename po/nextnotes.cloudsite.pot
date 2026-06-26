@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nextnotes.cloudsite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-24 19:04+0000\n"
+"POT-Creation-Date: 2026-06-24 19:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -393,8 +393,8 @@ msgstr ""
 msgid "The note text could not be prepared for sharing."
 msgstr ""
 
-#: qml/backend/ShareImportHandler.qml:78
-#: qml/backend/ShareImportHandlerUbuntu.qml:78
+#: qml/backend/ShareImportHandler.qml:77
+#: qml/backend/ShareImportHandlerUbuntu.qml:77
 msgid "Shared text could not be imported."
 msgstr ""
 
@@ -403,8 +403,8 @@ msgstr ""
 msgid "No shared content was received."
 msgstr ""
 
-#: qml/backend/ShareImportHandler.qml:98
-#: qml/backend/ShareImportHandlerUbuntu.qml:98
+#: qml/backend/ShareImportHandler.qml:100
+#: qml/backend/ShareImportHandlerUbuntu.qml:100
 msgid "The shared content did not contain readable text."
 msgstr ""
 

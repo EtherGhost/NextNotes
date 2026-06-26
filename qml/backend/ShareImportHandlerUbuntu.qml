@@ -10,6 +10,8 @@ Item {
 
     property var notesController
     property int maxImportedCharacters: 1000000
+    property var processedTransferRefs: []
+    property var processedContentKeys: ({})
 
     Component.onCompleted: {
         console.log("NextNotes ContentHub import handler ready hasPending=" + ContentHub.hasPending
@@ -22,13 +24,6 @@ Item {
 
         onImportRequested: {
             handler.handleImportRequested(transfer)
-        }
-
-        onHasPendingChanged: {
-            console.log("NextNotes ContentHub hasPending changed=" + ContentHub.hasPending)
-            if (ContentHub.hasPending) {
-                handler.restorePendingImports()
-            }
         }
 
         onFinishedImportsChanged: {
@@ -73,6 +68,10 @@ Item {
     function handleImportRequested(transfer) {
         var count = transfer && transfer.items ? transfer.items.length : 0
         console.log("NextNotes ContentHub import requested itemCount=" + count)
+        if (wasTransferProcessed(transfer)) {
+            console.log("NextNotes ContentHub import skipped already processed transfer")
+            return
+        }
 
         if (!notesController || !notesController.createLocalNoteFromSharedText) {
             importFailed(i18n.tr("Shared text could not be imported."))
@@ -80,6 +79,7 @@ Item {
         }
 
         if (!transfer || !transfer.items || transfer.items.length === 0) {
+            markTransferCollected(transfer)
             importFailed(i18n.tr("No shared content was received."))
             return
         }
@@ -95,6 +95,8 @@ Item {
 
         var content = textParts.join("\n\n").trim()
         if (content.length === 0) {
+            markTransferProcessed(transfer, "")
+            markTransferCollected(transfer)
             importFailed(i18n.tr("The shared content did not contain readable text."))
             return
         }
@@ -104,6 +106,14 @@ Item {
             console.log("NextNotes ContentHub import truncated length=" + content.length)
         }
 
+        if (wasContentProcessed(content)) {
+            console.log("NextNotes ContentHub import skipped duplicate content textLength=" + content.length)
+            markTransferProcessed(transfer, content)
+            markTransferCollected(transfer)
+            return
+        }
+
+        markTransferProcessed(transfer, content)
         var title = notesController.titleFromSharedText(content)
         var noteId = notesController.createLocalNoteFromSharedText(title, content)
         console.log("NextNotes ContentHub import created noteId=" + noteId + " textLength=" + content.length)
@@ -123,6 +133,42 @@ Item {
         } catch (error) {
             console.log("NextNotes ContentHub import finalize failed: " + error)
         }
+    }
+
+    function wasTransferProcessed(transfer) {
+        return transfer && processedTransferRefs.indexOf(transfer) >= 0
+    }
+
+    function wasContentProcessed(content) {
+        var key = contentKey(content)
+        var now = Date.now()
+        var seenAt = processedContentKeys[key] || 0
+        return seenAt > 0 && (now - seenAt) < 30000
+    }
+
+    function markTransferProcessed(transfer, content) {
+        if (transfer && processedTransferRefs.indexOf(transfer) < 0) {
+            processedTransferRefs.push(transfer)
+            if (processedTransferRefs.length > 20) {
+                processedTransferRefs.shift()
+            }
+        }
+        var key = contentKey(content)
+        if (key.length > 0) {
+            processedContentKeys[key] = Date.now()
+        }
+    }
+
+    function contentKey(content) {
+        var text = String(content || "")
+        if (text.length === 0) {
+            return ""
+        }
+        var hash = 0
+        for (var i = 0; i < text.length; ++i) {
+            hash = ((hash << 5) - hash + text.charCodeAt(i)) | 0
+        }
+        return String(text.length) + ":" + String(hash)
     }
 
     function textFromItem(item) {
