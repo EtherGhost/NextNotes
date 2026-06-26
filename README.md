@@ -22,7 +22,7 @@ This release adds Ubuntu Touch Content Hub integration. NextNotes can receive sh
 - Preserve local drafts when server conflicts are detected.
 - Review conflicts on a dedicated conflict page by choosing the local or server version.
 - Keep the note editor stable while sync state changes by showing sync/conflict state in the top bar.
-- Import shared text from other Ubuntu Touch apps through Content Hub as a new local note.
+- Import shared text from other Ubuntu Touch apps through Content Hub as a new note.
 - Share selected note text or full note text to other Ubuntu Touch apps through Content Hub.
 - Follow the system language or manually choose a supported language.
 - View version, license, and project information from the About page.
